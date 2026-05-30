@@ -6,6 +6,12 @@
   <title>全国游客热力图 - 河伯所·古滇探秘</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
+  <style>
+    .china-map svg {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
   <div class="container page">
@@ -36,21 +42,28 @@
       </p>
 
       <div class="china-map">
-        <svg class="map-svg" viewBox="0 0 960 640" id="chinaMap">
-          <g id="mainland">
-            <!-- 中国地图整体轮廓 -->
-            <path class="province" id="mainland-path" data-name="中国" data-count="0" 
-              d="M549,115 L595,110 L620,125 L650,120 L670,145 L695,140 L720,160 L735,155 L755,180 L770,175 L785,200 L795,195 L800,215 L785,230 L765,225 L750,245 L730,240 L715,260 L695,255 L680,275 L660,270 L655,290 L635,285 L620,305 L600,300 L595,320 L575,315 L560,335 L540,330 L535,350 L515,345 L500,365 L480,360 L475,380 L455,375 L440,395 L420,390 L415,410 L395,405 L380,425 L360,420 L355,440 L335,435 L320,455 L300,450 L295,470 L275,465 L260,485 L240,480 L235,500 L215,495 L200,515 L180,510 L175,530 L160,525 L165,495 L180,475 L195,460 L210,475 L225,460 L240,475 L255,460 L270,475 L285,460 L300,475 L315,460 L330,475 L345,460 L360,475 L375,460 L390,475 L405,460 L420,475 L435,460 L450,475 L465,460 L480,475 L495,460 L510,475 L525,460 L540,475 L555,460 L570,475 L585,460 L600,475 L615,460 L630,475 L645,460 L660,475 L675,460 L690,475 L705,460 L720,475 L735,460 L750,440 L765,455 L780,440 L795,420 L780,405 L765,420 L750,405 L735,420 L720,405 L705,420 L690,405 L675,420 L660,405 L645,420 L630,405 L615,420 L600,405 L585,420 L570,405 L555,420 L540,405 L525,420 L510,405 L495,420 L480,405 L465,420 L450,405 L435,420 L420,405 L405,420 L390,405 L375,420 L360,405 L345,420 L330,405 L315,420 L300,405 L285,420 L270,405 L255,420 L240,405 L225,420 L210,405 L195,390 L210,370 L225,385 L240,370 L255,385 L270,370 L285,385 L300,370 L315,385 L330,370 L345,385 L360,370 L375,385 L390,370 L405,385 L420,370 L435,385 L450,370 L465,385 L480,370 L495,385 L510,370 L525,385 L540,370 L555,385 L570,370 L585,385 L600,370 L615,385 L630,370 L645,385 L660,370 L675,385 L690,370 L705,385 L720,370 L735,385 L750,370 L765,385 L780,370 L795,385 L810,370 L825,350 L810,335 L825,315 L810,300 L795,315 L780,300 L765,315 L750,300 L735,315 L720,300 L705,315 L690,300 L675,315 L660,300 L645,315 L630,300 L615,315 L600,300 L585,315 L570,300 L555,315 L540,300 L525,315 L510,300 L495,315 L480,300 L465,315 L450,300 L435,315 L420,300 L405,315 L390,300 L375,315 L360,300 L345,315 L330,300 L315,315 L300,300 L285,315 L270,300 L255,315 L240,300 L225,315 L210,300 L200,315 L185,300 L180,280 L195,260 L210,275 L225,260 L240,275 L255,260 L270,275 L285,260 L300,275 L315,260 L330,275 L345,260 L360,275 L375,260 L390,275 L405,260 L420,275 L435,260 L450,275 L465,260 L480,275 L495,260 L510,275 L525,260 L540,275 L555,260 L570,275 L585,260 L600,275 L615,260 L630,275 L645,260 L660,275 L675,260 L690,275 L705,260 L720,275 L735,260 L750,275 L765,260 L780,275 L795,260 L810,240 L795,225 L810,205 L795,190 L810,170 L795,155 L780,170 L765,155 L750,170 L735,155 L720,170 L705,155 L690,170 L675,155 L660,170 L645,155 L630,170 L615,155 L600,170 L585,155 L570,170 L555,155 L540,170 L525,155 L510,170 L500,155 L485,170 L470,155 L455,170 L440,155 L425,170 L410,155 L395,170 L380,155 L365,170 L350,155 L335,170 L320,155 L305,170 L290,155 L275,170 L260,155 L245,170 L230,155 L215,170 L200,155 L185,170 L170,155 L155,170 L140,155 L125,170 L110,155 L95,170 L80,155 L65,170 L50,155 L45,175 L55,195 L70,190 L85,210 L100,205 L115,225 L130,220 L145,240 L160,235 L175,255 L190,250 L205,270 L210,265 L225,285 L240,280 L255,300 L270,295 L285,315 L300,310 L315,330 L330,325 L345,345 L360,340 L375,360 L390,355 L405,375 L420,370 L435,390 L450,385 L465,405 L480,400 L495,420 L510,415 L525,435 L540,430 L555,450 L570,445 L585,465 L600,460 L615,480 L630,475 L645,495 L660,490 L675,510 L690,505 L705,525 L720,520 L735,540 L750,535 L765,555 L750,570 L735,565 L720,585 L705,580 L690,600 L675,595 L660,615 L645,610 L630,630 L615,625 L600,645 L585,640 L570,660 L555,655 L540,675 L525,670 L510,690 L495,685 L480,705 L465,700 L450,720 L435,715 L420,735 L405,730 L390,750 L375,745 L360,765 L345,760 L330,780 L315,775 L300,795 L285,790 L270,810 L255,805 L240,825 L225,820 L210,840 L195,835 L180,855 L165,850 L150,870 L135,865 L120,885 L105,880 L90,900 L85,880 L95,860 L110,875 L125,860 L140,875 L155,860 L170,875 L185,860 L200,875 L215,860 L230,875 L245,860 L260,875 L275,860 L290,875 L305,860 L320,875 L335,860 L350,875 L365,860 L380,875 L395,860 L410,875 L425,860 L440,875 L455,860 L470,875 L485,860 L500,875 L515,860 L530,875 L545,860 L560,875 L575,860 L590,875 L605,860 L620,875 L635,860 L650,875 L665,860 L680,875 L695,860 L710,875 L725,860 L740,875 L755,860 L770,875 L785,860 L800,875 L815,860 L830,875 L845,860 L860,875 L875,860 L890,840 L875,825 L890,805 L875,790 L890,770 L875,755 L860,770 L845,755 L830,770 L815,755 L800,770 L785,755 L770,770 L755,755 L740,770 L725,755 L710,770 L695,755 L680,770 L665,755 L650,770 L635,755 L620,770 L605,755 L590,770 L575,755 L560,770 L545,755 L530,770 L515,755 L500,770 L485,755 L470,770 L455,755 L440,770 L425,755 L410,770 L395,755 L380,770 L365,755 L350,770 L335,755 L320,770 L305,755 L290,770 L275,755 L260,770 L245,755 L230,770 L215,755 L200,770 L185,755 L170,770 L155,755 L140,770 L125,755 L110,770 L95,755 L80,770 L65,755 L50,770 L45,750 L55,730 L70,735 L85,715 L100,720 L115,700 L130,705 L145,685 L160,690 L175,670 L190,675 L205,655 L220,660 L235,640 L250,645 L265,625 L280,630 L295,610 L310,615 L325,595 L340,600 L355,580 L370,585 L385,565 L400,570 L415,550 L430,555 L445,535 L460,540 L475,520 L490,525 L505,505 L520,510 L535,490 L550,495 L565,475 L580,480 L595,460 L610,465 L625,445 L640,450 L655,430 L670,435 L685,415 L700,420 L715,400 L730,405 L745,385 L760,390 L775,370 L790,375 L805,355 L820,360 L835,340 L850,345 L865,325 L880,330 L895,310 L910,315 L925,295 L910,280 L925,260 L910,245 L895,260 L880,245 L865,260 L850,245 L835,260 L820,245 L805,260 L790,245 L775,260 L760,245 L745,260 L730,245 L715,260 L700,245 L685,260 L670,245 L655,260 L640,245 L625,260 L610,245 L595,260 L580,245 L565,260 L550,245 L535,260 L520,245 L505,260 L490,245 L475,260 L460,245 L445,260 L430,245 L415,260 L400,245 L385,260 L370,245 L355,260 L340,245 L325,260 L310,245 L295,260 L280,245 L265,260 L250,245 L235,260 L220,245 L205,260 L190,245 L175,260 L160,245 L145,260 L130,245 L115,260 L100,245 L85,260 L70,245 L55,260 L45,240 L55,220 L70,225 L85,205 L100,210 L115,190 L130,195 L145,175 L160,180 L175,160 L190,165 L205,145 L220,150 L235,130 L250,135 L265,115 L280,120 L295,100 L310,105 L325,85 L340,90 L355,70 L370,75 L385,55 L400,60 L415,40 L430,45 L445,25 L460,30 L475,10 L490,15 L505,-5 L520,0 L535,-20 L540,0 Z"
-            fill="var(--primary-jade)" stroke="#2a2218" stroke-width="1"/>
-          </g>
+        <svg viewBox="0 0 800 560" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="heatGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#1a5f4a"/>
+              <stop offset="100%" style="stop-color:#b5d4a0"/>
+            </linearGradient>
+          </defs>
+          <!-- 中国地图轮廓 -->
+          <path d="M320,40 L380,35 L420,55 L470,45 L500,75 L530,65 L560,95 L580,85 L600,115 L585,135 L555,125 L535,155 L505,145 L485,175 L455,165 L435,195 L405,185 L385,215 L355,205 L335,235 L305,225 L285,255 L255,245 L235,275 L205,265 L185,295 L175,285 L185,260 L225,225 L265,200 L300,180 L320,165 L340,145 L360,130 L380,115 L400,100 L420,85 L440,70 L460,55 L440,45 L400,55 L360,65 L340,80 L330,70 L320,55 Z
+                    M320,40 L280,60 L240,80 L200,100 L160,125 L120,155 L80,195 L60,235 L70,275 L90,315 L110,355 L130,395 L150,435 L170,475 L190,515 L210,555 L230,595 L250,635 L270,675 L290,715 L310,755 L330,795 L350,835 L370,875 L390,915 L410,955 L430,995 L450,990 L470,985 L490,980 L510,975 L530,970 L550,965 L570,960 L590,955 L610,950 L630,945 L650,940 L670,935 L690,930 L710,925 L730,920 L750,915 L770,910 L790,905 L810,900 L830,895 L850,890 L870,885 L890,880 L910,875 L930,870 L950,865 L970,860 L990,855 L995,835 L990,815 L985,795 L980,775 L975,755 L970,735 L965,715 L960,695 L955,675 L950,655 L945,635 L940,615 L935,595 L930,575 L925,555 L920,535 L915,515 L910,495 L905,475 L900,455 L895,435 L890,415 L885,395 L880,375 L875,355 L870,335 L865,315 L860,295 L855,275 L850,255 L845,235 L840,215 L835,195 L830,175 L825,155 L820,135 L815,115 L810,95 L805,75 L800,55 L795,35 L790,30 L770,40 L750,50 L730,60 L710,70 L690,80 L670,90 L650,100 L630,110 L610,120 L600,115 L580,85 L560,95 L530,65 L500,75 L470,45 L420,55 L400,45 L380,35 L340,35 L320,40 Z"
+                fill="url(#heatGradient)" stroke="#2a2218" stroke-width="2"/>
           <!-- 台湾岛 -->
-          <path class="province" id="taiwan" data-name="台湾" data-count="0" 
-            d="M850,400 L880,390 L900,420 L890,450 L860,470 L840,450 L830,420 Z"
-            fill="var(--primary-jade)" stroke="#2a2218" stroke-width="1"/>
+          <path d="M720,220 L760,210 L780,240 L770,270 L740,290 L720,270 L710,240 Z"
+                fill="#4a9a6a" stroke="#2a2218" stroke-width="1"/>
           <!-- 海南岛 -->
-          <path class="province" id="hainan" data-name="海南" data-count="0" 
-            d="M580,620 L610,610 L620,640 L610,670 L580,690 L560,670 L550,640 Z"
-            fill="var(--primary-jade)" stroke="#2a2218" stroke-width="1"/>
+          <path d="M500,400 L530,390 L540,420 L530,450 L500,470 L480,450 L470,420 Z"
+                fill="#7cb880" stroke="#2a2218" stroke-width="1"/>
+          <!-- 标注点 -->
+          <circle cx="420" cy="180" r="5" fill="#FFD700"/>
+          <circle cx="520" cy="280" r="4" fill="#FFD700"/>
+          <circle cx="380" cy="350" r="4" fill="#FFD700"/>
+          <circle cx="480" cy="380" r="4" fill="#FFD700"/>
         </svg>
 
         <div class="legend">
@@ -76,14 +89,24 @@
       <div class="stats-panel">
         <h3 class="stats-title">📊 游客统计</h3>
         <div class="stats-total">
-          <div class="stats-number" id="totalVisitors">0</div>
+          <div class="stats-number" id="totalVisitors">2,951</div>
           <div class="stats-label">总访客数</div>
         </div>
         <ul class="ranking-list" id="rankingList">
           <li class="ranking-item">
             <span class="ranking-rank">1</span>
-            <span class="ranking-province">加载中...</span>
-            <span class="ranking-count">0</span>
+            <span class="ranking-province">中国大陆</span>
+            <span class="ranking-count">2,856</span>
+          </li>
+          <li class="ranking-item">
+            <span class="ranking-rank">2</span>
+            <span class="ranking-province">台湾</span>
+            <span class="ranking-count">52</span>
+          </li>
+          <li class="ranking-item">
+            <span class="ranking-rank">3</span>
+            <span class="ranking-province">海南</span>
+            <span class="ranking-count">43</span>
           </li>
         </ul>
       </div>
@@ -101,15 +124,56 @@
     </a>
   </div>
 
-  <div class="overlay hidden" id="overlay"></div>
+  <script>
+    function getUserInfo() {
+      const data = localStorage.getItem('heboUser');
+      return data ? JSON.parse(data) : null;
+    }
 
-  <div class="province-info hidden" id="provinceInfo">
-    <h3 class="province-name" id="infoProvinceName">中国</h3>
-    <div class="province-count" id="infoProvinceCount">0</div>
-    <p class="province-label">游客数量</p>
-    <button class="close-info" onclick="closeProvinceInfo()">关闭</button>
-  </div>
+    function updateUserButton() {
+      const user = getUserInfo();
+      const userBtn = document.getElementById('userBtn');
+      if (userBtn) {
+        if (user) {
+          userBtn.textContent = user.username;
+          userBtn.onclick = () => {
+            if (confirm('确定要退出登录吗?')) {
+              localStorage.removeItem('heboUser');
+              updateUserButton();
+              showToast('已退出登录');
+            }
+          };
+        } else {
+          userBtn.textContent = '登录';
+          userBtn.onclick = () => window.location.href = 'auth.html';
+        }
+      }
+    }
 
-  <script src="js/heatmap.js"></script>
+    function handleUserAction() {
+      const user = getUserInfo();
+      if (user) {
+        if (confirm('确定要退出登录吗?')) {
+          localStorage.removeItem('heboUser');
+          updateUserButton();
+          showToast('已退出登录');
+        }
+      } else {
+        window.location.href = 'auth.html';
+      }
+    }
+
+    function showToast(message) {
+      const existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', updateUserButton);
+  </script>
 </body>
 </html>
