@@ -95,12 +95,15 @@ function selectTool(tool) {
       break;
   }
 
-  if (tool === 'detector') {
-    document.getElementById('digGround').style.cursor = 'crosshair';
-  } else if (archaeologyState.selectedSpot) {
-    document.getElementById('digGround').style.cursor = 'pointer';
-  } else {
-    document.getElementById('digGround').style.cursor = 'not-allowed';
+  const digGround = document.getElementById('digGround');
+  if (digGround) {
+    if (tool === 'detector') {
+      digGround.style.cursor = 'crosshair';
+    } else if (archaeologyState.selectedSpot !== null) {
+      digGround.style.cursor = 'pointer';
+    } else {
+      digGround.style.cursor = 'not-allowed';
+    }
   }
 }
 
@@ -115,12 +118,15 @@ function initGame() {
   const grid = document.getElementById('artifactMarkers');
   if (grid) grid.innerHTML = '';
 
+  const shuffledArtifacts = [...ARTIFACTS].sort(() => Math.random() - 0.5);
+  const selectedArtifacts = shuffledArtifacts.slice(0, archaeologyState.totalSpots);
+
   for (let i = 0; i < archaeologyState.totalSpots; i++) {
     const spot = {
       id: i,
       x: 15 + Math.random() * 70,
       y: 20 + Math.random() * 50,
-      artifact: ARTIFACTS[i],
+      artifact: selectedArtifacts[i],
       state: 'hidden'
     };
     archaeologyState.digSpots.push(spot);
@@ -134,7 +140,8 @@ function initGame() {
     grid.appendChild(marker);
   }
 
-  document.getElementById('foundCount').textContent = '0';
+  const foundCountEl = document.getElementById('foundCount');
+  if (foundCountEl) foundCountEl.textContent = '0';
   selectTool('detector');
   updateCollectionCount();
 
@@ -143,10 +150,46 @@ function initGame() {
     digGround.onclick = function(e) {
       if (e.target.id === 'digGround' || e.target.classList.contains('soil-layer')) {
         if (archaeologyState.currentTool === 'detector') {
-          showScanEffect(e);
+          handleScan(e);
         }
       }
     };
+  }
+}
+
+function handleScan(e) {
+  const rect = e.target.getBoundingClientRect();
+  const clickX = ((e.clientX - rect.left) / rect.width) * 100;
+  const clickY = ((e.clientY - rect.top) / rect.height) * 100;
+
+  showScanEffect(e);
+
+  const scanRadius = 12;
+  let foundSpot = null;
+
+  archaeologyState.digSpots.forEach((spot) => {
+    if (spot.state === 'hidden') {
+      const distance = Math.sqrt(Math.pow(clickX - spot.x, 2) + Math.pow(clickY - spot.y, 2));
+      if (distance <= scanRadius) {
+        foundSpot = spot;
+      }
+    }
+  });
+
+  if (foundSpot) {
+    setTimeout(() => {
+      foundSpot.state = 'detected';
+      const marker = document.getElementById(`spot-${foundSpot.id}`);
+      if (marker) {
+        marker.classList.remove('hidden');
+        marker.classList.add('detected');
+        showToolTip('发现文物信号！切换到挖掘工具');
+      }
+    }, 600);
+  } else {
+    setTimeout(() => {
+      showToolTip('未发现文物，继续探索...');
+    }, 600);
   }
 }
 
@@ -158,9 +201,11 @@ function handleSpotClick(spotIndex, event) {
     if (spot.state === 'hidden') {
       spot.state = 'detected';
       const marker = document.getElementById(`spot-${spotIndex}`);
-      marker.classList.remove('hidden');
-      marker.classList.add('detected');
-      showToolTip('发现文物信号！切换到挖掘工具');
+      if (marker) {
+        marker.classList.remove('hidden');
+        marker.classList.add('detected');
+        showToolTip('发现文物信号！切换到挖掘工具');
+      }
     }
   } else if (archaeologyState.currentTool === 'shovel' || archaeologyState.currentTool === 'pickaxe') {
     if (spot.state === 'detected') {
@@ -169,14 +214,19 @@ function handleSpotClick(spotIndex, event) {
       archaeologyState.currentArtifact = spot.artifact;
 
       const marker = document.getElementById(`spot-${spotIndex}`);
-      marker.classList.add('excavating');
+      if (marker) {
+        marker.classList.add('excavating');
+      }
 
       setTimeout(() => {
         spot.state = 'brushing';
-        marker.classList.remove('excavating');
-        marker.classList.add('brushing');
+        const markerEl = document.getElementById(`spot-${spotIndex}`);
+        if (markerEl) {
+          markerEl.classList.remove('excavating');
+          markerEl.classList.add('brushing');
+        }
         showToolTip('发现文物！切换到刷子清理');
-      }, 800);
+      }, 1200);
     }
   } else if (archaeologyState.currentTool === 'brush') {
     if (spot.state === 'brushing') {
@@ -185,7 +235,9 @@ function handleSpotClick(spotIndex, event) {
       archaeologyState.currentArtifact = spot.artifact;
 
       const marker = document.getElementById(`spot-${spotIndex}`);
-      marker.classList.add('revealed');
+      if (marker) {
+        marker.classList.add('revealed');
+      }
 
       showArtifactReveal(spot.artifact);
     }
@@ -355,7 +407,7 @@ function resetGame() {
   if (overlay) overlay.classList.add('hidden');
   if (reveal) reveal.classList.add('hidden');
 
-  selectTool('detector');
+  initGame();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
