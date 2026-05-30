@@ -1,5 +1,10 @@
+const STORAGE_KEYS = {
+  USERS: 'heboUsers',
+  CURRENT_USER: 'heboUser'
+};
+
 function switchTab(tab) {
-  const tabs = document.querySelectorAll('.auth-tab');
+  const tabs = document.querySelectorAll('.tab-btn');
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
 
@@ -17,21 +22,18 @@ function switchTab(tab) {
 }
 
 function getUsers() {
-  const data = localStorage.getItem('heboUsers');
+  const data = localStorage.getItem(STORAGE_KEYS.USERS);
   return data ? JSON.parse(data) : [];
 }
 
 function saveUsers(users) {
-  localStorage.setItem('heboUsers', JSON.stringify(users));
+  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
 }
 
-function getProvincesData() {
-  const data = localStorage.getItem('heboProvinces');
-  return data ? JSON.parse(data) : {};
-}
-
-function saveProvincesData(data) {
-  localStorage.setItem('heboProvinces', JSON.stringify(data));
+function togglePassword(fieldId) {
+  const field = document.getElementById(fieldId);
+  const type = field.type === 'password' ? 'text' : 'password';
+  field.type = type;
 }
 
 function handleLogin(event) {
@@ -41,23 +43,21 @@ function handleLogin(event) {
   const password = document.getElementById('loginPassword').value;
 
   if (!username || !password) {
-    showToast('请填写所有字段');
+    showToast('请填写用户名和密码', 'error');
     return;
   }
 
   const users = getUsers();
-  const user = users.find(u =>
-    (u.username === username || u.email === username) && u.password === password
-  );
+  const user = users.find(u => u.username === username && u.password === password);
 
   if (user) {
-    localStorage.setItem('heboUser', JSON.stringify(user));
-    showToast('登录成功!');
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+    showToast('登录成功!', 'success');
     setTimeout(() => {
       window.location.href = 'index.html';
-    }, 1000);
+    }, 1500);
   } else {
-    showToast('用户名或密码错误');
+    showToast('用户名或密码错误', 'error');
   }
 }
 
@@ -65,79 +65,57 @@ function handleRegister(event) {
   event.preventDefault();
 
   const username = document.getElementById('regUsername').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
-  const confirmPassword = document.getElementById('regConfirmPassword').value;
   const province = document.getElementById('regProvince').value;
 
-  if (!username || !email || !password || !confirmPassword || !province) {
-    showToast('请填写所有字段');
+  if (!username || !password || !province) {
+    showToast('请填写所有字段', 'error');
     return;
   }
 
   if (username.length < 4 || username.length > 20) {
-    showToast('用户名需要4-20个字符');
-    return;
-  }
-
-  if (password.length < 6) {
-    showToast('密码至少需要6位');
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    showToast('两次密码输入不一致');
-    return;
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    showToast('请输入有效的邮箱地址');
+    showToast('用户名需要4-20个字符', 'error');
     return;
   }
 
   const users = getUsers();
 
   if (users.find(u => u.username === username)) {
-    showToast('用户名已存在');
-    return;
-  }
-
-  if (users.find(u => u.email === email)) {
-    showToast('邮箱已被注册');
+    showToast('用户名已存在', 'error');
     return;
   }
 
   const newUser = {
     id: Date.now(),
     username,
-    email,
     password,
     province,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    score: {
+      archaeology: 0,
+      puzzle: 0,
+      quiz: 0
+    },
+    collectedArtifacts: []
   };
 
   users.push(newUser);
   saveUsers(users);
 
-  let provincesData = getProvincesData();
-  provincesData[province] = (provincesData[province] || 0) + 1;
-  saveProvincesData(provincesData);
+  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(newUser));
 
-  localStorage.setItem('heboUser', JSON.stringify(newUser));
-
-  showToast('注册成功!');
+  showToast('注册成功!', 'success');
   setTimeout(() => {
     window.location.href = 'index.html';
-  }, 1000);
+  }, 1500);
 }
 
-function showToast(message) {
+function showToast(message, type = 'info') {
   const existing = document.querySelector('.toast');
   if (existing) existing.remove();
 
   const toast = document.createElement('div');
-  toast.className = 'toast';
+  toast.className = `toast toast-${type}`;
   toast.textContent = message;
   document.body.appendChild(toast);
 
@@ -145,8 +123,9 @@ function showToast(message) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const user = localStorage.getItem('heboUser');
+  const user = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
   if (user) {
     window.location.href = 'index.html';
+    return;
   }
 });
