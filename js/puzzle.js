@@ -166,8 +166,8 @@ function renderPuzzle() {
 
       tileDiv.style.backgroundImage = `url(${currentImage.image})`;
       tileDiv.style.backgroundSize = `${size * 100}%`;
-      tileDiv.style.backgroundPosition = `${originalCol * pieceSize * (size - 1) / (size - 1)}% ${originalRow * pieceSize * (size - 1) / (size - 1)}%`;
-      tileDiv.textContent = tile;
+      tileDiv.style.backgroundPosition = `${-originalCol * pieceSize}% ${-originalRow * pieceSize}%`;
+      tileDiv.style.backgroundRepeat = 'no-repeat';
 
       tileDiv.onclick = () => handleTileClick(index);
     }
@@ -228,10 +228,11 @@ function checkWin() {
 }
 
 function saveScore() {
-  const user = getUserInfo();
+  const user = localStorage.getItem('heboUser');
   if (user) {
+    const userData = JSON.parse(user);
     const users = JSON.parse(localStorage.getItem('heboUsers') || '[]');
-    const userIndex = users.findIndex(u => u.username === user.username);
+    const userIndex = users.findIndex(u => u.username === userData.username);
     if (userIndex !== -1) {
       const score = puzzleState.moves;
       if (!users[userIndex].score) {

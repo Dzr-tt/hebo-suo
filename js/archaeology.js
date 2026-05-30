@@ -1,3 +1,18 @@
+function getUserInfo() {
+  try {
+    const user = localStorage.getItem('heboUser');
+    if (user) {
+      const userData = JSON.parse(user);
+      if (userData && userData.username) {
+        return userData;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to parse user info:', e);
+  }
+  return null;
+}
+
 const ARTIFACTS = [
   {
     id: 1,
@@ -291,10 +306,7 @@ function viewCollection() {
     card.className = 'collection-card';
     card.innerHTML = `
       <div class="artifact-icon" style="border-color: ${artifact.color}">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="35" fill="none" stroke="${artifact.color}" stroke-width="3"/>
-          <text x="50" y="55" text-anchor="middle" font-size="20" fill="${artifact.color}">滇</text>
-        </svg>
+        <img src="${artifact.image}" alt="${artifact.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;35&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;3&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;20&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';">
       </div>
       <h4 class="artifact-name">${artifact.name}</h4>
       <p class="artifact-era">${artifact.era}</p>
