@@ -601,14 +601,37 @@ function showStartScreen() {
     clearInterval(quizState.timerInterval);
   }
   
-  document.getElementById('quizContainer').classList.add('hidden');
-  document.getElementById('resultScreen').classList.add('hidden');
-  document.getElementById('startScreen').classList.remove('hidden');
+  const quizContainer = document.getElementById('quizContainer');
+  const resultScreen = document.getElementById('resultScreen');
+  const startScreen = document.getElementById('startScreen');
   
-  document.getElementById('currentScore').textContent = '0';
+  if (quizContainer) quizContainer.classList.add('hidden');
+  if (resultScreen) resultScreen.classList.add('hidden');
+  if (startScreen) startScreen.classList.remove('hidden');
+  
+  const currentScore = document.getElementById('currentScore');
+  if (currentScore) currentScore.textContent = '0';
+}
+
+// 直接调用以确保初始化
+try {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showStartScreen);
+  } else {
+    showStartScreen();
+  }
+} catch (e) {
+  console.error('Initialization error:', e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  checkLogin();
   showStartScreen();
+});
+
+// 备用方案：确保在脚本加载完成后执行
+window.addEventListener('load', () => {
+  const startScreen = document.getElementById('startScreen');
+  if (startScreen && startScreen.classList.contains('hidden')) {
+    showStartScreen();
+  }
 });
