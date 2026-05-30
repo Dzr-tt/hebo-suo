@@ -470,3 +470,154 @@ const QUIZ_QUESTIONS = [
     correct: 3
   }
 ];
+
+let quizState = {
+  currentQuestion: 0,
+  score: 0,
+  totalQuestions: 0,
+  questions: [],
+  timer: 10,
+  timerInterval: null
+};
+
+function checkLogin() {
+  const user = localStorage.getItem('currentUser');
+  if (user) {
+    const userData = JSON.parse(user);
+    document.getElementById('userBtn').textContent = userData.username;
+  } else {
+    window.location.href = 'auth.html';
+  }
+}
+
+function startQuiz(count) {
+  quizState.totalQuestions = count;
+  quizState.currentQuestion = 0;
+  quizState.score = 0;
+  
+  const shuffled = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
+  quizState.questions = shuffled.slice(0, count);
+  
+  document.getElementById('quizContainer').classList.remove('hidden');
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.add('hidden');
+  
+  showQuestion();
+}
+
+function showQuestion() {
+  if (quizState.currentQuestion >= quizState.totalQuestions) {
+    showResult();
+    return;
+  }
+  
+  const question = quizState.questions[quizState.currentQuestion];
+  document.getElementById('quizQuestion').textContent = question.question;
+  
+  const options = document.querySelectorAll('.quiz-option');
+  options.forEach((option, index) => {
+    option.textContent = question.options[index];
+    option.classList.remove('correct', 'wrong', 'selected');
+  });
+  
+  document.getElementById('currentScore').textContent = quizState.score;
+  document.getElementById('quizProgress').textContent = `${quizState.currentQuestion + 1}/${quizState.totalQuestions}`;
+  
+  startTimer();
+}
+
+function startTimer() {
+  quizState.timer = 10;
+  document.getElementById('quizTimer').textContent = quizState.timer;
+  
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  quizState.timerInterval = setInterval(() => {
+    quizState.timer--;
+    document.getElementById('quizTimer').textContent = quizState.timer;
+    
+    if (quizState.timer <= 0) {
+      clearInterval(quizState.timerInterval);
+      nextQuestion();
+    }
+  }, 1000);
+}
+
+function selectOption(index) {
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  const question = quizState.questions[quizState.currentQuestion];
+  const options = document.querySelectorAll('.quiz-option');
+  
+  options.forEach((option, i) => {
+    if (i === question.correct) {
+      option.classList.add('correct');
+    } else if (i === index && i !== question.correct) {
+      option.classList.add('wrong');
+    }
+    option.classList.add('selected');
+  });
+  
+  if (index === question.correct) {
+    quizState.score++;
+    document.getElementById('currentScore').textContent = quizState.score;
+  }
+  
+  setTimeout(nextQuestion, 1500);
+}
+
+function nextQuestion() {
+  quizState.currentQuestion++;
+  showQuestion();
+}
+
+function showResult() {
+  document.getElementById('quizContainer').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+  
+  const finalScore = quizState.score;
+  const total = quizState.totalQuestions;
+  const percentage = Math.round((finalScore / total) * 100);
+  
+  document.getElementById('finalScore').textContent = `${finalScore}/${total}`;
+  
+  let level = '';
+  let message = '';
+  
+  if (percentage >= 90) {
+    level = '🏆 古滇大师';
+    message = '你对古滇文化了如指掌，堪称古滇文化大师！';
+  } else if (percentage >= 70) {
+    level = '📜 古滇学者';
+    message = '你对古滇文化有深入了解，继续努力！';
+  } else if (percentage >= 50) {
+    level = '🔍 古滇探索者';
+    message = '你对古滇文化有一定了解，还有更多知识等待探索！';
+  } else {
+    level = '🌱 古滇学徒';
+    message = '开始你的古滇文化探索之旅吧！';
+  }
+  
+  document.getElementById('resultLevel').textContent = level;
+  document.getElementById('resultMessage').textContent = message;
+}
+
+function showStartScreen() {
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  document.getElementById('quizContainer').classList.add('hidden');
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  
+  document.getElementById('currentScore').textContent = '0';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkLogin();
+});
