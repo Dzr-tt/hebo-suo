@@ -1,59 +1,59 @@
 const ARTIFACTS = [
   {
     id: 1,
-    name: '滇王金印',
-    era: '汉代',
-    desc: '滇王金印是汉代滇国权力的象征，证明古滇国存在的实物证据。印面刻有"滇王之印"四字，造型精美绝伦。',
-    color: '#FFD700'
+    name: '河伯所铜鼓',
+    era: '战国·滇',
+    desc: '河伯所遗址出土的标志性文物。铜鼓是古滇国神圣的祭祀重器，鼓面装饰太阳纹和翔鹭纹，象征着滇池先民对太阳和自然的崇拜。',
+    color: '#B87333'
   },
   {
     id: 2,
-    name: '青铜贮贝器',
-    era: '战国',
-    desc: '贮贝器是古滇国特有的青铜器物，用于储存海贝。器盖上铸有精美的祭祀场面，展现古滇国独特的宗教文化。',
+    name: '祭祀贮贝器',
+    era: '战国·滇',
+    desc: '古滇国特有的青铜器物，用于储存海贝。器盖铸有"播种"人物造型，展现古滇国农耕祭祀的庄严场景。',
     color: '#CD7F32'
   },
   {
     id: 3,
-    name: '玉璧',
-    era: '新石器时代',
-    desc: '玉璧是古代礼器中的重要器物，象征天圆地方的宇宙观。此玉璧质地温润，雕工精细，体现先民高超的制玉技艺。',
-    color: '#90EE90'
+    name: '立犬青铜扣饰',
+    era: '战国·滇',
+    desc: '扣饰是古滇国最具特色的装饰品。此件塑造一只警觉的立犬，造型生动逼真，反映滇池地区狩猎文化。',
+    color: '#8B6914'
   },
   {
     id: 4,
-    name: '铜鼓',
-    era: '东汉',
-    desc: '铜鼓是古代南方少数民族使用的打击乐器和祭祀重器，鼓面常刻有太阳纹、牛纹等图案，反映农耕文化特色。',
-    color: '#B87333'
+    name: '盟军青铜剑',
+    era: '战国·滇',
+    desc: '古滇国青铜兵器的代表。剑身修长，格挡处饰有精细的蟠螭纹，既是兵器也是艺术品。',
+    color: '#708090'
   },
   {
     id: 5,
-    name: '牛头铜牌',
-    era: '春秋',
-    desc: '牛头铜牌是古滇国青铜器中的典型器物，造型写实生动，反映了滇池地区农耕文明对牛的崇拜。',
-    color: '#8B4513'
+    name: '三迤铜锄',
+    era: '战国·滇',
+    desc: '古滇国青铜农具。锄面宽阔轻薄，刃部平直，便于翻土。是研究古滇国农业文明的重要实物资料。',
+    color: '#9B7B3B'
   },
   {
     id: 6,
-    name: '孔雀铜灯',
-    era: '西汉',
-    desc: '孔雀铜灯造型为一只开屏的孔雀，灯座设在孔雀背部，构思巧妙，既是实用器物又是艺术珍品。',
-    color: '#228B22'
+    name: '农业贮贝器',
+    era: '战国·滇',
+    desc: '器盖铸有农夫赶牛犁地的场景，是古滇国农业生活的生动写照。展现滇池流域发达的稻作文明。',
+    color: '#DAA520'
   },
   {
     id: 7,
-    name: '舞蹈铜俑',
-    era: '滇国',
-    desc: '舞蹈铜俑生动展现古滇国人民的舞蹈场景，人物姿态优美，服饰独特，是研究古滇社会生活的重要资料。',
-    color: '#DA70D6'
+    name: '纺织青铜器',
+    era: '战国·滇',
+    desc: '塑造古滇国妇女纺织的形象，反映滇池地区发达的纺织业。人物造型优美，服饰特征鲜明。',
+    color: '#D2691E'
   },
   {
     id: 8,
-    name: '蛙形铜器',
-    era: '古滇',
-    desc: '蛙形铜器是古滇文化特有的器物，蛙纹可能与古代雨神崇拜和生殖崇拜有关，反映了古滇人独特的宗教信仰。',
-    color: '#20B2AA'
+    name: '战争场面贮贝器',
+    era: '战国·滇',
+    desc: '器盖铸武士征战场景，青铜武士手持兵器，骑马冲锋，真实再现古滇国部落间的战争场面。',
+    color: '#8B0000'
   }
 ];
 
@@ -165,7 +165,7 @@ function initGame() {
     if (userData) {
       try {
         const parsed = JSON.parse(userData);
-        if (parsed.artifacts && Array.isArray(parsed.artifacts)) {
+        if (parsed.version && parsed.version === 2) {
           gameState = parsed;
         } else {
           resetGameState();
@@ -204,6 +204,7 @@ function resetGameState() {
 
   gameState.foundArtifacts = [];
   gameState.currentTool = 'detector';
+  gameState.version = 2;
   saveGame();
 }
 
@@ -281,29 +282,29 @@ function handleDig(x, y) {
 function handleDetector(targetArtifact, x, y) {
   const scanEffect = document.getElementById('scanEffect');
   scanEffect.classList.add('scanning');
-  
+
   const ring = document.createElement('div');
   ring.className = 'scan-ring';
   ring.style.left = x + 'px';
   ring.style.top = y + 'px';
   scanEffect.appendChild(ring);
-  
+
   setTimeout(() => ring.remove(), 1000);
-  
+
   if (targetArtifact) {
     if (targetArtifact.state === SPOT_STATES.unexplored) {
       setTimeout(() => {
         const success = document.createElement('div');
         success.className = 'scan-success';
-        success.style.left = targetArtifact.x + 'px';
-        success.style.top = targetArtifact.y + 'px';
+        success.style.left = targetArtifact.x + '%';
+        success.style.top = targetArtifact.y + '%';
         success.innerHTML = '📍';
         success.style.fontSize = '2rem';
         scanEffect.appendChild(success);
-        
+
         setTimeout(() => success.remove(), 1000);
       }, 300);
-      
+
       targetArtifact.state = SPOT_STATES.scanned;
       saveGame();
       renderArtifacts();
@@ -314,7 +315,7 @@ function handleDetector(targetArtifact, x, y) {
   } else {
     showToast('此处没有文物');
   }
-  
+
   setTimeout(() => {
     scanEffect.classList.remove('scanning');
   }, 1000);
