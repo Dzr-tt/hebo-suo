@@ -549,6 +549,14 @@ function selectOption(index) {
   }
   
   const question = quizState.questions[quizState.currentQuestion];
+  
+  // 添加防护检查
+  if (!question) {
+    console.error('Question not found:', quizState.currentQuestion, quizState.questions.length);
+    showResult();
+    return;
+  }
+  
   const options = document.querySelectorAll('.quiz-option');
   
   options.forEach((option, i) => {
@@ -620,12 +628,21 @@ function showStartScreen() {
   const currentScore = document.getElementById('currentScore');
   if (currentScore) currentScore.textContent = '0';
   
-  // 重新绑定按钮事件
-  document.querySelector('button.action-btn.primary')?.addEventListener('click', () => startQuiz(5));
-  document.querySelectorAll('button.action-btn').forEach((btn, index) => {
-    const counts = [5, 10, 20];
-    btn.addEventListener('click', () => startQuiz(counts[index] || 5));
-  });
+  // 绑定按钮事件 - 使用事件委托确保所有按钮都能响应
+  const heroDiv = document.querySelector('.hero');
+  if (heroDiv) {
+    heroDiv.addEventListener('click', (e) => {
+      const btn = e.target.closest('button.action-btn');
+      if (btn) {
+        const counts = [5, 10, 20];
+        const buttons = heroDiv.querySelectorAll('button.action-btn');
+        const index = Array.from(buttons).indexOf(btn);
+        if (index >= 0) {
+          startQuiz(counts[index]);
+        }
+      }
+    });
+  }
 }
 
 // 直接调用以确保初始化
