@@ -481,6 +481,8 @@ let quizState = {
 };
 
 function startQuiz(count) {
+  console.log('startQuiz called with count:', count);
+  
   quizState.totalQuestions = count;
   quizState.currentQuestion = 0;
   quizState.score = 0;
@@ -488,9 +490,15 @@ function startQuiz(count) {
   const shuffled = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
   quizState.questions = shuffled.slice(0, count);
   
-  document.getElementById('quizContainer').classList.remove('hidden');
-  document.getElementById('startScreen').classList.add('hidden');
-  document.getElementById('resultScreen').classList.add('hidden');
+  console.log('Questions loaded:', quizState.questions.length);
+  
+  const quizContainer = document.getElementById('quizContainer');
+  const startScreen = document.getElementById('startScreen');
+  const resultScreen = document.getElementById('resultScreen');
+  
+  if (quizContainer) quizContainer.classList.remove('hidden');
+  if (startScreen) startScreen.classList.add('hidden');
+  if (resultScreen) resultScreen.classList.add('hidden');
   
   showQuestion();
 }
@@ -611,6 +619,13 @@ function showStartScreen() {
   
   const currentScore = document.getElementById('currentScore');
   if (currentScore) currentScore.textContent = '0';
+  
+  // 重新绑定按钮事件
+  document.querySelector('button.action-btn.primary')?.addEventListener('click', () => startQuiz(5));
+  document.querySelectorAll('button.action-btn').forEach((btn, index) => {
+    const counts = [5, 10, 20];
+    btn.addEventListener('click', () => startQuiz(counts[index] || 5));
+  });
 }
 
 // 直接调用以确保初始化
