@@ -15,7 +15,7 @@
     .container { max-width: 700px; margin: 0 auto; }
     h1 { color: #d4af37; text-align: center; margin-bottom: 16px; }
     .china-map { 
-      background: #3d3228; 
+      background: #1e3d5c; 
       border-radius: 12px; 
       overflow: hidden;
       margin-bottom: 20px;
@@ -60,64 +60,59 @@
     <h1>全国游客热力图</h1>
     
     <div class="china-map">
-      <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="heatA" cx="50%" cy="50%" r="50%">
+          <radialGradient id="heat1" cx="50%" cy="50%" r="50%">
             <stop offset="0%" style="stop-color:#ff4500;stop-opacity:0.8"/>
-            <stop offset="50%" style="stop-color:#ff8c00;stop-opacity:0.3"/>
+            <stop offset="40%" style="stop-color:#ff8c00;stop-opacity:0.4"/>
             <stop offset="100%" style="stop-color:#ffd700;stop-opacity:0"/>
           </radialGradient>
-          <radialGradient id="heatB" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" style="stop-color:#ff6347;stop-opacity:0.7"/>
-            <stop offset="55%" style="stop-color:#ffa500;stop-opacity:0.25"/>
+          <radialGradient id="heat2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#ff6347;stop-opacity:0.6"/>
+            <stop offset="50%" style="stop-color:#ffa500;stop-opacity:0.3"/>
             <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0"/>
           </radialGradient>
-          <radialGradient id="heatC" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" style="stop-color:#ff7f50;stop-opacity:0.5"/>
+          <radialGradient id="heat3" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#ff7f50;stop-opacity:0.4"/>
             <stop offset="60%" style="stop-color:#ffb347;stop-opacity:0.2"/>
             <stop offset="100%" style="stop-color:#ffff99;stop-opacity:0"/>
           </radialGradient>
         </defs>
         
-        <!-- 海洋背景 -->
-        <rect width="900" height="600" fill="#1e3d5c"/>
-        
-        <!-- 中国地图 -->
-        <path d="M220,60 L280,55 L320,75 L370,65 L400,95 L430,85 L460,115 L480,105 L500,135 L485,155 L455,145 L435,175 L405,165 L385,195 L355,185 L335,215 L305,205 L285,235 L255,225 L235,255 L205,245 L185,275 L175,265 L185,240 L225,205 L265,180 L300,160 L320,145 L340,125 L360,110 L380,95 L400,80 L420,65 L440,50 L420,40 L380,50 L340,60 L320,75 L310,65 L290,50 L260,60 L220,80 L200,95 L180,115 L160,140 L140,170 L120,210 L100,260 L105,290 L125,340 L145,390 L165,440 L185,490 L205,540 L225,590 L245,640 L265,690 L285,740 L305,790 L325,840 L345,890 L365,940 L380,970 L400,975 L450,965 L500,955 L550,945 L600,935 L650,925 L700,915 L750,905 L800,895 L850,885 L880,880 L895,880 L890,860 L875,820 L855,770 L835,720 L815,670 L795,620 L775,570 L755,520 L735,470 L715,420 L695,370 L675,320 L655,270 L635,220 L615,170 L595,120 L575,95 L555,105 L535,85 L505,95 L475,65 L435,75 L415,55 L395,60 L375,40 L335,45 L315,55 L295,40 L255,50 L225,65 Z" fill="#f5f0e6" stroke="#c9b896" stroke-width="1.5"/>
+        <!-- 中国地图轮廓 -->
+        <path d="M180,80 L220,75 L260,90 L300,80 L330,105 L360,95 L390,125 L410,115 L430,145 L415,165 L385,155 L365,185 L335,175 L315,205 L285,195 L265,225 L235,215 L215,245 L205,235 L215,210 L255,175 L290,155 L310,140 L330,120 L350,105 L370,90 L390,75 L410,60 L430,45 L410,35 L370,45 L330,55 L310,70 L300,60 L280,45 L240,55 L200,75 L180,90 L160,110 L140,140 L120,180 L100,230 L105,260 L125,310 L145,360 L165,410 L185,460 L205,510 L225,560 L245,610 L265,660 L285,710 L305,760 L325,810 L345,860 L365,910 L380,940 L400,945 L450,935 L500,925 L550,915 L600,905 L650,895 L700,885 L750,875 L800,865 L830,860 L825,840 L805,790 L785,740 L765,690 L745,640 L725,590 L705,540 L685,490 L665,440 L645,390 L625,340 L605,290 L585,240 L565,200 L545,210 L525,190 L495,200 L465,170 L425,180 L405,160 L385,165 L365,145 L325,150 L305,135 L265,145 L235,165 L215,185 L205,200 L195,190 L205,165 L245,130 L280,110 L300,95 L320,75 L300,65 L260,75 L220,95 L200,110 L180,130 L170,120 L180,95 Z" fill="#f5f0e6" stroke="#c9b896" stroke-width="1"/>
         
         <!-- 台湾岛 -->
-        <path d="M720,280 L760,270 L780,300 L770,330 L740,350 L720,330 L710,300 Z" fill="#f5f0e6" stroke="#c9b896" stroke-width="1"/>
+        <path d="M680,220 L710,210 L730,240 L720,270 L690,290 L670,270 L660,240 Z" fill="#f5f0e6" stroke="#c9b896" stroke-width="1"/>
         
         <!-- 海南岛 -->
-        <path d="M500,500 L530,490 L540,520 L530,550 L500,570 L480,550 L470,520 Z" fill="#f5f0e6" stroke="#c9b896" stroke-width="1"/>
+        <path d="M460,400 L490,390 L500,420 L490,450 L460,470 L440,450 L430,420 Z" fill="#f5f0e6" stroke="#c9b896" stroke-width="1"/>
         
-        <!-- 热力热点 - 高密度 -->
-        <circle cx="580" cy="180" r="90" fill="url(#heatA)"/>
-        <circle cx="640" cy="280" r="100" fill="url(#heatA)"/>
-        <circle cx="620" cy="400" r="95" fill="url(#heatA)"/>
+        <!-- 热力热点 -->
+        <circle cx="520" cy="160" r="80" fill="url(#heat1)"/>
+        <circle cx="570" cy="250" r="90" fill="url(#heat1)"/>
+        <circle cx="550" cy="360" r="85" fill="url(#heat1)"/>
         
-        <!-- 热力热点 - 中密度 -->
-        <circle cx="450" cy="380" r="75" fill="url(#heatB)"/>
-        <circle cx="530" cy="340" r="70" fill="url(#heatB)"/>
-        <circle cx="420" cy="260" r="65" fill="url(#heatB)"/>
+        <circle cx="400" cy="330" r="70" fill="url(#heat2)"/>
+        <circle cx="480" cy="290" r="65" fill="url(#heat2)"/>
+        <circle cx="370" cy="210" r="60" fill="url(#heat2)"/>
         
-        <!-- 热力热点 - 低密度 -->
-        <circle cx="700" cy="160" r="55" fill="url(#heatC)"/>
-        <circle cx="510" cy="280" r="50" fill="url(#heatC)"/>
-        <circle cx="540" cy="370" r="50" fill="url(#heatC)"/>
-        <circle cx="660" cy="270" r="50" fill="url(#heatC)"/>
-        <circle cx="420" cy="450" r="45" fill="url(#heatC)"/>
-        <circle cx="350" cy="280" r="40" fill="url(#heatC)"/>
-        <circle cx="200" cy="180" r="45" fill="url(#heatC)"/>
-        <circle cx="680" cy="100" r="40" fill="url(#heatC)"/>
-        <circle cx="680" cy="350" r="35" fill="url(#heatC)"/>
+        <circle cx="650" cy="130" r="55" fill="url(#heat3)"/>
+        <circle cx="460" cy="250" r="50" fill="url(#heat3)"/>
+        <circle cx="490" cy="320" r="50" fill="url(#heat3)"/>
+        <circle cx="590" cy="240" r="50" fill="url(#heat3)"/>
+        <circle cx="390" cy="390" r="45" fill="url(#heat3)"/>
+        <circle cx="300" cy="240" r="40" fill="url(#heat3)"/>
+        <circle cx="150" cy="150" r="45" fill="url(#heat3)"/>
+        <circle cx="630" cy="80" r="40" fill="url(#heat3)"/>
+        <circle cx="630" cy="320" r="35" fill="url(#heat3)"/>
         
         <!-- 城市标注 -->
-        <text x="580" y="175" font-size="11" fill="#8b7355" text-anchor="middle">北京</text>
-        <text x="645" y="275" font-size="11" fill="#8b7355" text-anchor="middle">上海</text>
-        <text x="615" y="395" font-size="11" fill="#8b7355" text-anchor="middle">广州</text>
-        <text x="445" y="375" font-size="11" fill="#8b7355" text-anchor="middle">成都</text>
-        <text x="415" y="255" font-size="11" fill="#8b7355" text-anchor="middle">西安</text>
+        <text x="520" y="155" font-size="10" fill="#6b5344" text-anchor="middle">北京</text>
+        <text x="575" y="245" font-size="10" fill="#6b5344" text-anchor="middle">上海</text>
+        <text x="545" y="355" font-size="10" fill="#6b5344" text-anchor="middle">广州</text>
+        <text x="395" y="325" font-size="10" fill="#6b5344" text-anchor="middle">成都</text>
+        <text x="365" y="205" font-size="10" fill="#6b5344" text-anchor="middle">西安</text>
       </svg>
     </div>
     
@@ -147,11 +142,11 @@
         <div class="stats-label">总访客数</div>
       </div>
       <ul class="ranking-list">
-        <li class="ranking-item"><span class="ranking-rank">1</span><span>北京</span><span>523</span></li>
-        <li class="ranking-item"><span class="ranking-rank">2</span><span>上海</span><span>486</span></li>
-        <li class="ranking-item"><span class="ranking-rank">3</span><span>广州</span><span>412</span></li>
-        <li class="ranking-item"><span class="ranking-rank">4</span><span>成都</span><span>356</span></li>
-        <li class="ranking-item"><span class="ranking-rank">5</span><span>深圳</span><span>298</span></li>
+        <li class="ranking-item"><span>1</span><span>北京</span><span>523</span></li>
+        <li class="ranking-item"><span>2</span><span>上海</span><span>486</span></li>
+        <li class="ranking-item"><span>3</span><span>广州</span><span>412</span></li>
+        <li class="ranking-item"><span>4</span><span>成都</span><span>356</span></li>
+        <li class="ranking-item"><span>5</span><span>深圳</span><span>298</span></li>
       </ul>
     </div>
     
