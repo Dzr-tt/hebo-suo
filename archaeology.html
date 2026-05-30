@@ -182,16 +182,17 @@
       color: #666;
     }
 
-    .reveal-modal-content {
+    .reveal-modal .reveal-content {
       text-align: center;
+      padding: 24px 20px;
     }
 
     .reveal-modal-icon {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       border: 3px solid;
-      margin: 0 auto 16px;
+      margin: 0 auto 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -202,6 +203,112 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .reveal-modal .reveal-name {
+      color: #FFD700;
+      font-size: 1.3rem;
+      margin: 0 0 8px 0;
+    }
+
+    .reveal-modal .reveal-era {
+      color: #C9A227;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .collection-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(30, 22, 12, 0.98);
+      border: 2px solid #8B6914;
+      border-radius: 16px;
+      padding: 20px;
+      z-index: 1001;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .collection-modal .collection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(139, 105, 20, 0.4);
+    }
+
+    .collection-modal .collection-header h2 {
+      color: #FFD700;
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .collection-modal .close-btn {
+      background: none;
+      border: none;
+      color: #C9A227;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+    }
+
+    .collection-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 8px;
+      background: rgba(61, 50, 40, 0.6);
+      border-radius: 10px;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .collection-card:hover {
+      border-color: #8B6914;
+      background: rgba(139, 105, 20, 0.2);
+    }
+
+    .collection-card .artifact-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .collection-card .artifact-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .collection-card .artifact-name {
+      color: #C9A227;
+      font-size: 0.8rem;
+      margin: 0 0 4px 0;
+      text-align: center;
+    }
+
+    .collection-card .artifact-era {
+      color: #8B7355;
+      font-size: 0.7rem;
+      margin: 0;
     }
 
     @media (max-width: 480px) {
@@ -222,6 +329,46 @@
 
       .artifact-gallery-name {
         font-size: 0.7rem;
+      }
+
+      .reveal-modal .reveal-content {
+        padding: 20px 16px;
+      }
+
+      .reveal-modal-icon {
+        width: 60px;
+        height: 60px;
+      }
+
+      .reveal-modal .reveal-name {
+        font-size: 1.1rem;
+      }
+
+      .collection-modal {
+        width: 95%;
+        padding: 16px;
+      }
+
+      .collection-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+      }
+
+      .collection-card {
+        padding: 10px 6px;
+      }
+
+      .collection-card .artifact-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .collection-card .artifact-name {
+        font-size: 0.7rem;
+      }
+
+      .collection-card .artifact-era {
+        font-size: 0.6rem;
       }
     }
   </style>
@@ -302,6 +449,7 @@
       </div>
 
       <div class="action-bar">
+        <button class="action-btn" onclick="goHome()">🏠 返回首页</button>
         <button class="action-btn" onclick="resetGame()">重新开始</button>
         <button class="action-btn" onclick="viewArtifactGallery()">图鉴</button>
         <button class="action-btn primary" onclick="viewCollection()">
@@ -322,18 +470,16 @@
 
     <div id="artifactReveal" class="reveal-modal hidden">
       <div class="reveal-content">
-        <div class="reveal-modal-content">
-          <div class="reveal-modal-icon" id="revealIcon"></div>
-          <h2 id="revealName" class="reveal-name">文物名称</h2>
-          <p id="revealEra" class="reveal-era">时代</p>
-        </div>
+        <div class="reveal-modal-icon" id="revealIcon"></div>
+        <h2 id="revealName" class="reveal-name">文物名称</h2>
+        <p id="revealEra" class="reveal-era">时代</p>
         <button class="close-btn" onclick="closeReveal()" style="margin-top: 16px;">确定</button>
       </div>
     </div>
 
     <div id="collectionView" class="collection-modal hidden">
       <div class="collection-header">
-        <h2>我的收藏</h2>
+        <h2>🎒 我的收藏</h2>
         <button class="close-btn" onclick="closeOverlay()">×</button>
       </div>
       <div id="collectionGrid" class="collection-grid"></div>

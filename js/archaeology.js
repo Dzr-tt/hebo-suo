@@ -68,6 +68,10 @@ function getUserInfo() {
   return null;
 }
 
+function goHome() {
+  window.location.href = 'index.html';
+}
+
 function initArchaeologyGame() {
   gameState.digSpots = [];
   gameState.foundCount = 0;
@@ -452,7 +456,7 @@ function viewCollection() {
   const artifacts = user && user.collectedArtifacts ? user.collectedArtifacts : [];
 
   if (artifacts.length === 0) {
-    grid.innerHTML = '<p style="text-align: center; color: #999;">还没有收藏任何文物</p>';
+    grid.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">还没有收藏任何文物</p>';
   } else {
     artifacts.forEach(artifact => {
       const card = document.createElement('div');
