@@ -34,9 +34,20 @@
         </div>
       </div>
 
-      <p style="color: var(--secondary-yellow); margin-bottom: 12px; font-size: 0.9rem;">
-        探测器扫描 → 铁锹/锄头挖掘 → 刷子清理
-      </p>
+      <div class="operation-guide">
+        <div class="guide-step">
+          <span class="step-number">1</span>
+          <span class="step-text">选择<span class="step-highlight">探测器</span>，点击土地扫描</span>
+        </div>
+        <div class="guide-step">
+          <span class="step-number">2</span>
+          <span class="step-text">发现文物后，选择<span class="step-highlight">铁锹</span>或<span class="step-highlight">锄头</span>挖掘</span>
+        </div>
+        <div class="guide-step">
+          <span class="step-number">3</span>
+          <span class="step-text">挖掘完毕，选择<span class="step-highlight">刷子</span>清理文物</span>
+        </div>
+      </div>
 
       <div class="tool-bar" id="toolBar">
         <div class="tool-item active" data-tool="detector" onclick="selectTool('detector')">
@@ -82,6 +93,7 @@
           <div class="soil-layer layer-deep"></div>
           <div class="artifact-markers" id="artifactMarkers"></div>
           <div class="dig-cursor" id="digCursor"></div>
+          <div class="scan-effect" id="scanEffect"></div>
         </div>
       </div>
 

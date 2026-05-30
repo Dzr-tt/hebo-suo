@@ -266,7 +266,7 @@ function handleDig(x, y) {
 
   switch(tool) {
     case 'detector':
-      handleDetector(targetArtifact);
+      handleDetector(targetArtifact, x, y);
       break;
     case 'shovel':
     case 'pickaxe':
@@ -278,9 +278,32 @@ function handleDig(x, y) {
   }
 }
 
-function handleDetector(targetArtifact) {
+function handleDetector(targetArtifact, x, y) {
+  const scanEffect = document.getElementById('scanEffect');
+  scanEffect.classList.add('scanning');
+  
+  const ring = document.createElement('div');
+  ring.className = 'scan-ring';
+  ring.style.left = x + 'px';
+  ring.style.top = y + 'px';
+  scanEffect.appendChild(ring);
+  
+  setTimeout(() => ring.remove(), 1000);
+  
   if (targetArtifact) {
     if (targetArtifact.state === SPOT_STATES.unexplored) {
+      setTimeout(() => {
+        const success = document.createElement('div');
+        success.className = 'scan-success';
+        success.style.left = targetArtifact.x + 'px';
+        success.style.top = targetArtifact.y + 'px';
+        success.innerHTML = '📍';
+        success.style.fontSize = '2rem';
+        scanEffect.appendChild(success);
+        
+        setTimeout(() => success.remove(), 1000);
+      }, 300);
+      
       targetArtifact.state = SPOT_STATES.scanned;
       saveGame();
       renderArtifacts();
@@ -291,6 +314,10 @@ function handleDetector(targetArtifact) {
   } else {
     showToast('此处没有文物');
   }
+  
+  setTimeout(() => {
+    scanEffect.classList.remove('scanning');
+  }, 1000);
 }
 
 function handleDigging(targetArtifact, tool) {

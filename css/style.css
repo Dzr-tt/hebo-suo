@@ -1081,6 +1081,62 @@ body::before {
   50% { transform: scale(1.3); opacity: 0.7; }
 }
 
+.scan-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.scan-effect.scanning {
+  display: block;
+}
+
+.scan-ring {
+  position: absolute;
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: scanExpand 1s ease-out forwards;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes scanExpand {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+.scan-success {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  animation: scanSuccess 0.5s ease-out forwards;
+}
+
+@keyframes scanSuccess {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
 .marker-dig {
   width: 50px;
   height: 50px;
@@ -1303,6 +1359,51 @@ body::before {
 
 .action-btn.primary:hover {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.operation-guide {
+  background: rgba(26, 21, 16, 0.6);
+  border: 1px solid var(--primary-bronze);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.guide-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(201, 162, 39, 0.2);
+}
+
+.guide-step:last-child {
+  border-bottom: none;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--primary-bronze) 0%, var(--accent-gold) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #1a1510;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.step-text {
+  color: var(--secondary-ivory);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.step-highlight {
+  color: var(--accent-gold);
+  font-weight: bold;
 }
 
 .tool-bar {
