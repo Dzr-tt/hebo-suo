@@ -3,21 +3,25 @@ const STORAGE_KEYS = {
   CURRENT_USER: 'heboUser'
 };
 
-function switchTab(tab) {
-  const tabs = document.querySelectorAll('.tab-btn');
-  const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
+function showTab(tab) {
+  const tabs = document.querySelectorAll('.tab');
+  const loginForm = document.getElementById('formLogin');
+  const registerForm = document.getElementById('formRegister');
 
   tabs.forEach(t => t.classList.remove('active'));
 
   if (tab === 'login') {
-    document.querySelector('[data-tab="login"]').classList.add('active');
+    document.getElementById('tabLogin').classList.add('active');
+    loginForm.classList.add('active');
     loginForm.classList.remove('hidden');
+    registerForm.classList.remove('active');
     registerForm.classList.add('hidden');
   } else {
-    document.querySelector('[data-tab="register"]').classList.add('active');
-    loginForm.classList.add('hidden');
+    document.getElementById('tabRegister').classList.add('active');
+    registerForm.classList.add('active');
     registerForm.classList.remove('hidden');
+    loginForm.classList.remove('active');
+    loginForm.classList.add('hidden');
   }
 }
 
@@ -39,8 +43,8 @@ function togglePassword(fieldId) {
 function handleLogin(event) {
   event.preventDefault();
 
-  const username = document.getElementById('loginUsername').value.trim();
-  const password = document.getElementById('loginPassword').value;
+  const username = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value;
 
   if (!username || !password) {
     showToast('请填写用户名和密码', 'error');
@@ -64,8 +68,8 @@ function handleLogin(event) {
 function handleRegister(event) {
   event.preventDefault();
 
-  const username = document.getElementById('regUsername').value.trim();
-  const password = document.getElementById('regPassword').value;
+  const username = document.getElementById('regUser').value.trim();
+  const password = document.getElementById('regPass').value;
   const province = document.getElementById('regProvince').value;
 
   if (!username || !password || !province) {

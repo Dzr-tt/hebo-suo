@@ -3,208 +3,196 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>登录注册 - 河伯所·古滇探秘</title>
+  <title>古滇探秘 - 登录注册</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%231a1510' stroke='%238B6914' stroke-width='3'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='2'/%3E%3C/svg%3E">
 </head>
-<body>
-  <!-- 角落纹饰装饰 -->
-  <svg class="corner-decoration top-left" viewBox="0 0 100 100">
-    <path d="M5 5 Q15 15 5 25 Q20 15 35 5" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.3"/>
-    <path d="M10 10 Q20 20 10 30" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-    <circle cx="15" cy="15" r="8" fill="none" stroke="#8B6914" stroke-width="0.3" opacity="0.2"/>
-  </svg>
-  <svg class="corner-decoration top-right" viewBox="0 0 100 100">
-    <path d="M95 5 Q85 15 95 25 Q80 15 65 5" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.3"/>
-    <path d="M90 10 Q80 20 90 30" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-    <circle cx="85" cy="15" r="8" fill="none" stroke="#8B6914" stroke-width="0.3" opacity="0.2"/>
-  </svg>
-  <svg class="corner-decoration bottom-left" viewBox="0 0 100 100">
-    <path d="M5 95 Q15 85 5 75 Q20 85 35 95" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.3"/>
-    <path d="M10 90 Q20 80 10 70" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-    <circle cx="15" cy="85" r="8" fill="none" stroke="#8B6914" stroke-width="0.3" opacity="0.2"/>
-  </svg>
-  <svg class="corner-decoration bottom-right" viewBox="0 0 100 100">
-    <path d="M95 95 Q85 85 95 75 Q80 85 65 95" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.3"/>
-    <path d="M90 90 Q80 80 90 70" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-    <circle cx="85" cy="85" r="8" fill="none" stroke="#8B6914" stroke-width="0.3" opacity="0.2"/>
+<body class="auth-page">
+  <!-- 背景纹理 -->
+  <div class="bg-pattern"></div>
+  
+  <!-- 顶部云雷纹装饰 -->
+  <svg class="decor-top" viewBox="0 0 400 60">
+    <defs>
+      <linearGradient id="gradTop" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#8B6914;stop-opacity:0"/>
+        <stop offset="50%" style="stop-color:#C9A227;stop-opacity:0.4"/>
+        <stop offset="100%" style="stop-color:#8B6914;stop-opacity:0"/>
+      </linearGradient>
+    </defs>
+    <path d="M0 30 Q50 10 100 30 Q150 50 200 30 Q250 10 300 30 Q350 50 400 30" fill="none" stroke="url(#gradTop)" stroke-width="1.5"/>
+    <circle cx="60" cy="30" r="8" fill="none" stroke="url(#gradTop)" stroke-width="0.8"/>
+    <circle cx="200" cy="30" r="10" fill="none" stroke="url(#gradTop)" stroke-width="0.8"/>
+    <circle cx="340" cy="30" r="8" fill="none" stroke="url(#gradTop)" stroke-width="0.8"/>
   </svg>
 
-  <div class="container page">
-    <div class="auth-wrapper">
-      <div class="auth-card">
-        <!-- 头部装饰 -->
-        <div class="card-header">
-          <svg class="header-pattern" viewBox="0 0 200 40">
-            <path d="M0 20 Q25 10 50 20 Q75 30 100 20 Q125 10 150 20 Q175 30 200 20" fill="none" stroke="#8B6914" stroke-width="0.5" opacity="0.3"/>
-            <circle cx="30" cy="20" r="5" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-            <circle cx="100" cy="20" r="6" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-            <circle cx="170" cy="20" r="5" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-          </svg>
-        </div>
+  <!-- 底部云雷纹装饰 -->
+  <svg class="decor-bottom" viewBox="0 0 400 60">
+    <path d="M0 30 Q50 50 100 30 Q150 10 200 30 Q250 50 300 30 Q350 10 400 30" fill="none" stroke="url(#gradTop)" stroke-width="1.5"/>
+    <circle cx="60" cy="30" r="8" fill="none" stroke="url(#gradTop)" stroke-width="0.8"/>
+    <circle cx="200" cy="30" r="10" fill="none" stroke="url(#gradTop)" stroke-width="0.8"/>
+    <circle cx="340" cy="30" r="8" fill="none" stroke="url(#gradTop)" stroke-width="0.8"/>
+  </svg>
 
-        <!-- Logo区域 -->
-        <div class="logo-section">
-          <svg class="main-logo" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="35" fill="none" stroke="#8B6914" stroke-width="2"/>
-            <circle cx="40" cy="40" r="28" fill="none" stroke="#C9A227" stroke-width="1.5" opacity="0.6"/>
-            <path d="M40 15 L46 28 L40 41 L34 28 Z" fill="#FFD700"/>
-            <circle cx="40" cy="52" r="18" fill="none" stroke="#8B6914" stroke-width="1.5"/>
-            <circle cx="40" cy="52" r="6" fill="#8B6914"/>
-          </svg>
-          <h1 class="app-title">古滇探秘</h1>
-          <p class="app-subtitle">探索河伯所文化遗址的奥秘</p>
-        </div>
-
-        <!-- 标签切换 -->
-        <div class="tab-container">
-          <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">
-            <svg class="tab-icon" viewBox="0 0 24 24">
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-            </svg>
-            <span>登录</span>
-          </button>
-          <button class="tab-btn" data-tab="register" onclick="switchTab('register')">
-            <svg class="tab-icon" viewBox="0 0 24 24">
-              <path d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>注册</span>
-          </button>
-        </div>
-
-        <!-- 登录表单 -->
-        <form id="loginForm" onsubmit="handleLogin(event)" class="auth-form">
-          <div class="form-group">
-            <label class="form-label">
-              <svg class="label-icon" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-              <span>用户名</span>
-            </label>
-            <input type="text" class="form-input" id="loginUsername" placeholder="请输入用户名" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">
-              <svg class="label-icon" viewBox="0 0 24 24">
-                <path d="M18 8h-1V6a6 6 0 00-12 0v2H6c-1.1 0-2 .9-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a4 4 0 018 0v2z"/>
-              </svg>
-              <span>密码</span>
-            </label>
-            <div class="password-field">
-              <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" required>
-              <button type="button" class="toggle-btn" onclick="togglePassword('loginPassword')">
-                <svg class="eye-icon" viewBox="0 0 24 24">
-                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <button type="submit" class="submit-btn">
-            <svg class="btn-icon" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            <span>登录</span>
-          </button>
-        </form>
-
-        <!-- 注册表单 -->
-        <form id="registerForm" onsubmit="handleRegister(event)" class="auth-form hidden">
-          <div class="form-group">
-            <label class="form-label">
-              <svg class="label-icon" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-              <span>用户名</span>
-            </label>
-            <input type="text" class="form-input" id="regUsername" placeholder="请输入用户名" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">
-              <svg class="label-icon" viewBox="0 0 24 24">
-                <path d="M18 8h-1V6a6 6 0 00-12 0v2H6c-1.1 0-2 .9-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a4 4 0 018 0v2z"/>
-              </svg>
-              <span>密码</span>
-            </label>
-            <div class="password-field">
-              <input type="password" class="form-input" id="regPassword" placeholder="请输入密码" required>
-              <button type="button" class="toggle-btn" onclick="togglePassword('regPassword')">
-                <svg class="eye-icon" viewBox="0 0 24 24">
-                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">
-              <svg class="label-icon" viewBox="0 0 24 24">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
-              <span>所在省份</span>
-            </label>
-            <select class="form-select" id="regProvince" required>
-              <option value="">请选择所在省份</option>
-              <option value="北京">北京市</option>
-              <option value="天津">天津市</option>
-              <option value="河北">河北省</option>
-              <option value="山西">山西省</option>
-              <option value="内蒙古">内蒙古自治区</option>
-              <option value="辽宁">辽宁省</option>
-              <option value="吉林">吉林省</option>
-              <option value="黑龙江">黑龙江省</option>
-              <option value="上海">上海市</option>
-              <option value="江苏">江苏省</option>
-              <option value="浙江">浙江省</option>
-              <option value="安徽">安徽省</option>
-              <option value="福建">福建省</option>
-              <option value="江西">江西省</option>
-              <option value="山东">山东省</option>
-              <option value="河南">河南省</option>
-              <option value="湖北">湖北省</option>
-              <option value="湖南">湖南省</option>
-              <option value="广东">广东省</option>
-              <option value="广西">广西壮族自治区</option>
-              <option value="海南">海南省</option>
-              <option value="重庆">重庆市</option>
-              <option value="四川">四川省</option>
-              <option value="贵州">贵州省</option>
-              <option value="云南">云南省</option>
-              <option value="西藏">西藏自治区</option>
-              <option value="陕西">陕西省</option>
-              <option value="甘肃">甘肃省</option>
-              <option value="青海">青海省</option>
-              <option value="宁夏">宁夏回族自治区</option>
-              <option value="新疆">新疆维吾尔自治区</option>
-              <option value="台湾">台湾省</option>
-              <option value="香港">香港特别行政区</option>
-              <option value="澳门">澳门特别行政区</option>
-            </select>
-          </div>
-          <button type="submit" class="submit-btn">
-            <svg class="btn-icon" viewBox="0 0 24 24">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-            <span>注册</span>
-          </button>
-        </form>
-
-        <!-- 返回首页 -->
-        <a href="index.html" class="back-link">
-          <svg viewBox="0 0 24 24">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
-          <span>返回首页</span>
-        </a>
-
-        <!-- 底部装饰 -->
-        <div class="card-footer">
-          <svg class="footer-pattern" viewBox="0 0 200 30">
-            <path d="M0 15 Q25 5 50 15 Q75 25 100 15 Q125 5 150 15 Q175 25 200 15" fill="none" stroke="#8B6914" stroke-width="0.5" opacity="0.3"/>
-            <circle cx="30" cy="15" r="4" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-            <circle cx="100" cy="15" r="5" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-            <circle cx="170" cy="15" r="4" fill="none" stroke="#C9A227" stroke-width="0.5" opacity="0.2"/>
-          </svg>
-        </div>
+  <div class="auth-container">
+    <div class="auth-card">
+      <!-- Logo区域 -->
+      <div class="card-logo">
+        <svg viewBox="0 0 100 100" class="logo-main">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#8B6914" stroke-width="2"/>
+          <circle cx="50" cy="50" r="35" fill="none" stroke="#C9A227" stroke-width="1.5" opacity="0.6"/>
+          <path d="M50 18 L57 32 L50 46 L43 32 Z" fill="#FFD700"/>
+          <circle cx="50" cy="58" r="20" fill="none" stroke="#8B6914" stroke-width="1.5"/>
+          <circle cx="50" cy="58" r="6" fill="#8B6914"/>
+          <!-- 装饰点 -->
+          <circle cx="25" cy="25" r="3" fill="#C9A227" opacity="0.6"/>
+          <circle cx="75" cy="25" r="3" fill="#C9A227" opacity="0.6"/>
+          <circle cx="25" cy="75" r="3" fill="#C9A227" opacity="0.6"/>
+          <circle cx="75" cy="75" r="3" fill="#C9A227" opacity="0.6"/>
+        </svg>
+        <h1 class="card-title">古滇探秘</h1>
+        <p class="card-subtitle">探索河伯所文化遗址</p>
       </div>
+
+      <!-- 标签切换 -->
+      <div class="tabs-wrapper">
+        <button class="tab active" id="tabLogin" onclick="showTab('login')">
+          <span class="tab-text">登录</span>
+          <span class="tab-indicator"></span>
+        </button>
+        <button class="tab" id="tabRegister" onclick="showTab('register')">
+          <span class="tab-text">注册</span>
+          <span class="tab-indicator"></span>
+        </button>
+      </div>
+
+      <!-- 登录表单 -->
+      <form id="formLogin" class="form-panel active" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span>用户名</span>
+          </label>
+          <input type="text" id="loginUser" class="form-input" placeholder="请输入用户名" required>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 24 24">
+              <path d="M18 8h-1V6a6 6 0 00-12 0v2H6c-1.1 0-2 .9-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a4 4 0 018 0v2z"/>
+            </svg>
+            <span>密码</span>
+          </label>
+          <div class="password-box">
+            <input type="password" id="loginPass" class="form-input" placeholder="请输入密码" required>
+            <button type="button" class="toggle-pass" onclick="togglePassword('loginPass')">
+              <svg class="eye" viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span class="btn-text">登 录</span>
+          <svg class="btn-arrow" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- 注册表单 -->
+      <form id="formRegister" class="form-panel" onsubmit="handleRegister(event)">
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span>用户名</span>
+          </label>
+          <input type="text" id="regUser" class="form-input" placeholder="请输入用户名(4-20字符)" required>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 24 24">
+              <path d="M18 8h-1V6a6 6 0 00-12 0v2H6c-1.1 0-2 .9-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a4 4 0 018 0v2z"/>
+            </svg>
+            <span>密码</span>
+          </label>
+          <div class="password-box">
+            <input type="password" id="regPass" class="form-input" placeholder="请输入密码" required>
+            <button type="button" class="toggle-pass" onclick="togglePassword('regPass')">
+              <svg class="eye" viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">
+            <svg class="label-icon" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span>所在省份</span>
+          </label>
+          <select id="regProvince" class="form-select" required>
+            <option value="">请选择省份</option>
+            <option value="北京">北京市</option>
+            <option value="天津">天津市</option>
+            <option value="河北">河北省</option>
+            <option value="山西">山西省</option>
+            <option value="内蒙古">内蒙古自治区</option>
+            <option value="辽宁">辽宁省</option>
+            <option value="吉林">吉林省</option>
+            <option value="黑龙江">黑龙江省</option>
+            <option value="上海">上海市</option>
+            <option value="江苏">江苏省</option>
+            <option value="浙江">浙江省</option>
+            <option value="安徽">安徽省</option>
+            <option value="福建">福建省</option>
+            <option value="江西">江西省</option>
+            <option value="山东">山东省</option>
+            <option value="河南">河南省</option>
+            <option value="湖北">湖北省</option>
+            <option value="湖南">湖南省</option>
+            <option value="广东">广东省</option>
+            <option value="广西">广西壮族自治区</option>
+            <option value="海南">海南省</option>
+            <option value="重庆">重庆市</option>
+            <option value="四川">四川省</option>
+            <option value="贵州">贵州省</option>
+            <option value="云南">云南省</option>
+            <option value="西藏">西藏自治区</option>
+            <option value="陕西">陕西省</option>
+            <option value="甘肃">甘肃省</option>
+            <option value="青海">青海省</option>
+            <option value="宁夏">宁夏回族自治区</option>
+            <option value="新疆">新疆维吾尔自治区</option>
+            <option value="台湾">台湾省</option>
+            <option value="香港">香港特别行政区</option>
+            <option value="澳门">澳门特别行政区</option>
+          </select>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span class="btn-text">注 册</span>
+          <svg class="btn-arrow" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- 返回首页 -->
+      <a href="index.html" class="back-link">
+        <svg viewBox="0 0 24 24" class="back-icon">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>返回首页</span>
+      </a>
     </div>
   </div>
 
