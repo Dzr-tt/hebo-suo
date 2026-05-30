@@ -166,12 +166,37 @@ function handleScan(e) {
 
   const scanRadius = 12;
   let foundSpot = null;
+  let closestSpot = null;
+  let minDistance = Infinity;
+  let closestDirection = '';
 
   archaeologyState.digSpots.forEach((spot) => {
     if (spot.state === 'hidden') {
       const distance = Math.sqrt(Math.pow(clickX - spot.x, 2) + Math.pow(clickY - spot.y, 2));
+      
       if (distance <= scanRadius) {
         foundSpot = spot;
+      }
+      
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestSpot = spot;
+        
+        const dx = spot.x - clickX;
+        const dy = spot.y - clickY;
+        
+        if (Math.abs(dx) > Math.abs(dy)) {
+          closestDirection = dx > 0 ? '右' : '左';
+        } else {
+          closestDirection = dy > 0 ? '下' : '上';
+        }
+        
+        if (Math.abs(dx) > 30 && Math.abs(dy) > 30) {
+          if (dx > 0 && dy > 0) closestDirection = '右下';
+          else if (dx > 0 && dy < 0) closestDirection = '右上';
+          else if (dx < 0 && dy > 0) closestDirection = '左下';
+          else closestDirection = '左上';
+        }
       }
     }
   });
@@ -185,6 +210,20 @@ function handleScan(e) {
         marker.classList.add('detected');
         showToolTip('发现文物信号！切换到挖掘工具');
       }
+    }, 600);
+  } else if (closestSpot) {
+    setTimeout(() => {
+      let hintText = '';
+      if (minDistance <= 20) {
+        hintText = `探测器有微弱反应！文物在${closestDirection}方，很近了~`;
+      } else if (minDistance <= 35) {
+        hintText = `探测器有感应！文物在${closestDirection}方，距离适中`;
+      } else if (minDistance <= 50) {
+        hintText = `探测器轻微响应，文物在${closestDirection}方，还有段距离`;
+      } else {
+        hintText = `探测器无响应，文物在${closestDirection}方，较远`;
+      }
+      showToolTip(hintText);
     }, 600);
   } else {
     setTimeout(() => {
