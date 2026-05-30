@@ -137,6 +137,17 @@ function initGame() {
   document.getElementById('foundCount').textContent = '0';
   selectTool('detector');
   updateCollectionCount();
+
+  const digGround = document.getElementById('digGround');
+  if (digGround) {
+    digGround.onclick = function(e) {
+      if (e.target.id === 'digGround' || e.target.classList.contains('soil-layer')) {
+        if (archaeologyState.currentTool === 'detector') {
+          showScanEffect(e);
+        }
+      }
+    };
+  }
 }
 
 function handleSpotClick(spotIndex, event) {
@@ -181,36 +192,32 @@ function handleSpotClick(spotIndex, event) {
   }
 }
 
-document.getElementById('digGround').addEventListener('click', function(e) {
-  if (e.target.id === 'digGround' || e.target.classList.contains('soil-layer')) {
-    if (archaeologyState.currentTool === 'detector') {
-      showScanEffect(e);
-    }
-  }
-});
-
 function showScanEffect(e) {
-  const rect = this.getBoundingClientRect();
+  const rect = e.target.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
   const effect = document.getElementById('scanEffect');
-  effect.style.left = `${x - 50}px`;
-  effect.style.top = `${y - 50}px`;
-  effect.classList.add('active');
+  if (effect) {
+    effect.style.left = `${x - 50}px`;
+    effect.style.top = `${y - 50}px`;
+    effect.classList.add('active');
 
-  setTimeout(() => {
-    effect.classList.remove('active');
-  }, 600);
+    setTimeout(() => {
+      effect.classList.remove('active');
+    }, 600);
+  }
 }
 
 function showToolTip(text) {
   const tip = document.getElementById('toolTip');
-  tip.textContent = text;
-  tip.classList.add('show');
-  setTimeout(() => {
-    tip.classList.remove('show');
-  }, 2000);
+  if (tip) {
+    tip.textContent = text;
+    tip.classList.add('show');
+    setTimeout(() => {
+      tip.classList.remove('show');
+    }, 2000);
+  }
 }
 
 function showArtifactReveal(artifact) {
@@ -220,6 +227,8 @@ function showArtifactReveal(artifact) {
   const name = document.getElementById('revealName');
   const era = document.getElementById('revealEra');
   const desc = document.getElementById('revealDesc');
+
+  if (!overlay || !reveal || !icon || !name || !era || !desc) return;
 
   icon.innerHTML = `
     <defs>
@@ -246,13 +255,14 @@ function closeReveal() {
   const overlay = document.getElementById('overlay');
   const reveal = document.getElementById('artifactReveal');
 
-  overlay.classList.add('hidden');
-  reveal.classList.add('hidden');
+  if (overlay) overlay.classList.add('hidden');
+  if (reveal) reveal.classList.add('hidden');
 
   if (archaeologyState.currentArtifact) {
     archaeologyState.foundArtifacts.push(archaeologyState.currentArtifact);
     archaeologyState.foundCount++;
-    document.getElementById('foundCount').textContent = archaeologyState.foundCount;
+    const foundCountEl = document.getElementById('foundCount');
+    if (foundCountEl) foundCountEl.textContent = archaeologyState.foundCount;
     updateCollectionCount();
 
     saveCollection();
@@ -289,12 +299,15 @@ function updateCollectionCount() {
   if (user && user.collectedArtifacts) {
     count = user.collectedArtifacts.length;
   }
-  document.getElementById('collectionCount').textContent = count;
+  const collectionCountEl = document.getElementById('collectionCount');
+  if (collectionCountEl) collectionCountEl.textContent = count;
 }
 
 function viewCollection() {
   const overlay = document.getElementById('overlay');
   const grid = document.getElementById('collectionGrid');
+
+  if (!overlay || !grid) return;
 
   grid.innerHTML = '';
 
@@ -334,12 +347,13 @@ function resetGame() {
   archaeologyState.selectedSpot = null;
   archaeologyState.currentArtifact = null;
 
-  document.getElementById('foundCount').textContent = '0';
+  const foundCountEl = document.getElementById('foundCount');
+  if (foundCountEl) foundCountEl.textContent = '0';
 
   const overlay = document.getElementById('overlay');
   const reveal = document.getElementById('artifactReveal');
-  overlay.classList.add('hidden');
-  reveal.classList.add('hidden');
+  if (overlay) overlay.classList.add('hidden');
+  if (reveal) reveal.classList.add('hidden');
 
   selectTool('detector');
 }
