@@ -112,7 +112,10 @@ function renderPuzzle() {
   const image = PUZZLE_IMAGES[puzzleState.currentImageIndex];
   const pieceSize = 100 / puzzleState.size;
   
-  puzzleState.tiles.forEach(tile => {
+  // 按照 currentPosition 排序后再渲染，这样打乱才能生效
+  const sortedTiles = [...puzzleState.tiles].sort((a, b) => a.currentPosition - b.currentPosition);
+  
+  sortedTiles.forEach(tile => {
     const tileElement = document.createElement('div');
     tileElement.className = `puzzle-tile ${tile.isEmpty ? 'empty' : ''}`;
     tileElement.dataset.id = tile.id;
