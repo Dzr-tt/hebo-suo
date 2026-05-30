@@ -209,64 +209,10 @@ function renderDigSpots() {
         <div class="dig-progress" style="height: ${progress}%"></div>
         <div class="spot-marker">?</div>
       `;
-      spot.onclick = () => digSpot(i, artifactData);
-
-      spot.addEventListener('click', function(e) {
-        if (!gameState.foundArtifacts.includes(i)) {
-          animateDig(this, artifactData);
-        }
-      });
+      spot.onclick = () => handleDig(i, artifactData);
     }
 
     container.appendChild(spot);
-  }
-}
-
-function animateDig(spotEl, artifactData) {
-  const tool = gameState.currentTool;
-
-  if (tool === 'detector') {
-    if (artifactData) {
-      spotEl.classList.add('detecting');
-      showToast('检测到文物信号！');
-      setTimeout(() => spotEl.classList.remove('detecting'), 1000);
-    } else {
-      showToast('此处无文物');
-    }
-    return;
-  }
-
-  const toolInfo = TOOLS[tool];
-  let progress = gameState.digProgress[spotEl.dataset.index] || 0;
-  const artifactDepth = artifactData ? getDepthValue(artifactData.depth) : 0;
-  const toolPower = toolInfo.digSpeed;
-
-  if (!artifactDepth) {
-    progress = Math.min(progress + toolPower * 5, 30);
-  } else {
-    progress = Math.min(progress + toolPower * 10, 100);
-  }
-
-  gameState.digProgress[spotEl.dataset.index] = progress;
-  saveGame();
-
-  const progressBar = spotEl.querySelector('.dig-progress');
-  if (progressBar) {
-    progressBar.style.height = progress + '%';
-  }
-
-  spotEl.style.transform = 'scale(0.95)';
-  setTimeout(() => spotEl.style.transform = '', 100);
-
-  if (progress >= 100 && artifactData && !gameState.foundArtifacts.includes(parseInt(spotEl.dataset.index))) {
-    gameState.foundArtifacts.push(parseInt(spotEl.dataset.index));
-    saveGame();
-    renderDigSpots();
-    showArtifactReveal(artifactData.artifact);
-  } else if (progress >= 100 && !artifactData) {
-    showToast('这里只有泥土...');
-  } else if (progress >= 80 && artifactData) {
-    showToast('快要挖到了！');
   }
 }
 
@@ -279,42 +225,48 @@ function getDepthValue(depth) {
   }
 }
 
-function digSpot(index, artifactData) {
-  const progress = gameState.digProgress[index] || 0;
+function handleDig(index, artifactData) {
   const tool = gameState.currentTool;
-  const toolInfo = TOOLS[tool];
 
   if (tool === 'detector') {
     if (artifactData) {
-      showToast(`${TOOLS[tool].name}检测到文物信号！`);
+      showToast('检测到文物信号！');
     } else {
       showToast('此处无文物');
     }
     return;
   }
 
-  let newProgress = progress;
+  const toolInfo = TOOLS[tool];
+  let progress = gameState.digProgress[index] || 0;
+  const artifactDepth = artifactData ? getDepthValue(artifactData.depth) : 0;
+  const toolPower = toolInfo.digSpeed;
+
   if (artifactData) {
     const requiredDepth = getDepthValue(artifactData.depth);
-    if (toolInfo.digSpeed >= requiredDepth) {
-      newProgress = Math.min(progress + toolInfo.digSpeed * 15, 100);
-    } else {
-      newProgress = Math.min(progress + toolInfo.digSpeed * 8, 60);
+    if (toolPower < requiredDepth) {
+      progress = Math.min(progress + toolPower * 8, 60);
       showToast('这个工具不太合适...');
+    } else {
+      progress = Math.min(progress + toolPower * 15, 100);
     }
   } else {
-    newProgress = Math.min(progress + toolInfo.digSpeed * 5, 40);
+    progress = Math.min(progress + toolPower * 5, 40);
   }
 
-  gameState.digProgress[index] = newProgress;
+  gameState.digProgress[index] = progress;
   saveGame();
   renderDigSpots();
 
-  if (newProgress >= 100 && artifactData) {
+  if (progress >= 100 && artifactData) {
     gameState.foundArtifacts.push(index);
     saveGame();
     renderDigSpots();
     showArtifactReveal(artifactData.artifact);
+  } else if (progress >= 100 && !artifactData) {
+    showToast('这里只有泥土...');
+  } else if (progress >= 80 && artifactData) {
+    showToast('快要挖到了！');
   }
 }
 
