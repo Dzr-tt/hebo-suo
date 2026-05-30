@@ -4,93 +4,96 @@ const ARTIFACTS = [
     name: '滇王金印',
     era: '汉代',
     desc: '滇王金印是汉代滇国权力的象征，证明古滇国存在的实物证据。印面刻有"滇王之印"四字，造型精美绝伦。',
-    icon: '<circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="4"/><text x="50" y="60" text-anchor="middle" font-size="24" fill="currentColor">王</text>'
+    color: '#FFD700'
   },
   {
     id: 2,
     name: '青铜贮贝器',
     era: '战国',
     desc: '贮贝器是古滇国特有的青铜器物，用于储存海贝。器盖上铸有精美的祭祀场面，展现古滇国独特的宗教文化。',
-    icon: '<ellipse cx="50" cy="60" rx="35" ry="25" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="50" cy="35" rx="25" ry="15" fill="none" stroke="currentColor" stroke-width="3"/><line x1="50" y1="20" x2="50" y2="35" stroke="currentColor" stroke-width="3"/>'
+    color: '#CD7F32'
   },
   {
     id: 3,
     name: '玉璧',
     era: '新石器时代',
     desc: '玉璧是古代礼器中的重要器物，象征天圆地方的宇宙观。此玉璧质地温润，雕工精细，体现先民高超的制玉技艺。',
-    icon: '<circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="50" cy="50" r="15" fill="none" stroke="currentColor" stroke-width="3"/>'
+    color: '#90EE90'
   },
   {
     id: 4,
     name: '铜鼓',
     era: '东汉',
     desc: '铜鼓是古代南方少数民族使用的打击乐器和祭祀重器，鼓面常刻有太阳纹、牛纹等图案，反映农耕文化特色。',
-    icon: '<ellipse cx="50" cy="50" rx="35" ry="20" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="50" cy="50" rx="25" ry="12" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="50" cy="50" rx="10" ry="5" fill="currentColor"/>'
+    color: '#B87333'
   },
   {
     id: 5,
     name: '牛头铜牌',
     era: '春秋',
     desc: '牛头铜牌是古滇国青铜器中的典型器物，造型写实生动，反映了滇池地区农耕文明对牛的崇拜。',
-    icon: '<path d="M20 60 Q50 20 80 60 L75 70 L50 65 L25 70 Z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="35" cy="50" r="5" fill="currentColor"/><circle cx="65" cy="50" r="5" fill="currentColor"/>'
+    color: '#8B4513'
   },
   {
     id: 6,
     name: '孔雀铜灯',
     era: '西汉',
     desc: '孔雀铜灯造型为一只开屏的孔雀，灯座设在孔雀背部，构思巧妙，既是实用器物又是艺术珍品。',
-    icon: '<ellipse cx="50" cy="70" rx="20" ry="10" fill="none" stroke="currentColor" stroke-width="3"/><path d="M50 60 L50 40 M30 50 L50 40 L70 50 M25 55 L35 45 M65 55 L55 45" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="35" r="8" fill="currentColor"/>'
+    color: '#228B22'
   },
   {
     id: 7,
     name: '舞蹈铜俑',
     era: '滇国',
     desc: '舞蹈铜俑生动展现古滇国人民的舞蹈场景，人物姿态优美，服饰独特，是研究古滇社会生活的重要资料。',
-    icon: '<circle cx="50" cy="25" r="12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M50 37 L50 60 M50 45 L30 55 M50 45 L70 55 M50 60 L35 80 M50 60 L65 80" stroke="currentColor" stroke-width="3"/>'
+    color: '#DA70D6'
   },
   {
     id: 8,
     name: '蛙形铜器',
     era: '古滇',
     desc: '蛙形铜器是古滇文化特有的器物，蛙纹可能与古代雨神崇拜和生殖崇拜有关，反映了古滇人独特的宗教信仰。',
-    icon: '<ellipse cx="50" cy="55" rx="30" ry="20" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="35" cy="45" r="6" fill="currentColor"/><circle cx="65" cy="45" r="6" fill="currentColor"/><path d="M25 65 L15 75 M75 65 L85 75" stroke="currentColor" stroke-width="3"/>'
+    color: '#20B2AA'
   }
 ];
 
 const TOOLS = {
+  detector: {
+    name: '探测器',
+    desc: '扫描地下文物位置',
+    stage: 'scan'
+  },
   shovel: {
     name: '铁锹',
-    desc: '快速挖掘，适合深埋的文物',
-    digSpeed: 3,
-    depth: 'deep'
+    desc: '快速挖掘土层',
+    stage: 'dig'
   },
   pickaxe: {
     name: '锄头',
-    desc: '强力破碎土层，适合硬土',
-    digSpeed: 2,
-    depth: 'medium'
+    desc: '强力破碎硬土',
+    stage: 'dig'
   },
   brush: {
     name: '刷子',
-    desc: '精细清理，适合文物周围',
-    digSpeed: 1,
-    depth: 'surface'
-  },
-  detector: {
-    name: '探测器',
-    desc: '探测地下文物位置',
-    digSpeed: 0,
-    depth: 'all'
+    desc: '精细清理文物',
+    stage: 'reveal'
   }
 };
 
+const SPOT_STATES = {
+  unexplored: 'unexplored',
+  scanned: 'scanned',
+  digging: 'digging',
+  revealed: 'revealed',
+  collected: 'collected'
+};
+
 let gameState = {
-  totalSpots: 9,
-  artifactSpots: [],
+  artifacts: [],
   foundArtifacts: [],
-  collectedArtifacts: [],
-  currentTool: 'shovel',
-  digProgress: {}
+  currentTool: 'detector',
+  cursorX: 0,
+  cursorY: 0
 };
 
 function getUserInfo() {
@@ -124,17 +127,33 @@ function selectTool(tool) {
   document.querySelectorAll('.tool-item').forEach(item => {
     item.classList.toggle('active', item.dataset.tool === tool);
   });
-  showToolTip(tool);
+
+  const status = document.getElementById('digStatus');
+  const statusIcon = status.querySelector('.status-icon');
+  const statusText = status.querySelector('.status-text');
+
+  switch(tool) {
+    case 'detector':
+      statusIcon.textContent = '🔍';
+      statusText.textContent = '探测器 - 扫描地下文物';
+      break;
+    case 'shovel':
+    case 'pickaxe':
+      statusIcon.textContent = '⛏️';
+      statusText.textContent = `${TOOLS[tool].name} - 挖掘土层`;
+      break;
+    case 'brush':
+      statusIcon.textContent = '🖌️';
+      statusText.textContent = '刷子 - 清理文物';
+      break;
+  }
+
+  updateCursor();
 }
 
-function showToolTip(tool) {
-  const tip = document.getElementById('toolTip');
-  const toolInfo = TOOLS[tool];
-  tip.innerHTML = `<strong>${toolInfo.name}</strong><br>${toolInfo.desc}`;
-  tip.style.display = 'block';
-  setTimeout(() => {
-    tip.style.display = 'none';
-  }, 2000);
+function updateCursor() {
+  const cursor = document.getElementById('digCursor');
+  cursor.className = 'dig-cursor cursor-' + gameState.currentTool;
 }
 
 function initGame() {
@@ -152,25 +171,30 @@ function initGame() {
     resetGameState();
   }
 
-  renderDigSpots();
+  renderArtifacts();
   renderCollectionGrid();
   updateStats();
   selectTool(gameState.currentTool);
+  setupGroundEvents();
 }
 
 function resetGameState() {
   const numArtifacts = 3 + Math.floor(Math.random() * 2);
-  const spots = Array.from({ length: 9 }, (_, i) => i);
-  const shuffled = spots.sort(() => Math.random() - 0.5);
-  gameState.artifactSpots = shuffled.slice(0, numArtifacts).map((spotIndex, i) => ({
-    spotIndex,
-    artifact: ARTIFACTS[i % ARTIFACTS.length],
-    depth: ['deep', 'medium', 'surface'][Math.floor(Math.random() * 3)]
-  }));
+  gameState.artifacts = [];
+
+  for (let i = 0; i < numArtifacts; i++) {
+    gameState.artifacts.push({
+      id: Date.now() + i,
+      artifact: ARTIFACTS[i % ARTIFACTS.length],
+      x: 10 + Math.random() * 80,
+      y: 20 + Math.random() * 60,
+      state: SPOT_STATES.unexplored,
+      digProgress: 0
+    });
+  }
+
   gameState.foundArtifacts = [];
-  gameState.collectedArtifacts = [];
-  gameState.digProgress = {};
-  gameState.currentTool = 'shovel';
+  gameState.currentTool = 'detector';
   saveGame();
 }
 
@@ -181,99 +205,196 @@ function saveGame() {
   }
 }
 
-function renderDigSpots() {
-  const container = document.getElementById('digSpots');
-  container.innerHTML = '';
+function setupGroundEvents() {
+  const ground = document.getElementById('digGround');
 
-  for (let i = 0; i < 9; i++) {
-    const spot = document.createElement('div');
-    spot.className = 'dig-spot';
-    spot.dataset.index = i;
+  ground.addEventListener('mousemove', (e) => {
+    const rect = ground.getBoundingClientRect();
+    gameState.cursorX = ((e.clientX - rect.left) / rect.width) * 100;
+    gameState.cursorY = ((e.clientY - rect.top) / rect.height) * 100;
+    updateCursorPosition();
+  });
 
-    const artifactData = gameState.artifactSpots.find(a => a.spotIndex === i);
-    const progress = gameState.digProgress[i] || 0;
+  ground.addEventListener('click', (e) => {
+    const rect = ground.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    handleDig(x, y);
+  });
 
-    if (gameState.foundArtifacts.includes(i)) {
-      spot.classList.add('dug', 'found');
-      if (artifactData) {
-        spot.innerHTML = `
-          <div class="artifact-glow"></div>
-          <svg class="spot-artifact" viewBox="0 0 100 100">${artifactData.artifact.icon}</svg>
-        `;
-      }
-      spot.onclick = () => showArtifactPreview(artifactData);
-    } else {
-      const depthClass = artifactData ? `depth-${artifactData.depth}` : '';
-      spot.className = `dig-spot ${depthClass}`;
-      spot.innerHTML = `
-        <div class="dig-progress" style="height: ${progress}%"></div>
-        <div class="spot-marker">?</div>
-      `;
-      spot.onclick = () => handleDig(i, artifactData);
-    }
-
-    container.appendChild(spot);
-  }
+  ground.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = ground.getBoundingClientRect();
+    const x = ((touch.clientX - rect.left) / rect.width) * 100;
+    const y = ((touch.clientY - rect.top) / rect.height) * 100;
+    handleDig(x, y);
+  });
 }
 
-function getDepthValue(depth) {
-  switch(depth) {
-    case 'deep': return 3;
-    case 'medium': return 2;
-    case 'surface': return 1;
-    default: return 0;
-  }
+function updateCursorPosition() {
+  const cursor = document.getElementById('digCursor');
+  cursor.style.left = gameState.cursorX + '%';
+  cursor.style.top = gameState.cursorY + '%';
 }
 
-function handleDig(index, artifactData) {
+function handleDig(x, y) {
   const tool = gameState.currentTool;
+  const toolInfo = TOOLS[tool];
 
-  if (tool === 'detector') {
-    if (artifactData) {
-      showToast('检测到文物信号！');
+  let targetArtifact = null;
+  let minDist = Infinity;
+
+  for (const art of gameState.artifacts) {
+    if (art.state === SPOT_STATES.collected) continue;
+
+    const dist = Math.sqrt(Math.pow(art.x - x, 2) + Math.pow(art.y - y, 2));
+    if (dist < 15 && dist < minDist) {
+      minDist = dist;
+      targetArtifact = art;
+    }
+  }
+
+  switch(tool) {
+    case 'detector':
+      handleDetector(targetArtifact);
+      break;
+    case 'shovel':
+    case 'pickaxe':
+      handleDigging(targetArtifact, tool);
+      break;
+    case 'brush':
+      handleReveal(targetArtifact);
+      break;
+  }
+}
+
+function handleDetector(targetArtifact) {
+  if (targetArtifact) {
+    if (targetArtifact.state === SPOT_STATES.unexplored) {
+      targetArtifact.state = SPOT_STATES.scanned;
+      saveGame();
+      renderArtifacts();
+      showToast('📍 发现文物信号！');
     } else {
-      showToast('此处无文物');
+      showToast('这里已经扫描过了');
+    }
+  } else {
+    showToast('此处没有文物');
+  }
+}
+
+function handleDigging(targetArtifact, tool) {
+  if (!targetArtifact) {
+    showToast('请先使用探测器找到文物位置');
+    return;
+  }
+
+  if (targetArtifact.state === SPOT_STATES.unexplored) {
+    showToast('请先用探测器扫描该位置');
+    return;
+  }
+
+  if (targetArtifact.state === SPOT_STATES.revealed || targetArtifact.state === SPOT_STATES.collected) {
+    showToast('这里已经挖完了');
+    return;
+  }
+
+  const digSpeed = tool === 'shovel' ? 15 : 10;
+  targetArtifact.digProgress = Math.min(targetArtifact.digProgress + digSpeed, 100);
+  targetArtifact.state = SPOT_STATES.digging;
+  saveGame();
+  renderArtifacts();
+
+  if (targetArtifact.digProgress >= 100) {
+    showToast('土层已松动，请用刷子清理');
+  } else if (targetArtifact.digProgress >= 50) {
+    showToast('正在挖掘...');
+  }
+}
+
+function handleReveal(targetArtifact) {
+  if (!targetArtifact) {
+    showToast('请先找到文物位置');
+    return;
+  }
+
+  if (targetArtifact.state !== SPOT_STATES.digging) {
+    if (targetArtifact.state === SPOT_STATES.unexplored) {
+      showToast('请先用探测器定位');
+    } else if (targetArtifact.state === SPOT_STATES.scanned) {
+      showToast('请先用铁锹或锄头挖掘');
+    } else if (targetArtifact.state === SPOT_STATES.revealed || targetArtifact.state === SPOT_STATES.collected) {
+      showToast('文物已经清理出来了');
     }
     return;
   }
 
-  const toolInfo = TOOLS[tool];
-  let progress = gameState.digProgress[index] || 0;
-  const artifactDepth = artifactData ? getDepthValue(artifactData.depth) : 0;
-  const toolPower = toolInfo.digSpeed;
-
-  if (artifactData) {
-    const requiredDepth = getDepthValue(artifactData.depth);
-    if (toolPower < requiredDepth) {
-      progress = Math.min(progress + toolPower * 8, 60);
-      showToast('这个工具不太合适...');
-    } else {
-      progress = Math.min(progress + toolPower * 15, 100);
-    }
-  } else {
-    progress = Math.min(progress + toolPower * 5, 40);
-  }
-
-  gameState.digProgress[index] = progress;
+  targetArtifact.state = SPOT_STATES.revealed;
+  targetArtifact.digProgress = 100;
   saveGame();
-  renderDigSpots();
+  renderArtifacts();
+  showArtifactReveal(targetArtifact.artifact);
+}
 
-  if (progress >= 100 && artifactData) {
-    gameState.foundArtifacts.push(index);
-    saveGame();
-    renderDigSpots();
-    showArtifactReveal(artifactData.artifact);
-  } else if (progress >= 100 && !artifactData) {
-    showToast('这里只有泥土...');
-  } else if (progress >= 80 && artifactData) {
-    showToast('快要挖到了！');
+function renderArtifacts() {
+  const container = document.getElementById('artifactMarkers');
+  container.innerHTML = '';
+
+  for (const art of gameState.artifacts) {
+    const marker = document.createElement('div');
+    marker.className = 'artifact-marker state-' + art.state;
+    marker.style.left = art.x + '%';
+    marker.style.top = art.y + '%';
+
+    if (art.state === SPOT_STATES.unexplored) {
+      marker.innerHTML = '<div class="marker-question">?</div>';
+    } else if (art.state === SPOT_STATES.scanned) {
+      marker.innerHTML = '<div class="marker-scan">📍</div>';
+    } else if (art.state === SPOT_STATES.digging) {
+      const progress = art.digProgress || 0;
+      marker.innerHTML = `
+        <div class="marker-dig">
+          <div class="dig-progress-ring">
+            <svg viewBox="0 0 36 36">
+              <circle class="progress-bg" cx="18" cy="18" r="15"/>
+              <circle class="progress-fill" cx="18" cy="18" r="15"
+                stroke-dasharray="${progress} ${100 - progress}"
+                stroke-dashoffset="25"/>
+            </svg>
+          </div>
+        </div>
+      `;
+    } else if (art.state === SPOT_STATES.revealed) {
+      marker.innerHTML = `
+        <div class="marker-revealed" style="border-color: ${art.artifact.color}">
+          <div class="artifact-icon" style="background: ${art.artifact.color}20; border-color: ${art.artifact.color}">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <circle cx="12" cy="12" r="8" fill="${art.artifact.color}"/>
+            </svg>
+          </div>
+        </div>
+      `;
+      marker.onclick = () => showArtifactReveal(art.artifact);
+    } else if (art.state === SPOT_STATES.collected) {
+      marker.innerHTML = `<div class="marker-collected">✓</div>`;
+    }
+
+    container.appendChild(marker);
   }
 }
 
 function showArtifactReveal(artifact) {
   document.getElementById('overlay').classList.remove('hidden');
   document.getElementById('artifactReveal').classList.remove('hidden');
-  document.getElementById('revealIcon').innerHTML = artifact.icon;
+
+  const iconEl = document.getElementById('revealIcon');
+  iconEl.innerHTML = `
+    <circle cx="50" cy="50" r="40" fill="none" stroke="${artifact.color}" stroke-width="4"/>
+    <circle cx="50" cy="50" r="25" fill="${artifact.color}" opacity="0.3"/>
+    <circle cx="50" cy="50" r="12" fill="${artifact.color}"/>
+  `;
+
   document.getElementById('revealName').textContent = artifact.name;
   document.getElementById('revealEra').textContent = artifact.era;
   document.getElementById('revealDesc').textContent = artifact.desc;
@@ -282,52 +403,63 @@ function showArtifactReveal(artifact) {
 function closeReveal() {
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('artifactReveal').classList.add('hidden');
-  renderCollectionGrid();
-  updateStats();
-}
 
-function showArtifactPreview(artifactData) {
-  if (!artifactData) return;
-  showArtifactReveal(artifactData.artifact);
+  const lastRevealed = gameState.artifacts.find(a => a.state === SPOT_STATES.revealed);
+  if (lastRevealed) {
+    lastRevealed.state = SPOT_STATES.collected;
+    if (!gameState.foundArtifacts.find(f => f.id === lastRevealed.artifact.id)) {
+      gameState.foundArtifacts.push(lastRevealed.artifact);
+    }
+    saveGame();
+    renderArtifacts();
+    renderCollectionGrid();
+    updateStats();
+  }
 }
 
 function renderCollectionGrid() {
   const grid = document.getElementById('collectionGrid');
   grid.innerHTML = '';
 
-  gameState.artifactSpots.forEach((data, i) => {
+  gameState.artifacts.forEach((data) => {
     const item = document.createElement('div');
-    const isFound = gameState.foundArtifacts.includes(data.spotIndex);
+    const isFound = gameState.foundArtifacts.find(f => f.id === data.artifact.id);
     item.className = `collection-item ${isFound ? 'collected' : 'empty'}`;
 
     if (isFound) {
-      item.innerHTML = `<svg class="collection-icon" viewBox="0 0 100 100">${data.artifact.icon}</svg>`;
+      item.innerHTML = `
+        <div class="collection-icon-wrapper" style="border-color: ${data.artifact.color}">
+          <svg viewBox="0 0 24 24" width="32" height="32">
+            <circle cx="12" cy="12" r="8" fill="${data.artifact.color}"/>
+          </svg>
+        </div>
+        <span class="collection-name">${data.artifact.name}</span>
+      `;
       item.onclick = () => showArtifactReveal(data.artifact);
     } else {
-      item.innerHTML = `<svg class="collection-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4"/></svg>`;
+      item.innerHTML = `
+        <div class="collection-icon-wrapper empty">
+          <svg viewBox="0 0 24 24" width="32" height="32">
+            <circle cx="12" cy="12" r="8" fill="none" stroke="var(--primary-bronze)" stroke-width="2" stroke-dasharray="4"/>
+          </svg>
+        </div>
+        <span class="collection-name">???</span>
+      `;
     }
 
     grid.appendChild(item);
   });
-
-  for (let i = gameState.artifactSpots.length; i < 8; i++) {
-    const item = document.createElement('div');
-    item.className = 'collection-item empty';
-    item.innerHTML = `<svg class="collection-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4"/></svg>`;
-    grid.appendChild(item);
-  }
-
-  document.getElementById('collectionCount').textContent = gameState.foundArtifacts.length;
 }
 
 function updateStats() {
   document.getElementById('foundCount').textContent = gameState.foundArtifacts.length;
-  document.getElementById('totalSpots').textContent = gameState.artifactSpots.length;
+  document.getElementById('totalSpots').textContent = gameState.artifacts.length;
+  document.getElementById('collectionCount').textContent = gameState.foundArtifacts.length;
 }
 
 function resetGame() {
   resetGameState();
-  renderDigSpots();
+  renderArtifacts();
   renderCollectionGrid();
   updateStats();
   showToast('已重新开始挖掘！');
