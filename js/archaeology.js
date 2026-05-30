@@ -149,6 +149,28 @@ function handleGroundClick(event) {
 
   if (gameState.currentTool === 'detector') {
     performScan(event);
+  } else if (gameState.currentTool === 'brush') {
+    handleBrushClick(event);
+  }
+}
+
+function handleBrushClick(event) {
+  const digGround = document.getElementById('digGround');
+  if (!digGround) return;
+
+  const rect = digGround.getBoundingClientRect();
+  const clickX = ((event.clientX - rect.left) / rect.width) * 100;
+  const clickY = ((event.clientY - rect.top) / rect.height) * 100;
+
+  const excavatedSpot = gameState.digSpots.find(spot => 
+    spot.state === 'excavated' &&
+    Math.sqrt(Math.pow(clickX - spot.x, 2) + Math.pow(clickY - spot.y, 2)) <= 15
+  );
+
+  if (excavatedSpot) {
+    cleanArtifact(excavatedSpot);
+  } else {
+    showToolTip('请点击已挖掘的文物位置进行清理', event.clientX, event.clientY);
   }
 }
 
@@ -190,7 +212,7 @@ function performScan(event) {
   }
 }
 
-function revealArtifactSpot(spot) {
+function revealArtifactSpot(spot, event) {
   spot.state = 'detected';
 
   const marker = document.getElementById(`spot-${spot.id}`);
@@ -200,20 +222,22 @@ function revealArtifactSpot(spot) {
     marker.classList.remove('hidden');
     marker.classList.add('detected');
 
-    marker.onclick = () => handleMarkerClick(spot);
+    marker.onclick = (e) => handleMarkerClick(spot, e);
   }
 
-  showToolTip('发现文物信号！切换到挖掘工具', event.clientX, event.clientY);
+  if (event) {
+    showToolTip('发现文物信号！切换到挖掘工具', event.clientX, event.clientY);
+  }
 }
 
-function handleMarkerClick(spot) {
+function handleMarkerClick(spot, event) {
   if (gameState.currentTool === 'detector') {
     if (spot.state === 'hidden') {
-      revealArtifactSpot(spot);
+      revealArtifactSpot(spot, event);
     }
   } else if (gameState.currentTool === 'shovel' || gameState.currentTool === 'pickaxe') {
     if (spot.state === 'detected') {
-      startExcavation(spot);
+      startExcavation(spot, event);
     }
   } else if (gameState.currentTool === 'brush') {
     if (spot.state === 'excavated') {
@@ -222,7 +246,7 @@ function handleMarkerClick(spot) {
   }
 }
 
-function startExcavation(spot) {
+function startExcavation(spot, event) {
   spot.state = 'excavating';
 
   const marker = document.getElementById(`spot-${spot.id}`);
@@ -248,7 +272,9 @@ function startExcavation(spot) {
       markerEl.classList.remove('excavating');
       markerEl.classList.add('excavated');
     }
-    showToolTip('挖掘完成！切换到刷子清理', event.clientX, event.clientY);
+    if (event) {
+      showToolTip('挖掘完成！切换到刷子清理', event.clientX, event.clientY);
+    }
   }, 1500);
 }
 
