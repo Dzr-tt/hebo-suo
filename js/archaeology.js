@@ -163,7 +163,16 @@ function initGame() {
   if (user) {
     const userData = localStorage.getItem(`hebo_archaeology_${user.id}`);
     if (userData) {
-      gameState = JSON.parse(userData);
+      try {
+        const parsed = JSON.parse(userData);
+        if (parsed.artifacts && Array.isArray(parsed.artifacts)) {
+          gameState = parsed;
+        } else {
+          resetGameState();
+        }
+      } catch (e) {
+        resetGameState();
+      }
     } else {
       resetGameState();
     }
@@ -174,7 +183,7 @@ function initGame() {
   renderArtifacts();
   renderCollectionGrid();
   updateStats();
-  selectTool(gameState.currentTool);
+  selectTool(gameState.currentTool || 'detector');
   setupGroundEvents();
 }
 
