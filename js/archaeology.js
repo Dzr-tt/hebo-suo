@@ -165,7 +165,13 @@ function initGame() {
 }
 
 function handleScan(e) {
-  const rect = e.target.getBoundingClientRect();
+  const target = e.target || e.srcElement;
+  if (!target || typeof target.getBoundingClientRect !== 'function') {
+    console.error('Invalid target in handleScan:', target);
+    return;
+  }
+  
+  const rect = target.getBoundingClientRect();
   const clickX = ((e.clientX - rect.left) / rect.width) * 100;
   const clickY = ((e.clientY - rect.top) / rect.height) * 100;
 
@@ -291,7 +297,13 @@ function handleSpotClick(spotIndex, event) {
 }
 
 function showScanEffect(e) {
-  const rect = e.target.getBoundingClientRect();
+  const target = e.target || e.srcElement;
+  if (!target || typeof target.getBoundingClientRect !== 'function') {
+    console.error('Invalid target in showScanEffect:', target);
+    return;
+  }
+  
+  const rect = target.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
