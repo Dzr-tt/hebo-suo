@@ -2632,14 +2632,20 @@ body::before {
   background-size: cover;
   background-position: center;
   border-radius: 6px;
-  cursor: grab;
+  cursor: pointer;
   transition: all 0.2s ease;
   border: 2px solid rgba(139, 105, 20, 0.5);
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.puzzle-tile:active {
-  cursor: grabbing;
+.puzzle-tile:hover:not(.empty) {
+  border-color: var(--accent-gold);
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.puzzle-tile:active:not(.empty) {
+  transform: scale(0.97);
 }
 
 .puzzle-tile.empty {
@@ -2647,17 +2653,6 @@ body::before {
   border-style: dashed;
   border-color: rgba(139, 105, 20, 0.3);
   cursor: default;
-}
-
-.puzzle-tile.dragging {
-  opacity: 0.6;
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-}
-
-.puzzle-tile.drag-over {
-  border-color: var(--accent-gold);
-  background: rgba(255, 215, 0, 0.1);
 }
 
 .puzzle-stats {

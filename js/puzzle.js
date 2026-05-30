@@ -16,9 +16,6 @@ let puzzleState = {
   isCompleted: false
 };
 
-let draggedTile = null;
-let dragOverTile = null;
-
 function initPuzzle() {
   puzzleState.isCompleted = false;
   puzzleState.moves = 0;
@@ -129,120 +126,28 @@ function renderPuzzle() {
       tileElement.style.backgroundPosition = `${col * pieceSize}% ${row * pieceSize}%`;
       tileElement.style.backgroundSize = `${puzzleState.size * 100}%`;
       
-      tileElement.draggable = true;
-      tileElement.addEventListener('dragstart', handleDragStart);
-      tileElement.addEventListener('dragover', handleDragOver);
-      tileElement.addEventListener('drop', handleDrop);
-      tileElement.addEventListener('dragend', handleDragEnd);
-      
-      tileElement.addEventListener('touchstart', handleTouchStart, { passive: true });
+      // 点击交换逻辑
+      tileElement.addEventListener('click', handleTileClick);
     }
     
     grid.appendChild(tileElement);
   });
 }
 
-function handleDragStart(e) {
-  draggedTile = e.target;
-  draggedTile.classList.add('dragging');
-  e.dataTransfer.effectAllowed = 'move';
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
+function handleTileClick(e) {
+  if (puzzleState.isCompleted) return;
   
-  // 清除之前的 drag-over 状态
-  if (dragOverTile) {
-    dragOverTile.classList.remove('drag-over');
+  const clickedTile = e.target;
+  const clickedPos = parseInt(clickedTile.dataset.position);
+  
+  // 找到空白位置
+  const emptyTile = puzzleState.tiles.find(t => t.isEmpty);
+  const emptyPos = emptyTile.currentPosition;
+  
+  // 检查是否相邻
+  if (isAdjacent(clickedPos, emptyPos)) {
+    moveTile(clickedPos, emptyPos);
   }
-  
-  const target = e.target;
-  if (target.classList.contains('puzzle-tile')) {
-    // 允许拖拽到任何拼图块上
-    dragOverTile = target;
-    // 只有拖到空位置才显示高亮
-    if (target.classList.contains('empty')) {
-      target.classList.add('drag-over');
-    }
-  }
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  
-  if (dragOverTile && draggedTile) {
-    const fromPos = parseInt(draggedTile.dataset.position);
-    const toPos = parseInt(dragOverTile.dataset.position);
-    
-    // 检查目标是否是空位置且相邻
-    const targetTile = puzzleState.tiles.find(t => t.currentPosition === toPos);
-    if (targetTile && targetTile.isEmpty && isAdjacent(fromPos, toPos)) {
-      moveTile(fromPos, toPos);
-    }
-  }
-  
-  clearDragState();
-}
-
-function handleDragEnd() {
-  clearDragState();
-}
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-function handleTouchStart(e) {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-  
-  const tile = e.target;
-  if (tile.classList.contains('puzzle-tile') && !tile.classList.contains('empty')) {
-    draggedTile = tile;
-    
-    tile.addEventListener('touchmove', handleTouchMove, { passive: true });
-    tile.addEventListener('touchend', handleTouchEnd);
-  }
-}
-
-function handleTouchMove(e) {
-  if (!draggedTile) return;
-  
-  const deltaX = e.touches[0].clientX - touchStartX;
-  const deltaY = e.touches[0].clientY - touchStartY;
-  
-  const threshold = 30;
-  
-  if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
-    const fromPos = parseInt(draggedTile.dataset.position);
-    const emptyTile = document.querySelector('.puzzle-tile.empty');
-    const toPos = parseInt(emptyTile.dataset.position);
-    
-    if (isAdjacent(fromPos, toPos)) {
-      moveTile(fromPos, toPos);
-    }
-    
-    clearDragState();
-  }
-}
-
-function handleTouchEnd() {
-  clearDragState();
-}
-
-function clearDragState() {
-  if (draggedTile) {
-    draggedTile.classList.remove('dragging');
-    draggedTile.removeEventListener('touchmove', handleTouchMove);
-    draggedTile.removeEventListener('touchend', handleTouchEnd);
-  }
-  
-  if (dragOverTile) {
-    dragOverTile.classList.remove('drag-over');
-  }
-  
-  draggedTile = null;
-  dragOverTile = null;
 }
 
 function isAdjacent(pos1, pos2) {
