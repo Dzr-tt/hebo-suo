@@ -152,10 +152,19 @@ function handleDragOver(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'move';
   
+  // 清除之前的 drag-over 状态
+  if (dragOverTile) {
+    dragOverTile.classList.remove('drag-over');
+  }
+  
   const target = e.target;
-  if (target.classList.contains('puzzle-tile') && target.classList.contains('empty')) {
-    target.classList.add('drag-over');
+  if (target.classList.contains('puzzle-tile')) {
+    // 允许拖拽到任何拼图块上
     dragOverTile = target;
+    // 只有拖到空位置才显示高亮
+    if (target.classList.contains('empty')) {
+      target.classList.add('drag-over');
+    }
   }
 }
 
@@ -166,7 +175,9 @@ function handleDrop(e) {
     const fromPos = parseInt(draggedTile.dataset.position);
     const toPos = parseInt(dragOverTile.dataset.position);
     
-    if (isAdjacent(fromPos, toPos)) {
+    // 检查目标是否是空位置且相邻
+    const targetTile = puzzleState.tiles.find(t => t.currentPosition === toPos);
+    if (targetTile && targetTile.isEmpty && isAdjacent(fromPos, toPos)) {
       moveTile(fromPos, toPos);
     }
   }
