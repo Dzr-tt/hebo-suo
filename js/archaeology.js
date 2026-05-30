@@ -57,11 +57,40 @@ const ARTIFACTS = [
   }
 ];
 
+const TOOLS = {
+  shovel: {
+    name: '铁锹',
+    desc: '快速挖掘，适合深埋的文物',
+    digSpeed: 3,
+    depth: 'deep'
+  },
+  pickaxe: {
+    name: '锄头',
+    desc: '强力破碎土层，适合硬土',
+    digSpeed: 2,
+    depth: 'medium'
+  },
+  brush: {
+    name: '刷子',
+    desc: '精细清理，适合文物周围',
+    digSpeed: 1,
+    depth: 'surface'
+  },
+  detector: {
+    name: '探测器',
+    desc: '探测地下文物位置',
+    digSpeed: 0,
+    depth: 'all'
+  }
+};
+
 let gameState = {
-  totalSpots: 16,
+  totalSpots: 9,
   artifactSpots: [],
   foundArtifacts: [],
-  collectedArtifacts: []
+  collectedArtifacts: [],
+  currentTool: 'shovel',
+  digProgress: {}
 };
 
 function getUserInfo() {
@@ -90,6 +119,24 @@ function updateUserButton() {
   }
 }
 
+function selectTool(tool) {
+  gameState.currentTool = tool;
+  document.querySelectorAll('.tool-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.tool === tool);
+  });
+  showToolTip(tool);
+}
+
+function showToolTip(tool) {
+  const tip = document.getElementById('toolTip');
+  const toolInfo = TOOLS[tool];
+  tip.innerHTML = `<strong>${toolInfo.name}</strong><br>${toolInfo.desc}`;
+  tip.style.display = 'block';
+  setTimeout(() => {
+    tip.style.display = 'none';
+  }, 2000);
+}
+
 function initGame() {
   if (!checkLogin()) return;
 
@@ -105,21 +152,25 @@ function initGame() {
     resetGameState();
   }
 
-  renderDigGrid();
+  renderDigSpots();
   renderCollectionGrid();
   updateStats();
+  selectTool(gameState.currentTool);
 }
 
 function resetGameState() {
-  const numArtifacts = 3 + Math.floor(Math.random() * 3);
-  const spots = Array.from({ length: 16 }, (_, i) => i);
+  const numArtifacts = 3 + Math.floor(Math.random() * 2);
+  const spots = Array.from({ length: 9 }, (_, i) => i);
   const shuffled = spots.sort(() => Math.random() - 0.5);
   gameState.artifactSpots = shuffled.slice(0, numArtifacts).map((spotIndex, i) => ({
     spotIndex,
-    artifact: ARTIFACTS[i % ARTIFACTS.length]
+    artifact: ARTIFACTS[i % ARTIFACTS.length],
+    depth: ['deep', 'medium', 'surface'][Math.floor(Math.random() * 3)]
   }));
   gameState.foundArtifacts = [];
   gameState.collectedArtifacts = [];
+  gameState.digProgress = {};
+  gameState.currentTool = 'shovel';
   saveGame();
 }
 
@@ -130,43 +181,140 @@ function saveGame() {
   }
 }
 
-function renderDigGrid() {
-  const grid = document.getElementById('digGrid');
-  grid.innerHTML = '';
+function renderDigSpots() {
+  const container = document.getElementById('digSpots');
+  container.innerHTML = '';
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 9; i++) {
     const spot = document.createElement('div');
     spot.className = 'dig-spot';
     spot.dataset.index = i;
 
     const artifactData = gameState.artifactSpots.find(a => a.spotIndex === i);
+    const progress = gameState.digProgress[i] || 0;
 
     if (gameState.foundArtifacts.includes(i)) {
-      spot.classList.add('dug');
+      spot.classList.add('dug', 'found');
       if (artifactData) {
-        spot.innerHTML = `<svg viewBox="0 0 24 24" style="width:60%;height:60%;fill:var(--accent-gold);"><circle cx="12" cy="12" r="10"/></svg>`;
+        spot.innerHTML = `
+          <div class="artifact-glow"></div>
+          <svg class="spot-artifact" viewBox="0 0 100 100">${artifactData.artifact.icon}</svg>
+        `;
       }
       spot.onclick = () => showArtifactPreview(artifactData);
     } else {
-      spot.onclick = () => digSpot(i);
+      const depthClass = artifactData ? `depth-${artifactData.depth}` : '';
+      spot.className = `dig-spot ${depthClass}`;
+      spot.innerHTML = `
+        <div class="dig-progress" style="height: ${progress}%"></div>
+        <div class="spot-marker">?</div>
+      `;
+      spot.onclick = () => digSpot(i, artifactData);
+
+      spot.addEventListener('click', function(e) {
+        if (!gameState.foundArtifacts.includes(i)) {
+          animateDig(this, artifactData);
+        }
+      });
     }
 
-    grid.appendChild(spot);
+    container.appendChild(spot);
   }
 }
 
-function digSpot(index) {
-  const artifactData = gameState.artifactSpots.find(a => a.spotIndex === index);
+function animateDig(spotEl, artifactData) {
+  const tool = gameState.currentTool;
 
-  if (artifactData && !gameState.foundArtifacts.includes(index)) {
+  if (tool === 'detector') {
+    if (artifactData) {
+      spotEl.classList.add('detecting');
+      showToast('检测到文物信号！');
+      setTimeout(() => spotEl.classList.remove('detecting'), 1000);
+    } else {
+      showToast('此处无文物');
+    }
+    return;
+  }
+
+  const toolInfo = TOOLS[tool];
+  let progress = gameState.digProgress[spotEl.dataset.index] || 0;
+  const artifactDepth = artifactData ? getDepthValue(artifactData.depth) : 0;
+  const toolPower = toolInfo.digSpeed;
+
+  if (!artifactDepth) {
+    progress = Math.min(progress + toolPower * 5, 30);
+  } else {
+    progress = Math.min(progress + toolPower * 10, 100);
+  }
+
+  gameState.digProgress[spotEl.dataset.index] = progress;
+  saveGame();
+
+  const progressBar = spotEl.querySelector('.dig-progress');
+  if (progressBar) {
+    progressBar.style.height = progress + '%';
+  }
+
+  spotEl.style.transform = 'scale(0.95)';
+  setTimeout(() => spotEl.style.transform = '', 100);
+
+  if (progress >= 100 && artifactData && !gameState.foundArtifacts.includes(parseInt(spotEl.dataset.index))) {
+    gameState.foundArtifacts.push(parseInt(spotEl.dataset.index));
+    saveGame();
+    renderDigSpots();
+    showArtifactReveal(artifactData.artifact);
+  } else if (progress >= 100 && !artifactData) {
+    showToast('这里只有泥土...');
+  } else if (progress >= 80 && artifactData) {
+    showToast('快要挖到了！');
+  }
+}
+
+function getDepthValue(depth) {
+  switch(depth) {
+    case 'deep': return 3;
+    case 'medium': return 2;
+    case 'surface': return 1;
+    default: return 0;
+  }
+}
+
+function digSpot(index, artifactData) {
+  const progress = gameState.digProgress[index] || 0;
+  const tool = gameState.currentTool;
+  const toolInfo = TOOLS[tool];
+
+  if (tool === 'detector') {
+    if (artifactData) {
+      showToast(`${TOOLS[tool].name}检测到文物信号！`);
+    } else {
+      showToast('此处无文物');
+    }
+    return;
+  }
+
+  let newProgress = progress;
+  if (artifactData) {
+    const requiredDepth = getDepthValue(artifactData.depth);
+    if (toolInfo.digSpeed >= requiredDepth) {
+      newProgress = Math.min(progress + toolInfo.digSpeed * 15, 100);
+    } else {
+      newProgress = Math.min(progress + toolInfo.digSpeed * 8, 60);
+      showToast('这个工具不太合适...');
+    }
+  } else {
+    newProgress = Math.min(progress + toolInfo.digSpeed * 5, 40);
+  }
+
+  gameState.digProgress[index] = newProgress;
+  saveGame();
+  renderDigSpots();
+
+  if (newProgress >= 100 && artifactData) {
     gameState.foundArtifacts.push(index);
     saveGame();
-    renderDigGrid();
+    renderDigSpots();
     showArtifactReveal(artifactData.artifact);
-  } else {
-    const spot = document.querySelector(`[data-index="${index}"]`);
-    spot.style.transform = 'scale(0.95)';
-    setTimeout(() => spot.style.transform = '', 150);
   }
 }
 
@@ -227,10 +375,10 @@ function updateStats() {
 
 function resetGame() {
   resetGameState();
-  renderDigGrid();
+  renderDigSpots();
   renderCollectionGrid();
   updateStats();
-  showToast('游戏已重置!');
+  showToast('已重新开始挖掘！');
 }
 
 function viewCollection() {
