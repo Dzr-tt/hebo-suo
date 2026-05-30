@@ -481,7 +481,7 @@ let quizState = {
 };
 
 function checkLogin() {
-  const user = localStorage.getItem('currentUser');
+  const user = localStorage.getItem('heboUser');
   if (user) {
     const userData = JSON.parse(user);
     document.getElementById('userBtn').textContent = userData.username;
