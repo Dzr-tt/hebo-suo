@@ -480,13 +480,39 @@ let quizState = {
   timerInterval: null
 };
 
+function showToast(message, type = 'info') {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 3000);
+}
+
 function checkLogin() {
   const user = localStorage.getItem('heboUser');
   if (user) {
     const userData = JSON.parse(user);
-    document.getElementById('userBtn').textContent = userData.username;
+    const userBtn = document.getElementById('userBtn');
+    if (userBtn) {
+      userBtn.textContent = userData.username;
+      userBtn.onclick = () => {
+        if (confirm('确定要退出登录吗?')) {
+          localStorage.removeItem('heboUser');
+          showToast('已退出登录');
+          setTimeout(() => {
+            window.location.href = 'auth.html';
+          }, 1000);
+        }
+      };
+    }
+    return true;
   } else {
     window.location.href = 'auth.html';
+    return false;
   }
 }
 
