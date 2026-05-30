@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>登录注册 - 河伯所·古滇探秘</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="container page">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M24 6 L28 14 L24 22 L20 14 Z" fill="currentColor"/>
+            <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="24" cy="28" r="4" fill="currentColor"/>
+          </svg>
+          <span class="logo-text">河伯所</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login" onclick="switchTab('login')">登录</button>
+          <button class="auth-tab" data-tab="register" onclick="switchTab('register')">注册</button>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">用户名 / 邮箱</label>
+            <input type="text" class="form-input" id="loginUsername" placeholder="请输入用户名或邮箱" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" required>
+          </div>
+          <button type="submit" class="submit-btn">登录</button>
+        </form>
+
+        <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">用户名</label>
+            <input type="text" class="form-input" id="regUsername" placeholder="请输入用户名 (4-20字符)" required minlength="4" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">邮箱</label>
+            <input type="email" class="form-input" id="regEmail" placeholder="请输入邮箱地址" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <input type="password" class="form-input" id="regPassword" placeholder="请输入密码 (至少6位)" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label">确认密码</label>
+            <input type="password" class="form-input" id="regConfirmPassword" placeholder="请再次输入密码" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">所在省份</label>
+            <select class="form-select" id="regProvince" required>
+              <option value="">请选择所在省份</option>
+              <option value="北京">北京市</option>
+              <option value="天津">天津市</option>
+              <option value="河北">河北省</option>
+              <option value="山西">山西省</option>
+              <option value="内蒙古">内蒙古自治区</option>
+              <option value="辽宁">辽宁省</option>
+              <option value="吉林">吉林省</option>
+              <option value="黑龙江">黑龙江省</option>
+              <option value="上海">上海市</option>
+              <option value="江苏">江苏省</option>
+              <option value="浙江">浙江省</option>
+              <option value="安徽">安徽省</option>
+              <option value="福建">福建省</option>
+              <option value="江西">江西省</option>
+              <option value="山东">山东省</option>
+              <option value="河南">河南省</option>
+              <option value="湖北">湖北省</option>
+              <option value="湖南">湖南省</option>
+              <option value="广东">广东省</option>
+              <option value="广西">广西壮族自治区</option>
+              <option value="海南">海南省</option>
+              <option value="重庆">重庆市</option>
+              <option value="四川">四川省</option>
+              <option value="贵州">贵州省</option>
+              <option value="云南">云南省</option>
+              <option value="西藏">西藏自治区</option>
+              <option value="陕西">陕西省</option>
+              <option value="甘肃">甘肃省</option>
+              <option value="青海">青海省</option>
+              <option value="宁夏">宁夏回族自治区</option>
+              <option value="新疆">新疆维吾尔自治区</option>
+              <option value="台湾">台湾省</option>
+              <option value="香港">香港特别行政区</option>
+              <option value="澳门">澳门特别行政区</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">注册</button>
+        </form>
+      </div>
+
+      <a href="index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        返回首页
+      </a>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>全国游客热力图 - 河伯所·古滇探秘</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="container page">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M24 6 L28 14 L24 22 L20 14 Z" fill="currentColor"/>
+            <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="24" cy="28" r="4" fill="currentColor"/>
+          </svg>
+          <span class="logo-text">河伯所</span>
+        </div>
+        <div class="user-area">
+          <button class="user-btn" id="userBtn" onclick="handleUserAction()">登录</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="heatmap-container">
+      <div class="game-header">
+        <h1 class="game-title-header">全国游客热力图</h1>
+      </div>
+
+      <p style="color: var(--secondary-yellow); margin-bottom: 16px; font-size: 0.9rem;">
+        查看来自全国各地游客的分布情况
+      </p>
+
+      <div class="china-map">
+        <svg class="map-svg" viewBox="0 0 600 500" id="chinaMap">
+          <path class="province" id="heilongjiang" d="M420 30 L450 40 L470 60 L480 90 L470 120 L440 130 L410 120 L390 100 L380 70 L390 40 Z" data-name="黑龙江" data-count="0"/>
+          <path class="province" id="jilin" d="M390 100 L410 120 L440 130 L450 150 L440 170 L410 175 L380 165 L360 140 L370 110 Z"/>
+          <path class="province" id="liaoning" d="M380 165 L410 175 L430 200 L420 230 L390 240 L360 230 L350 200 L360 175 Z"/>
+          <path class="province" id="neimenggu" d="M280 80 L350 60 L390 40 L420 30 L380 140 L350 200 L320 220 L280 210 L250 180 L240 130 L260 90 Z"/>
+          <path class="province" id="xinjiang" d="M80 60 L180 40 L240 50 L260 90 L240 130 L200 160 L140 170 L80 150 L40 120 L50 80 Z"/>
+          <path class="province" id="xizang" d="M80 150 L140 170 L180 220 L200 280 L180 340 L120 360 L60 340 L40 280 L50 200 Z"/>
+          <path class="province" id="qinghai" d="M180 220 L240 200 L280 210 L300 250 L280 300 L220 320 L180 300 L160 260 Z"/>
+          <path class="province" id="gansu" d="M200 160 L280 140 L320 150 L340 180 L320 220 L280 210 L240 200 L200 180 Z"/>
+          <path class="province" id="ningxia" d="M320 220 L340 220 L350 250 L340 280 L310 280 L310 250 Z"/>
+          <path class="province" id="shaanxi" d="M340 180 L380 170 L400 190 L390 230 L360 250 L340 240 L330 210 Z"/>
+          <path class="province" id="shanxi" d="M360 140 L400 130 L420 160 L410 200 L380 210 L360 190 Z"/>
+          <path class="province" id="henan" d="M380 210 L410 200 L430 230 L420 270 L390 280 L370 260 L380 230 Z"/>
+          <path class="province" id="shandong" d="M420 200 L460 190 L480 220 L470 270 L440 290 L410 280 L410 240 Z"/>
+          <path class="province" id="jiangsu" d="M440 260 L470 250 L490 280 L480 320 L450 330 L430 300 L440 270 Z"/>
+          <path class="province" id="anhui" d="M430 300 L460 290 L480 310 L470 350 L440 360 L420 340 Z"/>
+          <path class="province" id="hubei" d="M350 280 L390 280 L420 300 L410 340 L370 360 L340 340 L350 300 Z"/>
+          <path class="province" id="sichuan" d="M200 280 L260 260 L300 280 L320 320 L300 370 L250 390 L200 370 L180 320 Z"/>
+          <path class="province" id="chongqing" d="M300 320 L330 310 L350 340 L330 380 L300 370 Z"/>
+          <path class="province" id="yunnan" d="M180 380 L220 360 L260 380 L280 430 L250 470 L190 480 L150 450 L160 400 Z"/>
+          <path class="province" id="guizhou" d="M260 380 L300 360 L330 380 L320 430 L280 450 L250 440 Z"/>
+          <path class="province" id="guangxi" d="M250 440 L280 420 L320 440 L340 490 L290 510 L240 500 L230 460 Z"/>
+          <path class="province" id="guangdong" d="M290 440 L340 420 L380 440 L390 490 L340 510 L290 500 Z"/>
+          <path class="province" id="hainan" d="M340 510 L370 520 L360 550 L330 550 L330 520 Z"/>
+          <path class="province" id="hunan" d="M330 380 L370 360 L400 380 L390 430 L350 450 L320 440 Z"/>
+          <path class="province" id="jiangxi" d="M390 360 L420 340 L450 360 L450 410 L420 430 L390 410 Z"/>
+          <path class="province" id="fujian" d="M420 380 L450 360 L480 380 L490 430 L460 460 L430 440 Z"/>
+          <path class="province" id="taiwan" d="M490 400 L510 390 L520 420 L500 450 L485 430 Z"/>
+          <path class="province" id="zhejiang" d="M450 330 L480 310 L510 330 L500 380 L470 400 L450 370 Z"/>
+          <path class="province" id="shanghai" d="M480 320 L500 310 L510 330 L495 345 L480 335 Z"/>
+          <path class="province" id="beijing" d="M380 140 L400 135 L405 150 L390 160 L375 155 Z"/>
+          <path class="province" id="tianjin" d="M395 155 L410 150 L420 165 L405 175 L390 165 Z"/>
+          <path class="province" id="hebei" d="M340 140 L380 130 L400 150 L390 190 L350 200 L320 180 L330 150 Z"/>
+          <path class="province" id="hongkong" d="M355 485 L365 480 L370 495 L360 505 L350 495 Z"/>
+          <path class="province" id="macau" d="M340 490 L348 487 L350 498 L342 502 Z"/>
+        </svg>
+
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: #1a5f4a;"></div>
+            <span>较少</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #4a9a6a;"></div>
+            <span>一般</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #7cb880;"></div>
+            <span>较多</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #b5d4a0;"></div>
+            <span>密集</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-panel">
+        <h3 class="stats-title">📊 游客统计</h3>
+        <div class="stats-total">
+          <div class="stats-number" id="totalVisitors">0</div>
+          <div class="stats-label">总访客数</div>
+        </div>
+        <ul class="ranking-list" id="rankingList">
+          <li class="ranking-item">
+            <span class="ranking-rank">1</span>
+            <span class="ranking-province">加载中...</span>
+            <span class="ranking-count">0</span>
+          </li>
+        </ul>
+      </div>
+
+      <p style="color: var(--secondary-yellow); margin-top: 16px; font-size: 0.85rem; text-align: center;">
+        点击地图省份查看详情 · 数据基于用户注册信息统计
+      </p>
+    </div>
+
+    <a href="index.html" class="back-link" style="margin-top: 24px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      返回首页
+    </a>
+  </div>
+
+  <div class="overlay hidden" id="overlay"></div>
+
+  <div class="province-info hidden" id="provinceInfo">
+    <h3 class="province-name" id="infoProvinceName">省份</h3>
+    <div class="province-count" id="infoProvinceCount">0</div>
+    <p class="province-label">游客数量</p>
+    <button class="close-info" onclick="closeProvinceInfo()">关闭</button>
+  </div>
+
+  <script src="js/heatmap.js"></script>
+</body>
+</html>
