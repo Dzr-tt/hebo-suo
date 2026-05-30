@@ -107,6 +107,13 @@ function selectTool(tool) {
   }
 }
 
+function onDigGroundClick(e) {
+  console.log('digGround clicked, tool:', archaeologyState.currentTool);
+  if (archaeologyState.currentTool === 'detector') {
+    handleScan(e);
+  }
+}
+
 function initGame() {
   archaeologyState.digSpots = [];
   archaeologyState.foundArtifacts = [];
@@ -147,14 +154,14 @@ function initGame() {
 
   const digGround = document.getElementById('digGround');
   if (digGround) {
-    digGround.onclick = function(e) {
-      if (e.target.id === 'digGround' || e.target.classList.contains('soil-layer')) {
-        if (archaeologyState.currentTool === 'detector') {
-          handleScan(e);
-        }
-      }
-    };
+    digGround.removeEventListener('click', onDigGroundClick);
+    digGround.addEventListener('click', onDigGroundClick);
   }
+  
+  console.log('Game initialized with', archaeologyState.digSpots.length, 'artifact spots');
+  archaeologyState.digSpots.forEach((spot, i) => {
+    console.log('Spot', i, 'at position:', spot.x + '%', spot.y + '%');
+  });
 }
 
 function handleScan(e) {
