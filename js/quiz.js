@@ -1,0 +1,576 @@
+const QUIZ_QUESTIONS = [
+  {
+    question: '河泊所文化遗址位于哪个省份?',
+    options: ['云南省', '贵州省', '四川省', '广西壮族自治区'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址发现于哪一年?',
+    options: ['1958年', '1965年', '1972年', '1980年'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的主要文化层属于哪个时期?',
+    options: ['新石器时代', '青铜时代', '铁器时代', '汉代'],
+    correct: 1
+  },
+  {
+    question: '河泊所遗址出土的青铜鼓属于哪种类型?',
+    options: ['石寨山型', '万家坝型', '冷水冲型', '北流型'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址是哪个古代王国的重要遗址?',
+    options: ['古滇国', '夜郎国', '句町国', '南越国'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址位于哪个湖泊的南岸?',
+    options: ['滇池', '洱海', '抚仙湖', '泸沽湖'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的"滇王之印"是用什么材料制成的?',
+    options: ['金', '银', '铜', '玉'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的发掘单位是?',
+    options: ['云南省文物考古研究所', '中国社会科学院考古研究所', '北京大学考古文博学院', '四川大学考古系'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜贮贝器主要用来做什么?',
+    options: ['储存海贝', '储存粮食', '祭祀用品', '装饰器物'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的年代大约是?',
+    options: ['公元前5世纪-公元1世纪', '公元前10世纪-公元前5世纪', '公元1世纪-公元5世纪', '公元前3世纪-公元3世纪'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜立牛贮贝器属于哪类文物?',
+    options: ['一级文物', '二级文物', '三级文物', '一般文物'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址发现的房屋遗迹主要是什么结构?',
+    options: ['干栏式', '半地穴式', '窑洞式', '地面式'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜剑属于哪种类型?',
+    options: ['柳叶形剑', '双刃剑', '曲刃剑', '短剑'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的面积大约是多少?',
+    options: ['约1平方公里', '约5平方公里', '约10平方公里', '约20平方公里'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的陶器以什么为主?',
+    options: ['夹砂陶', '泥质陶', '黑陶', '白陶'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的主要经济形态是?',
+    options: ['农业', '畜牧业', '渔业', '手工业'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜鼓上最常见的纹饰是?',
+    options: ['太阳纹', '云雷纹', '水波纹', '几何纹'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址属于哪个国家级文物保护单位?',
+    options: ['第五批', '第六批', '第七批', '第八批'],
+    correct: 2
+  },
+  {
+    question: '河泊所遗址出土的青铜扣饰主要装饰在哪里?',
+    options: ['衣服', '帽子', '腰带', '鞋子'],
+    correct: 2
+  },
+  {
+    question: '河泊所文化与哪个中原王朝关系密切?',
+    options: ['汉朝', '唐朝', '宋朝', '明朝'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的海贝主要来自哪里?',
+    options: ['印度洋', '太平洋', '渤海', '黄海'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的文化堆积厚度大约是?',
+    options: ['2-3米', '5-6米', '8-10米', '10米以上'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜釜主要用途是?',
+    options: ['烹饪', '祭祀', '储存', '装饰'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的墓葬形式主要是?',
+    options: ['土坑墓', '砖室墓', '崖墓', '悬棺葬'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜编钟属于哪种音阶?',
+    options: ['五声音阶', '七声音阶', '十二平均律', '纯律'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址发现的道路遗迹是什么材质?',
+    options: ['土路', '石板路', '青砖路', '鹅卵石路'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的主要农作物是?',
+    options: ['水稻', '小麦', '玉米', '高粱'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜铲用于什么?',
+    options: ['农业生产', '祭祀', '兵器', '装饰'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的发掘工作主要在哪几年进行?',
+    options: ['1950年代-1960年代', '1970年代-1980年代', '1990年代-2000年代', '2010年代至今'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的玉璧属于哪种类型?',
+    options: ['谷纹璧', '云纹璧', '素面璧', '兽面纹璧'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的青铜器铸造技术属于?',
+    options: ['失蜡法', '范铸法', '锻造法', '焊接法'],
+    correct: 1
+  },
+  {
+    question: '河泊所遗址出土的青铜矛主要用于?',
+    options: ['兵器', '农具', '礼器', '乐器'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址所在的地区古称是什么?',
+    options: ['益州', '永昌', '越巂', '牂牁'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜尊属于哪种器形?',
+    options: ['侈口尊', '敛口尊', '贯耳尊', '牛头尊'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的社会结构属于?',
+    options: ['奴隶制', '封建制', '原始公社', '资本主义'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜钺象征什么?',
+    options: ['权力', '财富', '智慧', '长寿'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的漆木器主要是什么?',
+    options: ['木棺', '木俑', '漆器', '木器工具'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的陶器纹饰主要有?',
+    options: ['绳纹', '篮纹', '方格纹', '以上都是'],
+    correct: 3
+  },
+  {
+    question: '河泊所遗址出土的青铜当卢用于装饰什么?',
+    options: ['马', '车', '房屋', '衣服'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的地理位置大约在北纬多少度?',
+    options: ['24度', '26度', '28度', '30度'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜壶属于哪种类型?',
+    options: ['提梁壶', '双耳壶', '三足壶', '带盖壶'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的居民主要是什么民族?',
+    options: ['滇族', '彝族', '白族', '傣族'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜笙属于什么乐器?',
+    options: ['管乐器', '弦乐器', '打击乐器', '弹拨乐器'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的贝币主要是什么贝壳?',
+    options: ['货贝', '环纹货贝', '阿文绶贝', '拟枣贝'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的墓葬中常见的随葬品有?',
+    options: ['青铜器', '陶器', '玉器', '以上都是'],
+    correct: 3
+  },
+  {
+    question: '河泊所遗址出土的青铜杯属于哪种类型?',
+    options: ['高足杯', '平底杯', '圈足杯', '三足杯'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的海拔高度大约是多少?',
+    options: ['1800米', '2000米', '2200米', '2400米'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的青铜器主要采用什么合金?',
+    options: ['铜锡合金', '铜铅合金', '铜锌合金', '纯铜'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜铎是一种什么器物?',
+    options: ['乐器', '兵器', '农具', '礼器'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的琉璃珠可能来自哪里?',
+    options: ['西亚', '中亚', '南亚', '中原'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的房屋遗迹中发现了什么取暖设施?',
+    options: ['火塘', '壁炉', '火炕', '地炉'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜戈主要用于?',
+    options: ['兵器', '农具', '礼器', '工具'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址的发掘面积大约是多少?',
+    options: ['1万平方米', '5万平方米', '10万平方米', '20万平方米'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的陶器制作工艺主要是?',
+    options: ['轮制', '手制', '模制', '挤压成型'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜铃主要用于?',
+    options: ['祭祀', '装饰', '乐器', '信号'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的玛瑙珠主要是什么颜色?',
+    options: ['红色', '绿色', '蓝色', '白色'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的主要家畜有?',
+    options: ['牛', '羊', '猪', '以上都是'],
+    correct: 3
+  },
+  {
+    question: '河泊所遗址出土的青铜镯属于哪种类型?',
+    options: ['实心镯', '空心镯', '绞丝镯', '镶嵌镯'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的铁制工具最早出现于哪个时期?',
+    options: ['战国晚期', '汉代早期', '汉代中期', '汉代晚期'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的丧葬习俗中常见的葬式是?',
+    options: ['仰身直肢葬', '俯身葬', '屈肢葬', '二次葬'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜盘主要用于?',
+    options: ['盛水', '盛食', '祭祀', '盥洗'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的玻璃器可能是通过什么途径传入的?',
+    options: ['丝绸之路', '海上丝绸之路', '茶马古道', '蜀道'],
+    correct: 1
+  },
+  {
+    question: '河泊所文化的陶器颜色主要是?',
+    options: ['灰陶', '红陶', '黑陶', '白陶'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜匕首主要用于?',
+    options: ['防身', '狩猎', '祭祀', '烹饪'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的骨器主要是什么材质?',
+    options: ['牛骨', '猪骨', '鹿骨', '鱼骨'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的玉石器制作工艺包括?',
+    options: ['切割', '钻孔', '打磨', '以上都是'],
+    correct: 3
+  },
+  {
+    question: '河泊所遗址出土的青铜熏炉主要用于?',
+    options: ['熏香', '取暖', '烹饪', '祭祀'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的蚌器主要是什么用途?',
+    options: ['装饰品', '工具', '货币', '祭祀用品'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的建筑材料主要有?',
+    options: ['木材', '竹子', '茅草', '以上都是'],
+    correct: 3
+  },
+  {
+    question: '河泊所遗址出土的青铜洗主要用于?',
+    options: ['盥洗', '烹饪', '储存', '祭祀'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的金器主要是什么?',
+    options: ['金印', '金饰', '金器', '金箔'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的石器工具主要有?',
+    options: ['石斧', '石锛', '石凿', '以上都是'],
+    correct: 3
+  },
+  {
+    question: '河泊所遗址出土的青铜镇主要用于?',
+    options: ['压物', '装饰', '镇宅', '祭祀'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的陶瓷器最早出现于哪个时期?',
+    options: ['战国', '秦代', '汉代', '唐代'],
+    correct: 2
+  },
+  {
+    question: '河泊所文化的纺织业主要生产什么?',
+    options: ['麻布', '丝绸', '棉布', '毛布'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜鐎斗主要用于?',
+    options: ['温酒', '烹饪', '取水', '储存'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的水晶珠主要来自哪里?',
+    options: ['本地', '中原', '西域', '南海'],
+    correct: 2
+  },
+  {
+    question: '河泊所文化的造船业主要制造什么船?',
+    options: ['独木舟', '木帆船', '竹筏', '皮筏'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜斛主要用于?',
+    options: ['量器', '容器', '乐器', '礼器'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的煤精制品主要是什么?',
+    options: ['装饰品', '工具', '祭祀用品', '货币'],
+    correct: 0
+  },
+  {
+    question: '河泊所文化的酿酒业主要酿造什么酒?',
+    options: ['米酒', '果酒', '黄酒', '白酒'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的青铜博山炉主要用于?',
+    options: ['熏香', '取暖', '祭祀', '装饰'],
+    correct: 0
+  },
+  {
+    question: '河泊所遗址出土的琥珀饰品主要来自哪里?',
+    options: ['波罗的海', '缅甸', '云南本地', '东南亚'],
+    correct: 1
+  }
+];
+
+let quizState = {
+  currentQuestion: 0,
+  score: 0,
+  totalQuestions: 0,
+  questions: [],
+  timer: 10,
+  timerInterval: null,
+  correctCount: 0,
+  wrongCount: 0
+};
+
+function startQuiz(count) {
+  quizState.totalQuestions = count;
+  quizState.currentQuestion = 0;
+  quizState.score = 0;
+  quizState.correctCount = 0;
+  quizState.wrongCount = 0;
+  
+  const shuffled = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
+  quizState.questions = shuffled.slice(0, count);
+  
+  document.getElementById('quizContainer').classList.remove('hidden');
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.add('hidden');
+  
+  showQuestion();
+}
+
+function showQuestion() {
+  if (quizState.currentQuestion >= quizState.totalQuestions) {
+    showResult();
+    return;
+  }
+  
+  const question = quizState.questions[quizState.currentQuestion];
+  document.getElementById('quizQuestion').textContent = question.question;
+  
+  const options = document.querySelectorAll('.quiz-option');
+  options.forEach((option, index) => {
+    option.textContent = question.options[index];
+    option.classList.remove('correct', 'wrong', 'selected');
+  });
+  
+  document.getElementById('currentScore').textContent = quizState.score;
+  document.getElementById('quizProgress').textContent = `${quizState.currentQuestion + 1}/${quizState.totalQuestions}`;
+  
+  startTimer();
+}
+
+function startTimer() {
+  quizState.timer = 10;
+  document.getElementById('quizTimer').textContent = quizState.timer;
+  
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  quizState.timerInterval = setInterval(() => {
+    quizState.timer--;
+    document.getElementById('quizTimer').textContent = quizState.timer;
+    
+    if (quizState.timer <= 0) {
+      clearInterval(quizState.timerInterval);
+      nextQuestion();
+    }
+  }, 1000);
+}
+
+function selectOption(index) {
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  const question = quizState.questions[quizState.currentQuestion];
+  
+  if (!question) {
+    showResult();
+    return;
+  }
+  
+  const options = document.querySelectorAll('.quiz-option');
+  
+  options.forEach((option, i) => {
+    if (i === question.correct) {
+      option.classList.add('correct');
+    } else if (i === index && i !== question.correct) {
+      option.classList.add('wrong');
+    }
+    option.classList.add('selected');
+  });
+  
+  if (index === question.correct) {
+    quizState.score++;
+    quizState.correctCount++;
+    document.getElementById('currentScore').textContent = quizState.score;
+  } else {
+    quizState.wrongCount++;
+  }
+  
+  setTimeout(nextQuestion, 1500);
+}
+
+function nextQuestion() {
+  quizState.currentQuestion++;
+  showQuestion();
+}
+
+function showResult() {
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  document.getElementById('finalScore').textContent = quizState.score;
+  document.getElementById('correctCount').textContent = quizState.correctCount;
+  document.getElementById('wrongCount').textContent = quizState.wrongCount;
+  
+  const percentage = (quizState.score / quizState.totalQuestions) * 100;
+  let level, message;
+  
+  if (percentage >= 90) {
+    level = '🏆 古滇大师';
+    message = '你对古滇文化有深入研究，堪称古滇大师！';
+  } else if (percentage >= 70) {
+    level = '📜 古滇学者';
+    message = '你对古滇文化有深入了解，继续努力！';
+  } else if (percentage >= 50) {
+    level = '🔍 古滇探索者';
+    message = '你对古滇文化有一定了解，还有更多知识等待探索！';
+  } else {
+    level = '🌱 古滇学徒';
+    message = '开始你的古滇文化探索之旅吧！';
+  }
+  
+  document.getElementById('resultLevel').textContent = level;
+  document.getElementById('resultMessage').textContent = message;
+  
+  document.getElementById('quizContainer').classList.add('hidden');
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.remove('hidden');
+}
+
+function showStartScreen() {
+  if (quizState.timerInterval) {
+    clearInterval(quizState.timerInterval);
+  }
+  
+  document.getElementById('quizContainer').classList.add('hidden');
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  
+  document.getElementById('currentScore').textContent = '0';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btn10').addEventListener('click', () => startQuiz(10));
+  document.getElementById('btn20').addEventListener('click', () => startQuiz(20));
+  document.getElementById('btn30').addEventListener('click', () => startQuiz(30));
+});
