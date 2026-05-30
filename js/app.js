@@ -85,6 +85,7 @@ function checkLogin() {
     }, 1000);
     return false;
   }
+  updateUserButton();
   return true;
 }
 
@@ -101,5 +102,8 @@ function showToast(message, type = 'info') {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, checking user info...');
+  const user = getUserInfo();
+  console.log('User info:', user);
   updateUserButton();
 });
