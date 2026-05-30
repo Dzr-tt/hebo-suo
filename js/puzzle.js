@@ -1,6 +1,24 @@
 const PUZZLE_IMAGES = [
-  { name: '青铜器', grid: generateNumberGrid(3) },
-  { name: '玉璧', grid: generateNumberGrid(4) }
+  {
+    name: '滇王之印',
+    image: 'images/滇王之印.png'
+  },
+  {
+    name: '滇国相印封泥',
+    image: 'images/"滇国相印" 封泥.png'
+  },
+  {
+    name: '益州铭文瓦当',
+    image: 'images/"益州" 铭文瓦当.png'
+  },
+  {
+    name: '官印封泥群',
+    image: 'images/官印封泥群（益州郡体系）.png'
+  },
+  {
+    name: '汉代简牍',
+    image: 'images/汉代简牍.png'
+  }
 ];
 
 let puzzleState = {
@@ -61,6 +79,15 @@ function loadSettings() {
       btn.classList.add('active');
     }
   });
+
+  updateImageSelector();
+}
+
+function updateImageSelector() {
+  const imageLabel = document.getElementById('currentImageLabel');
+  if (imageLabel) {
+    imageLabel.textContent = PUZZLE_IMAGES[puzzleState.currentImageIndex].name;
+  }
 }
 
 function setDifficulty(size) {
@@ -166,6 +193,8 @@ function renderPuzzleGrid() {
   const grid = document.getElementById('puzzleGrid');
   grid.innerHTML = '';
 
+  const currentImage = PUZZLE_IMAGES[puzzleState.currentImageIndex];
+
   puzzleState.grid.forEach((num, index) => {
     const piece = document.createElement('div');
     piece.className = 'puzzle-piece';
@@ -173,7 +202,13 @@ function renderPuzzleGrid() {
     if (num === 0) {
       piece.classList.add('empty');
     } else {
-      piece.textContent = num;
+      const row = Math.floor((num - 1) / puzzleState.size);
+      const col = (num - 1) % puzzleState.size;
+
+      piece.style.backgroundImage = `url('${currentImage.image}')`;
+      piece.style.backgroundSize = `${puzzleState.size * 100}% ${puzzleState.size * 100}%`;
+      piece.style.backgroundPosition = `${col * (100 / (puzzleState.size - 1))}% ${row * (100 / (puzzleState.size - 1))}%`;
+
       piece.onclick = () => handlePieceClick(index);
     }
 
@@ -252,6 +287,7 @@ function resetPuzzle() {
 
 function changeImage() {
   puzzleState.currentImageIndex = (puzzleState.currentImageIndex + 1) % PUZZLE_IMAGES.length;
+  updateImageSelector();
   resetPuzzle();
   showToast(`已切换到: ${PUZZLE_IMAGES[puzzleState.currentImageIndex].name}`);
 }
@@ -261,9 +297,23 @@ function showWinModal() {
   const minutes = Math.floor(elapsed / 60);
   const seconds = elapsed % 60;
 
+  const currentImage = PUZZLE_IMAGES[puzzleState.currentImageIndex];
+
+  const winModal = document.getElementById('winModal');
+  const existingImage = winModal.querySelector('.win-image');
+  if (existingImage) existingImage.remove();
+
+  const imgElement = document.createElement('img');
+  imgElement.className = 'win-image';
+  imgElement.src = currentImage.image;
+  imgElement.alt = currentImage.name;
+  imgElement.style.cssText = 'width: 200px; height: 200px; object-fit: contain; border-radius: 12px; border: 3px solid var(--primary-bronze); margin-bottom: 16px; background: rgba(26, 21, 16, 0.6);';
+
+  winModal.insertBefore(imgElement, winModal.firstChild);
+
   document.getElementById('winMessage').textContent =
-    `用时: ${minutes}分${seconds}秒 | 步数: ${puzzleState.moves}`;
-  document.getElementById('winModal').classList.remove('hidden');
+    `${currentImage.name} | 用时: ${minutes}分${seconds}秒 | 步数: ${puzzleState.moves}`;
+  winModal.classList.remove('hidden');
 }
 
 function closeWinModal() {

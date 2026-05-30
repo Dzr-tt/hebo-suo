@@ -1,59 +1,43 @@
 const ARTIFACTS = [
   {
     id: 1,
-    name: '河伯所铜鼓',
-    era: '战国·滇',
-    desc: '河伯所遗址出土的标志性文物。铜鼓是古滇国神圣的祭祀重器，鼓面装饰太阳纹和翔鹭纹，象征着滇池先民对太阳和自然的崇拜。',
-    color: '#B87333'
+    name: '滇王之印',
+    era: '汉代',
+    desc: '滇王金印是汉代滇国权力的象征，证明古滇国存在的实物证据。印面刻有"滇王之印"四字，造型精美绝伦。',
+    image: 'images/滇王之印.png',
+    color: '#FFD700'
   },
   {
     id: 2,
-    name: '祭祀贮贝器',
-    era: '战国·滇',
-    desc: '古滇国特有的青铜器物，用于储存海贝。器盖铸有"播种"人物造型，展现古滇国农耕祭祀的庄严场景。',
+    name: '滇国相印封泥',
+    era: '汉代',
+    desc: '滇国相印封泥是古滇国行政体系的重要证据，展现了汉代益州郡的官僚制度，是研究古滇国政治制度的重要实物。',
+    image: 'images/"滇国相印" 封泥.png',
     color: '#CD7F32'
   },
   {
     id: 3,
-    name: '立犬青铜扣饰',
-    era: '战国·滇',
-    desc: '扣饰是古滇国最具特色的装饰品。此件塑造一只警觉的立犬，造型生动逼真，反映滇池地区狩猎文化。',
+    name: '益州铭文瓦当',
+    era: '汉代',
+    desc: '益州铭文瓦当是汉代建筑构件，刻有"益州"二字，证明了益州郡的存在，展现了汉代在滇池地区的行政建设。',
+    image: 'images/"益州" 铭文瓦当.png',
     color: '#8B6914'
   },
   {
     id: 4,
-    name: '盟军青铜剑',
-    era: '战国·滇',
-    desc: '古滇国青铜兵器的代表。剑身修长，格挡处饰有精细的蟠螭纹，既是兵器也是艺术品。',
+    name: '官印封泥群',
+    era: '汉代',
+    desc: '官印封泥群展现了益州郡体系的完整官僚架构，包括太守、县令等各级官员的封泥，是研究汉代地方行政制度的珍贵资料。',
+    image: 'images/官印封泥群（益州郡体系）.png',
     color: '#708090'
   },
   {
     id: 5,
-    name: '三迤铜锄',
-    era: '战国·滇',
-    desc: '古滇国青铜农具。锄面宽阔轻薄，刃部平直，便于翻土。是研究古滇国农业文明的重要实物资料。',
+    name: '汉代简牍',
+    era: '汉代',
+    desc: '汉代简牍是古代书写载体，记录了当时的行政文书、法律条文等内容，是研究汉代益州郡社会治理的重要文献资料。',
+    image: 'images/汉代简牍.png',
     color: '#9B7B3B'
-  },
-  {
-    id: 6,
-    name: '农业贮贝器',
-    era: '战国·滇',
-    desc: '器盖铸有农夫赶牛犁地的场景，是古滇国农业生活的生动写照。展现滇池流域发达的稻作文明。',
-    color: '#DAA520'
-  },
-  {
-    id: 7,
-    name: '纺织青铜器',
-    era: '战国·滇',
-    desc: '塑造古滇国妇女纺织的形象，反映滇池地区发达的纺织业。人物造型优美，服饰特征鲜明。',
-    color: '#D2691E'
-  },
-  {
-    id: 8,
-    name: '战争场面贮贝器',
-    era: '战国·滇',
-    desc: '器盖铸武士征战场景，青铜武士手持兵器，骑马冲锋，真实再现古滇国部落间的战争场面。',
-    color: '#8B0000'
   }
 ];
 
@@ -165,7 +149,7 @@ function initGame() {
     if (userData) {
       try {
         const parsed = JSON.parse(userData);
-        if (parsed.version && parsed.version === 2) {
+        if (parsed.version && parsed.version === 3) {
           gameState = parsed;
         } else {
           resetGameState();
@@ -204,7 +188,7 @@ function resetGameState() {
 
   gameState.foundArtifacts = [];
   gameState.currentTool = 'detector';
-  gameState.version = 2;
+  gameState.version = 3;
   saveGame();
 }
 
@@ -285,8 +269,8 @@ function handleDetector(targetArtifact, x, y) {
 
   const ring = document.createElement('div');
   ring.className = 'scan-ring';
-  ring.style.left = x + 'px';
-  ring.style.top = y + 'px';
+  ring.style.left = x + '%';
+  ring.style.top = y + '%';
   scanEffect.appendChild(ring);
 
   setTimeout(() => ring.remove(), 1000);
@@ -425,12 +409,17 @@ function showArtifactReveal(artifact) {
   document.getElementById('overlay').classList.remove('hidden');
   document.getElementById('artifactReveal').classList.remove('hidden');
 
-  const iconEl = document.getElementById('revealIcon');
-  iconEl.innerHTML = `
-    <circle cx="50" cy="50" r="40" fill="none" stroke="${artifact.color}" stroke-width="4"/>
-    <circle cx="50" cy="50" r="25" fill="${artifact.color}" opacity="0.3"/>
-    <circle cx="50" cy="50" r="12" fill="${artifact.color}"/>
-  `;
+  const revealContent = document.getElementById('artifactReveal');
+  const existingImage = revealContent.querySelector('.artifact-real-image');
+  if (existingImage) existingImage.remove();
+
+  const imgElement = document.createElement('img');
+  imgElement.className = 'artifact-real-image';
+  imgElement.src = artifact.image;
+  imgElement.alt = artifact.name;
+  imgElement.style.cssText = 'width: 180px; height: 180px; object-fit: contain; border-radius: 12px; border: 3px solid var(--primary-bronze); margin-bottom: 16px; background: rgba(26, 21, 16, 0.6);';
+  
+  revealContent.insertBefore(imgElement, revealContent.firstChild);
 
   document.getElementById('revealName').textContent = artifact.name;
   document.getElementById('revealEra').textContent = artifact.era;
@@ -466,9 +455,7 @@ function renderCollectionGrid() {
     if (isFound) {
       item.innerHTML = `
         <div class="collection-icon-wrapper" style="border-color: ${data.artifact.color}">
-          <svg viewBox="0 0 24 24" width="32" height="32">
-            <circle cx="12" cy="12" r="8" fill="${data.artifact.color}"/>
-          </svg>
+          <img src="${data.artifact.image}" alt="${data.artifact.name}" style="width: 48px; height: 48px; object-fit: contain; border-radius: 8px;">
         </div>
         <span class="collection-name">${data.artifact.name}</span>
       `;
