@@ -1,6 +1,13 @@
 function getUserInfo() {
-  const data = localStorage.getItem('heboUser');
-  return data ? JSON.parse(data) : null;
+  try {
+    const data = localStorage.getItem('heboUser');
+    if (!data) return null;
+    const user = JSON.parse(data);
+    return user && user.username ? user : null;
+  } catch (e) {
+    console.error('获取用户信息失败:', e);
+    return null;
+  }
 }
 
 function updateUserButton() {
@@ -20,6 +27,8 @@ function updateUserButton() {
       };
       // 添加用户信息显示
       if (userInfo) {
+        const existingDetails = userInfo.querySelector('.user-details');
+        if (existingDetails) existingDetails.remove();
         const userDetails = document.createElement('div');
         userDetails.className = 'user-details';
         userDetails.innerHTML = `
