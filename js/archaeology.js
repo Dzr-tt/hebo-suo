@@ -12,7 +12,7 @@ const ARTIFACTS = [
     name: '滇国相印封泥',
     era: '汉代',
     desc: '滇国相印封泥是古滇国行政体系的重要证据，展现了汉代益州郡的官僚制度，是研究古滇国政治制度的重要实物。',
-    image: 'images/"滇国相印" 封泥.png',
+    image: 'images/“滇国相印” 封泥.png',
     color: '#CD7F32'
   },
   {
@@ -20,7 +20,7 @@ const ARTIFACTS = [
     name: '益州铭文瓦当',
     era: '汉代',
     desc: '益州铭文瓦当是汉代建筑构件，刻有"益州"二字，证明了益州郡的存在，展现了汉代在滇池地区的行政建设。',
-    image: 'images/"益州" 铭文瓦当.png',
+    image: 'images/“益州” 铭文瓦当.png',
     color: '#8B6914'
   },
   {

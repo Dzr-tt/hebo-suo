@@ -5,11 +5,11 @@ const PUZZLE_IMAGES = [
   },
   {
     name: '滇国相印封泥',
-    image: 'images/"滇国相印" 封泥.png'
+    image: 'images/“滇国相印” 封泥.png'
   },
   {
     name: '益州铭文瓦当',
-    image: 'images/"益州" 铭文瓦当.png'
+    image: 'images/“益州” 铭文瓦当.png'
   },
   {
     name: '官印封泥群',
