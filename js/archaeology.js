@@ -132,8 +132,10 @@ function selectTool(tool) {
 function bindEvents() {
   const digGround = document.getElementById('digGround');
   if (digGround) {
-    digGround.removeEventListener('click', handleGroundClick);
     digGround.addEventListener('click', handleGroundClick);
+    console.log('事件绑定成功');
+  } else {
+    console.error('digGround 元素不存在');
   }
 }
 
