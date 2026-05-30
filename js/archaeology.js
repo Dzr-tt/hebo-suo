@@ -100,14 +100,14 @@ function updateUI() {
 function updateToolStatus() {
   const statusText = document.querySelector('.status-text');
   const statusIcon = document.querySelector('.status-icon');
-  
+
   const toolInfo = {
     detector: { icon: '🔍', text: '选择探测器扫描土地' },
     shovel: { icon: '⛏️', text: '选择铁锹挖掘文物' },
     pickaxe: { icon: '🔨', text: '选择锄头挖掘文物' },
     brush: { icon: '🖌️', text: '选择刷子清理文物' }
   };
-  
+
   const info = toolInfo[gameState.currentTool];
   if (statusIcon) statusIcon.textContent = info.icon;
   if (statusText) statusText.textContent = info.text;
@@ -115,13 +115,13 @@ function updateToolStatus() {
 
 function selectTool(tool) {
   gameState.currentTool = tool;
-  
+
   document.querySelectorAll('.tool-item').forEach(item => {
     item.classList.toggle('active', item.dataset.tool === tool);
   });
-  
+
   updateToolStatus();
-  
+
   const digGround = document.getElementById('digGround');
   if (digGround) {
     digGround.style.cursor = tool === 'detector' ? 'crosshair' : 'pointer';
@@ -140,7 +140,7 @@ function bindEvents() {
 
 function handleGroundClick(event) {
   console.log('点击土地，工具:', gameState.currentTool);
-  
+
   if (gameState.currentTool === 'detector') {
     performScan(event);
   }
@@ -149,55 +149,53 @@ function handleGroundClick(event) {
 function performScan(event) {
   const digGround = document.getElementById('digGround');
   if (!digGround) return;
-  
+
   const rect = digGround.getBoundingClientRect();
   const clickX = ((event.clientX - rect.left) / rect.width) * 100;
   const clickY = ((event.clientY - rect.top) / rect.height) * 100;
-  
+
   showScanEffect(event);
-  
+
   let foundSpot = null;
   let closestSpot = null;
   let minDistance = GAME_CONFIG.maxDistance;
-  
+
   gameState.digSpots.forEach(spot => {
     if (spot.state === 'hidden') {
       const distance = Math.sqrt(Math.pow(clickX - spot.x, 2) + Math.pow(clickY - spot.y, 2));
-      
+
       if (distance <= GAME_CONFIG.scanRadius) {
         foundSpot = spot;
       }
-      
+
       if (distance < minDistance) {
         minDistance = distance;
         closestSpot = spot;
       }
     }
   });
-  
+
   if (foundSpot) {
     setTimeout(() => revealArtifactSpot(foundSpot), 500);
   } else if (closestSpot) {
-    showDistanceHint(minDistance, closestSpot, clickX, clickY);
+    showDistanceHint(minDistance, closestSpot, clickX, clickY, event.clientX, event.clientY);
   } else {
-    showToolTip('所有文物已发现！');
+    showToolTip('所有文物已发现！', event.clientX, event.clientY);
   }
 }
 
 function revealArtifactSpot(spot) {
   spot.state = 'detected';
-  
+
   const marker = document.getElementById(`spot-${spot.id}`);
   if (marker) {
     marker.style.left = `${spot.x}%`;
     marker.style.top = `${spot.y}%`;
     marker.classList.remove('hidden');
     marker.classList.add('detected');
-    
+
     marker.onclick = () => handleMarkerClick(spot);
   }
-  
-  showToolTip('发现文物信号！切换到挖掘工具');
 }
 
 function handleMarkerClick(spot) {
@@ -218,15 +216,23 @@ function handleMarkerClick(spot) {
 
 function startExcavation(spot) {
   spot.state = 'excavating';
-  
+
   const marker = document.getElementById(`spot-${spot.id}`);
   if (marker) {
     marker.classList.remove('detected');
     marker.classList.add('excavating');
   }
-  
-  showToolTip('正在挖掘...');
-  
+
+  const digGround = document.getElementById('digGround');
+  if (digGround) {
+    const hole = document.createElement('div');
+    hole.className = 'excavation-hole';
+    hole.id = `hole-${spot.id}`;
+    hole.style.left = `${spot.x}%`;
+    hole.style.top = `${spot.y}%`;
+    digGround.appendChild(hole);
+  }
+
   setTimeout(() => {
     spot.state = 'excavated';
     const markerEl = document.getElementById(`spot-${spot.id}`);
@@ -234,32 +240,37 @@ function startExcavation(spot) {
       markerEl.classList.remove('excavating');
       markerEl.classList.add('excavated');
     }
-    showToolTip('挖掘完成！切换到刷子清理');
   }, 1500);
 }
 
 function cleanArtifact(spot) {
   spot.state = 'revealed';
   gameState.foundCount++;
-  
+
   const marker = document.getElementById(`spot-${spot.id}`);
   if (marker) {
     marker.classList.remove('excavated');
     marker.classList.add('revealed');
   }
-  
+
+  const hole = document.getElementById(`hole-${spot.id}`);
+  if (hole) {
+    hole.classList.add('cleaned');
+    setTimeout(() => hole.remove(), 500);
+  }
+
   showArtifactInfo(spot.artifact);
   saveToCollection(spot.artifact);
   updateUI();
 }
 
-function showDistanceHint(distance, spot, clickX, clickY) {
+function showDistanceHint(distance, spot, clickX, clickY, clientX, clientY) {
   let direction = '';
   const dx = spot.x - clickX;
   const dy = spot.y - clickY;
-  
+
   const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-  
+
   if (angle >= -22.5 && angle < 22.5) {
     direction = '右';
   } else if (angle >= 22.5 && angle < 67.5) {
@@ -277,7 +288,7 @@ function showDistanceHint(distance, spot, clickX, clickY) {
   } else {
     direction = '右上';
   }
-  
+
   let hint = '';
   if (distance <= 25) {
     hint = `探测器反应强烈！文物在${direction}方，很近了！`;
@@ -286,20 +297,20 @@ function showDistanceHint(distance, spot, clickX, clickY) {
   } else {
     hint = `探测器微弱响应，文物在${direction}方，继续搜索`;
   }
-  
-  showToolTip(hint);
+
+  showToolTip(hint, clientX, clientY);
 }
 
 function showScanEffect(event) {
   const digGround = document.getElementById('digGround');
   const effect = document.getElementById('scanEffect');
-  
+
   if (!digGround || !effect) return;
-  
+
   const rect = digGround.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
-  
+
   effect.innerHTML = `
     <div class="scan-ring" style="left: ${x}px; top: ${y}px;"></div>
     <div class="scan-ring" style="left: ${x}px; top: ${y}px; animation-delay: 0.2s;"></div>
@@ -307,11 +318,13 @@ function showScanEffect(event) {
   `;
 }
 
-function showToolTip(text) {
+function showToolTip(text, x, y) {
   const tip = document.getElementById('toolTip');
   if (!tip) return;
-  
+
   tip.textContent = text;
+  tip.style.left = `${x + 15}px`;
+  tip.style.top = `${y + 15}px`;
   tip.classList.add('show');
   setTimeout(() => tip.classList.remove('show'), 2500);
 }
@@ -319,20 +332,20 @@ function showToolTip(text) {
 function showArtifactInfo(artifact) {
   const overlay = document.getElementById('overlay');
   const reveal = document.getElementById('artifactReveal');
-  
+
   if (!overlay || !reveal) return;
-  
+
   document.getElementById('revealName').textContent = artifact.name;
   document.getElementById('revealEra').textContent = artifact.era;
   document.getElementById('revealDesc').textContent = artifact.desc;
-  
+
   const revealIcon = document.getElementById('revealIcon');
   revealIcon.innerHTML = `
-    <img src="${artifact.image}" alt="${artifact.name}" 
+    <img src="${artifact.image}" alt="${artifact.name}"
          onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;4&quot;/><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;30&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;2&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;24&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';"
          style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid ${artifact.color};">
   `;
-  
+
   overlay.classList.remove('hidden');
   reveal.classList.remove('hidden');
 }
@@ -351,15 +364,15 @@ function closeOverlay() {
 function saveToCollection(artifact) {
   const user = getUserInfo();
   if (!user) return;
-  
+
   const users = JSON.parse(localStorage.getItem('heboUsers') || '[]');
   const userIndex = users.findIndex(u => u.username === user.username);
-  
+
   if (userIndex !== -1) {
     if (!users[userIndex].collectedArtifacts) {
       users[userIndex].collectedArtifacts = [];
     }
-    
+
     const exists = users[userIndex].collectedArtifacts.find(a => a.id === artifact.id);
     if (!exists) {
       users[userIndex].collectedArtifacts.push(artifact);
@@ -378,14 +391,14 @@ function updateCollectionCount() {
 function viewCollection() {
   const overlay = document.getElementById('overlay');
   const grid = document.getElementById('collectionGrid');
-  
+
   if (!overlay || !grid) return;
-  
+
   grid.innerHTML = '';
-  
+
   const user = getUserInfo();
   const artifacts = user && user.collectedArtifacts ? user.collectedArtifacts : [];
-  
+
   if (artifacts.length === 0) {
     grid.innerHTML = '<p style="text-align: center; color: #999;">还没有收藏任何文物</p>';
   } else {
@@ -394,7 +407,7 @@ function viewCollection() {
       card.className = 'collection-card';
       card.innerHTML = `
         <div class="artifact-icon" style="border-color: ${artifact.color}">
-          <img src="${artifact.image}" alt="${artifact.name}" 
+          <img src="${artifact.image}" alt="${artifact.name}"
             onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;35&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;3&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;20&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';">
         </div>
         <h4 class="artifact-name">${artifact.name}</h4>
@@ -403,7 +416,7 @@ function viewCollection() {
       grid.appendChild(card);
     });
   }
-  
+
   overlay.classList.remove('hidden');
   document.getElementById('collectionView').classList.remove('hidden');
 }
@@ -412,7 +425,11 @@ function resetGame() {
   document.querySelectorAll('.artifact-marker').forEach(marker => {
     marker.remove();
   });
-  
+
+  document.querySelectorAll('.excavation-hole').forEach(hole => {
+    hole.remove();
+  });
+
   const markersContainer = document.getElementById('artifactMarkers');
   if (markersContainer) {
     for (let i = 0; i < GAME_CONFIG.totalArtifacts; i++) {
@@ -422,11 +439,11 @@ function resetGame() {
       markersContainer.appendChild(marker);
     }
   }
-  
+
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('artifactReveal').classList.add('hidden');
   document.getElementById('collectionView').classList.add('hidden');
-  
+
   initArchaeologyGame();
 }
 
@@ -440,6 +457,6 @@ document.addEventListener('DOMContentLoaded', () => {
       markersContainer.appendChild(marker);
     }
   }
-  
+
   initArchaeologyGame();
 });
