@@ -285,13 +285,14 @@ function showArtifactReveal(artifact) {
 
   document.getElementById('revealName').textContent = artifact.name;
   document.getElementById('revealEra').textContent = artifact.era;
-
-  const revealIcon = document.getElementById('revealIcon');
-  revealIcon.innerHTML = `
-    <img src="${artifact.image}" alt="${artifact.name}"
-         onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;4&quot;/><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;30&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;2&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;24&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';"
-         style="border-color: ${artifact.color};">
-  `;
+  
+  const revealImage = document.getElementById('revealImage');
+  revealImage.src = artifact.image;
+  revealImage.alt = artifact.name;
+  revealImage.onerror = function() {
+    this.style.display = 'none';
+    this.parentElement.innerHTML = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="${artifact.color}" stroke-width="4"/><text x="50" y="55" text-anchor="middle" font-size="24" fill="${artifact.color}">滇</text></svg>`;
+  };
 
   overlay.classList.remove('hidden');
   reveal.classList.remove('hidden');
@@ -469,12 +470,41 @@ function viewCollection() {
         <h4 class="artifact-name">${artifact.name}</h4>
         <p class="artifact-era">${artifact.era}</p>
       `;
+      card.onclick = function() {
+        openImageZoom(artifact);
+      };
       grid.appendChild(card);
     });
   }
 
   overlay.classList.remove('hidden');
   document.getElementById('collectionView').classList.remove('hidden');
+}
+
+function openImageZoom(artifact) {
+  const overlay = document.getElementById('overlay');
+  const zoomModal = document.getElementById('imageZoomModal');
+  
+  if (!overlay || !zoomModal) return;
+  
+  document.getElementById('zoomTitle').textContent = artifact.name;
+  document.getElementById('zoomName').textContent = artifact.name;
+  
+  const zoomImage = document.getElementById('zoomImage');
+  zoomImage.src = artifact.image;
+  zoomImage.alt = artifact.name;
+  zoomImage.onerror = function() {
+    this.style.display = 'none';
+    this.parentElement.innerHTML = `<svg viewBox="0 0 100 100" style="width: 200px; height: 200px;"><circle cx="50" cy="50" r="40" fill="none" stroke="${artifact.color}" stroke-width="4"/><text x="50" y="55" text-anchor="middle" font-size="32" fill="${artifact.color}">滇</text></svg><p style="color: #C9A227; margin-top: 12px;">${artifact.name}</p>`;
+  };
+  
+  document.getElementById('collectionView').classList.add('hidden');
+  zoomModal.classList.remove('hidden');
+}
+
+function closeImageZoom() {
+  document.getElementById('overlay').classList.add('hidden');
+  document.getElementById('imageZoomModal').classList.add('hidden');
 }
 
 function closeOverlay() {
