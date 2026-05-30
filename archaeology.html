@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>模拟考古 - 河伯所·古滇探秘</title>
+  <title>河伯所·古滇探秘 - 线上模拟考古</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
 </head>
 <body>
-  <div class="container page">
+  <div class="container archaeology-page" id="app">
     <header class="header">
       <div class="header-content">
-        <div class="logo">
+        <div class="logo" onclick="window.location.href='index.html'">
           <svg class="logo-icon" viewBox="0 0 48 48">
             <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
             <path d="M24 6 L28 14 L24 22 L20 14 Z" fill="currentColor"/>
@@ -21,124 +21,103 @@
           <span class="logo-text">河伯所</span>
         </div>
         <div class="user-area">
-          <button class="user-btn" id="userBtn" onclick="checkLogin()">未登录</button>
+          <div id="userInfo" class="user-info">
+            <button class="user-btn" id="userBtn" onclick="handleUserAction()">登录</button>
+          </div>
         </div>
       </div>
     </header>
 
     <div class="game-container">
       <div class="game-header">
-        <h1 class="game-title-header">模拟考古</h1>
-        <div class="game-score">
+        <h1 class="game-title">线上模拟考古</h1>
+        <div class="progress-info">
           <span id="foundCount">0</span> / <span id="totalSpots">3</span> 件文物
         </div>
       </div>
 
-      <div class="operation-guide">
-        <div class="guide-step">
-          <span class="step-number">1</span>
-          <span class="step-text">选择<span class="step-highlight">探测器</span>，点击土地扫描</span>
+      <div class="game-tips">
+        <div class="tip-item">
+          <span class="tip-number">1</span>
+          <span>选择<span class="highlight">探测器</span>，点击土地扫描</span>
         </div>
-        <div class="guide-step">
-          <span class="step-number">2</span>
-          <span class="step-text">发现文物后，选择<span class="step-highlight">铁锹</span>或<span class="step-highlight">锄头</span>挖掘</span>
+        <div class="tip-item">
+          <span class="tip-number">2</span>
+          <span>发现文物后，选择<span class="highlight">铁锹</span>或<span class="highlight">锄头</span>挖掘</span>
         </div>
-        <div class="guide-step">
-          <span class="step-number">3</span>
-          <span class="step-text">挖掘完毕，选择<span class="step-highlight">刷子</span>清理文物</span>
+        <div class="tip-item">
+          <span class="tip-number">3</span>
+          <span>挖掘完毕，选择<span class="highlight">刷子</span>清理文物</span>
         </div>
       </div>
 
-      <div class="tool-bar" id="toolBar">
-        <div class="tool-item active" data-tool="detector" onclick="selectTool('detector')">
-          <svg class="tool-icon" viewBox="0 0 48 48">
-            <circle cx="24" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <line x1="24" y1="26" x2="24" y2="42" stroke="currentColor" stroke-width="2.5"/>
-            <line x1="18" y1="42" x2="30" y2="42" stroke="currentColor" stroke-width="2.5"/>
-            <circle cx="24" cy="16" r="4" fill="currentColor"/>
-          </svg>
-          <span>探测器</span>
-        </div>
-        <div class="tool-item" data-tool="shovel" onclick="selectTool('shovel')">
-          <svg class="tool-icon" viewBox="0 0 48 48">
-            <path d="M24 6 L20 6 L18 10 L18 32 Q18 36 22 36 L26 36 Q30 36 30 32 L30 10 L28 6 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-            <line x1="24" y1="36" x2="24" y2="46" stroke="currentColor" stroke-width="3"/>
-            <path d="M20 46 Q24 48 28 46" fill="none" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <span>铁锹</span>
-        </div>
-        <div class="tool-item" data-tool="pickaxe" onclick="selectTool('pickaxe')">
-          <svg class="tool-icon" viewBox="0 0 48 48">
-            <path d="M10 14 Q24 10 38 14 L36 18 Q24 14 12 18 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-            <line x1="24" y1="16" x2="24" y2="44" stroke="currentColor" stroke-width="3"/>
-            <path d="M18 44 Q24 46 30 44" fill="none" stroke="currentColor" stroke-width="2"/>
-            <path d="M14 14 L10 18" stroke="currentColor" stroke-width="2"/>
-            <path d="M34 14 L38 18" stroke="currentColor" stroke-width="2"/>
-          </svg>
-          <span>锄头</span>
-        </div>
-        <div class="tool-item" data-tool="brush" onclick="selectTool('brush')">
-          <svg class="tool-icon" viewBox="0 0 48 48">
-            <rect x="20" y="6" width="8" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-            <path d="M18 26 L18 38 Q24 42 30 38 L30 26" fill="none" stroke="currentColor" stroke-width="2"/>
-            <line x1="20" y1="32" x2="20" y2="36" stroke="currentColor" stroke-width="1"/>
-            <line x1="24" y1="34" x2="24" y2="38" stroke="currentColor" stroke-width="1"/>
-            <line x1="28" y1="32" x2="28" y2="36" stroke="currentColor" stroke-width="1"/>
-          </svg>
-          <span>刷子</span>
-        </div>
+      <div class="tool-bar">
+        <button class="tool-item active" data-tool="detector" onclick="selectTool('detector')">
+          <span class="tool-icon">🔍</span>
+          <span class="tool-name">探测器</span>
+        </button>
+        <button class="tool-item" data-tool="shovel" onclick="selectTool('shovel')">
+          <span class="tool-icon">⛏️</span>
+          <span class="tool-name">铁锹</span>
+        </button>
+        <button class="tool-item" data-tool="pickaxe" onclick="selectTool('pickaxe')">
+          <span class="tool-icon">🔨</span>
+          <span class="tool-name">锄头</span>
+        </button>
+        <button class="tool-item" data-tool="brush" onclick="selectTool('brush')">
+          <span class="tool-icon">🖌️</span>
+          <span class="tool-name">刷子</span>
+        </button>
       </div>
 
       <div class="dig-area">
-        <div class="dig-ground" id="digGround">
-          <div class="soil-layer layer-top"></div>
-          <div class="soil-layer layer-mid"></div>
-          <div class="soil-layer layer-deep"></div>
-          <div class="artifact-markers" id="artifactMarkers"></div>
-          <div class="dig-cursor" id="digCursor"></div>
-          <div class="scan-effect" id="scanEffect"></div>
+        <div id="digGround" class="dig-ground">
+          <div id="artifactMarkers" class="artifact-markers"></div>
+          <div id="scanEffect" class="scan-effect"></div>
         </div>
       </div>
 
-      <div class="dig-status" id="digStatus">
+      <div class="status-bar">
         <span class="status-icon">🔍</span>
         <span class="status-text">选择探测器扫描土地</span>
       </div>
 
       <div class="action-bar">
         <button class="action-btn" onclick="resetGame()">重新开始</button>
-        <button class="action-btn primary" onclick="viewCollection()">我的收藏 (<span id="collectionCount">0</span>)</button>
+        <button class="action-btn primary" onclick="viewCollection()">
+          我的收藏 (<span id="collectionCount">0</span>)
+        </button>
       </div>
-
-      <h2 class="section-title" style="margin-top: 24px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/>
-        </svg>
-        文物图鉴
-      </h2>
-
-      <div class="collection-grid" id="collectionGrid"></div>
     </div>
 
-    <a href="index.html" class="back-link" style="margin-top: 24px;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
-      返回首页
-    </a>
+    <div id="overlay" class="overlay hidden" onclick="closeOverlay()"></div>
+
+    <div id="artifactReveal" class="reveal-modal hidden">
+      <div class="reveal-content">
+        <div class="reveal-icon" id="revealIcon">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#FFD700" stroke-width="4"/>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#FFD700" stroke-width="2"/>
+            <text x="50" y="55" text-anchor="middle" font-size="24" fill="#FFD700">滇</text>
+          </svg>
+        </div>
+        <h2 id="revealName" class="reveal-name">文物名称</h2>
+        <p id="revealEra" class="reveal-era">时代</p>
+        <p id="revealDesc" class="reveal-desc">描述信息</p>
+        <button class="close-btn" onclick="closeReveal()">确定</button>
+      </div>
+    </div>
+
+    <div id="collectionView" class="collection-modal hidden">
+      <div class="collection-header">
+        <h2>我的收藏</h2>
+        <button class="close-btn" onclick="closeOverlay()">×</button>
+      </div>
+      <div id="collectionGrid" class="collection-grid"></div>
+    </div>
+
+    <div id="toolTip" class="tooltip"></div>
   </div>
-
-  <div class="overlay hidden" id="overlay"></div>
-
-  <div class="artifact-reveal hidden" id="artifactReveal">
-    <svg class="artifact-image" id="revealIcon" viewBox="0 0 100 100"></svg>
-    <h3 class="artifact-name" id="revealName"></h3>
-    <p class="artifact-era" id="revealEra"></p>
-    <p class="artifact-desc" id="revealDesc"></p>
-    <button class="submit-btn" style="margin-top: 16px;" onclick="closeReveal()">收入囊中</button>
-  </div>
-
-  <div class="tool-tip" id="toolTip"></div>
 
   <script src="js/app.js"></script>
   <script src="js/archaeology.js"></script>

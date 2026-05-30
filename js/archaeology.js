@@ -10,7 +10,7 @@ const ARTIFACTS = [
     name: '滇王之印',
     era: '汉代',
     desc: '滇王金印是汉代滇国权力的象征，证明古滇国存在的实物证据。印面刻有"滇王之印"四字，造型精美绝伦。',
-    image: 'images/dianwang_zhiyin.png',
+    image: '图片/滇王之印.png',
     color: '#FFD700'
   },
   {
@@ -18,7 +18,7 @@ const ARTIFACTS = [
     name: '滇国相印封泥',
     era: '汉代',
     desc: '滇国相印封泥是古滇国行政体系的重要证据，展现了汉代益州郡的官僚制度，是研究古滇国政治制度的重要实物。',
-    image: 'images/dianguo_xiangyin.png',
+    image: '图片/“滇国相印” 封泥.png',
     color: '#CD7F32'
   },
   {
@@ -26,7 +26,7 @@ const ARTIFACTS = [
     name: '益州铭文瓦当',
     era: '汉代',
     desc: '益州铭文瓦当是汉代建筑构件，刻有"益州"二字，证明了益州郡的存在，展现了汉代在滇池地区的行政建设。',
-    image: 'images/yizhou_wadang.png',
+    image: '图片/“益州” 铭文瓦当.png',
     color: '#8B6914'
   },
   {
@@ -34,7 +34,7 @@ const ARTIFACTS = [
     name: '官印封泥群',
     era: '汉代',
     desc: '官印封泥群展现了益州郡体系的完整官僚架构，包括太守、县令等各级官员的封泥，是研究汉代地方行政制度的珍贵资料。',
-    image: 'images/guanyin_fengni.png',
+    image: '图片/官印封泥群（益州郡体系）.png',
     color: '#708090'
   },
   {
@@ -42,7 +42,7 @@ const ARTIFACTS = [
     name: '汉代简牍',
     era: '汉代',
     desc: '汉代简牍是古代书写载体，记录了当时的行政文书、法律条文等内容，是研究汉代益州郡社会治理的重要文献资料。',
-    image: 'images/handai_jiandu.png',
+    image: '图片/汉代简牍.png',
     color: '#9B7B3B'
   }
 ];
@@ -93,7 +93,6 @@ function initArchaeologyGame() {
 
 function updateUI() {
   document.getElementById('foundCount').textContent = gameState.foundCount;
-  document.getElementById('totalSpots').textContent = GAME_CONFIG.totalArtifacts;
   updateCollectionCount();
   updateToolStatus();
 }
@@ -179,9 +178,9 @@ function performScan(event) {
   if (foundSpot) {
     setTimeout(() => revealArtifactSpot(foundSpot), 500);
   } else if (closestSpot) {
-    showDistanceHint(minDistance, closestSpot);
+    showDistanceHint(minDistance, closestSpot, clickX, clickY);
   } else {
-    showToolTip('未发现文物，继续探索...');
+    showToolTip('所有文物已发现！');
   }
 }
 
@@ -190,6 +189,8 @@ function revealArtifactSpot(spot) {
   
   const marker = document.getElementById(`spot-${spot.id}`);
   if (marker) {
+    marker.style.left = `${spot.x}%`;
+    marker.style.top = `${spot.y}%`;
     marker.classList.remove('hidden');
     marker.classList.add('detected');
     
@@ -209,7 +210,7 @@ function handleMarkerClick(spot) {
       startExcavation(spot);
     }
   } else if (gameState.currentTool === 'brush') {
-    if (spot.state === 'excavating') {
+    if (spot.state === 'excavated') {
       cleanArtifact(spot);
     }
   }
@@ -252,15 +253,29 @@ function cleanArtifact(spot) {
   updateUI();
 }
 
-function showDistanceHint(distance, spot) {
+function showDistanceHint(distance, spot, clickX, clickY) {
   let direction = '';
-  const dx = spot.x - 50;
-  const dy = spot.y - 50;
+  const dx = spot.x - clickX;
+  const dy = spot.y - clickY;
   
-  if (Math.abs(dx) > Math.abs(dy)) {
-    direction = dx > 0 ? '右' : '左';
+  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+  
+  if (angle >= -22.5 && angle < 22.5) {
+    direction = '右';
+  } else if (angle >= 22.5 && angle < 67.5) {
+    direction = '右下';
+  } else if (angle >= 67.5 && angle < 112.5) {
+    direction = '下';
+  } else if (angle >= 112.5 && angle < 157.5) {
+    direction = '左下';
+  } else if (angle >= 157.5 || angle < -157.5) {
+    direction = '左';
+  } else if (angle >= -157.5 && angle < -112.5) {
+    direction = '左上';
+  } else if (angle >= -112.5 && angle < -67.5) {
+    direction = '上';
   } else {
-    direction = dy > 0 ? '下' : '上';
+    direction = '右上';
   }
   
   let hint = '';
@@ -285,11 +300,11 @@ function showScanEffect(event) {
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
   
-  effect.style.left = `${x - 50}px`;
-  effect.style.top = `${y - 50}px`;
-  effect.classList.add('active');
-  
-  setTimeout(() => effect.classList.remove('active'), 600);
+  effect.innerHTML = `
+    <div class="scan-ring" style="left: ${x}px; top: ${y}px;"></div>
+    <div class="scan-ring" style="left: ${x}px; top: ${y}px; animation-delay: 0.2s;"></div>
+    <div class="scan-ring" style="left: ${x}px; top: ${y}px; animation-delay: 0.4s;"></div>
+  `;
 }
 
 function showToolTip(text) {
@@ -311,16 +326,11 @@ function showArtifactInfo(artifact) {
   document.getElementById('revealEra').textContent = artifact.era;
   document.getElementById('revealDesc').textContent = artifact.desc;
   
-  document.getElementById('revealIcon').innerHTML = `
-    <defs>
-      <linearGradient id="grad-${artifact.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${artifact.color}"/>
-        <stop offset="100%" stop-color="#8B6914"/>
-      </linearGradient>
-    </defs>
-    <circle cx="50" cy="50" r="40" fill="none" stroke="url(#grad-${artifact.id})" stroke-width="4"/>
-    <circle cx="50" cy="50" r="30" fill="none" stroke="url(#grad-${artifact.id})" stroke-width="2"/>
-    <text x="50" y="55" text-anchor="middle" font-size="24" fill="${artifact.color}">滇</text>
+  const revealIcon = document.getElementById('revealIcon');
+  revealIcon.innerHTML = `
+    <img src="${artifact.image}" alt="${artifact.name}" 
+         onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;4&quot;/><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;30&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;2&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;24&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';"
+         style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid ${artifact.color};">
   `;
   
   overlay.classList.remove('hidden');
@@ -330,6 +340,12 @@ function showArtifactInfo(artifact) {
 function closeReveal() {
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('artifactReveal').classList.add('hidden');
+}
+
+function closeOverlay() {
+  document.getElementById('overlay').classList.add('hidden');
+  document.getElementById('artifactReveal').classList.add('hidden');
+  document.getElementById('collectionView').classList.add('hidden');
 }
 
 function saveToCollection(artifact) {
@@ -368,24 +384,28 @@ function viewCollection() {
   grid.innerHTML = '';
   
   const user = getUserInfo();
-  const artifacts = user && user.collectedArtifacts ? user.collectedArtifacts : ARTIFACTS;
+  const artifacts = user && user.collectedArtifacts ? user.collectedArtifacts : [];
   
-  artifacts.forEach(artifact => {
-    const card = document.createElement('div');
-    card.className = 'collection-card';
-    card.innerHTML = `
-      <div class="artifact-icon" style="border-color: ${artifact.color}">
-        <img src="${artifact.image}" alt="${artifact.name}" 
-          onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;35&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;3&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;20&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';">
-      </div>
-      <h4 class="artifact-name">${artifact.name}</h4>
-      <p class="artifact-era">${artifact.era}</p>
-    `;
-    grid.appendChild(card);
-  });
+  if (artifacts.length === 0) {
+    grid.innerHTML = '<p style="text-align: center; color: #999;">还没有收藏任何文物</p>';
+  } else {
+    artifacts.forEach(artifact => {
+      const card = document.createElement('div');
+      card.className = 'collection-card';
+      card.innerHTML = `
+        <div class="artifact-icon" style="border-color: ${artifact.color}">
+          <img src="${artifact.image}" alt="${artifact.name}" 
+            onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;35&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;3&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;20&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';">
+        </div>
+        <h4 class="artifact-name">${artifact.name}</h4>
+        <p class="artifact-era">${artifact.era}</p>
+      `;
+      grid.appendChild(card);
+    });
+  }
   
   overlay.classList.remove('hidden');
-  overlay.onclick = () => overlay.classList.add('hidden');
+  document.getElementById('collectionView').classList.remove('hidden');
 }
 
 function resetGame() {
@@ -405,6 +425,7 @@ function resetGame() {
   
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('artifactReveal').classList.add('hidden');
+  document.getElementById('collectionView').classList.add('hidden');
   
   initArchaeologyGame();
 }
