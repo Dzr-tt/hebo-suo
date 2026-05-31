@@ -33,9 +33,9 @@
         <h2 style="font-family: 'Noto Serif SC', serif; font-size: 1.5rem; color: var(--accent-gold); margin-bottom: 16px;">选择题库数量</h2>
         <p style="color: var(--secondary-yellow); margin-bottom: 24px;">测试你对古滇文化的了解程度</p>
         <div style="display: flex; flex-direction: column; gap: 12px;">
-          <button class="action-btn primary" onclick="startQuiz(10)">🌱 初探古滇 (10题)</button>
-          <button class="action-btn" onclick="startQuiz(20)">📚 深入探索 (20题)</button>
-          <button class="action-btn" onclick="startQuiz(30)">🏆 古滇大师 (30题)</button>
+          <button class="action-btn primary" id="btn10">🌱 初探古滇 (10题)</button>
+          <button class="action-btn" id="btn20">📚 深入探索 (20题)</button>
+          <button class="action-btn" id="btn30">🏆 古滇大师 (30题)</button>
         </div>
       </div>
       <a href="index.html" class="back-link" style="margin-top: 24px;">
@@ -68,7 +68,7 @@
       </div>
 
       <div class="action-bar" style="margin-top: 20px;">
-        <button class="action-btn secondary" onclick="showStartScreen()">重新选择题库</button>
+        <button class="action-btn secondary" id="btnRestart">重新选择题库</button>
       </div>
     </div>
 
@@ -91,7 +91,7 @@
           <span>答错 <span id="wrongCount">0</span> 题</span>
         </div>
       </div>
-      <button class="submit-btn" onclick="showStartScreen()">再玩一次</button>
+      <button class="submit-btn" id="btnReplay">再玩一次</button>
       <a href="index.html" class="back-link" style="margin-top: 24px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -340,12 +340,23 @@
       document.getElementById('currentScore').textContent = '0';
     }
 
-    // 绑定选项点击事件
-    document.querySelectorAll('.quiz-option').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const index = parseInt(this.getAttribute('data-index'));
-        selectOption(index);
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Quiz DOM loaded');
+
+      document.getElementById('btn10').addEventListener('click', function() { startQuiz(10); });
+      document.getElementById('btn20').addEventListener('click', function() { startQuiz(20); });
+      document.getElementById('btn30').addEventListener('click', function() { startQuiz(30); });
+      document.getElementById('btnRestart').addEventListener('click', showStartScreen);
+      document.getElementById('btnReplay').addEventListener('click', showStartScreen);
+
+      document.querySelectorAll('.quiz-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const index = parseInt(this.getAttribute('data-index'));
+          selectOption(index);
+        });
       });
+
+      console.log('Quiz events bound');
     });
   </script>
 </body>
