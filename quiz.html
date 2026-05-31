@@ -8,6 +8,8 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
   <style>
     .hidden { display: none !important; }
+    .hero::before { pointer-events: none !important; }
+    .hero::after { pointer-events: none !important; }
   </style>
 </head>
 <body>
@@ -340,24 +342,36 @@
       document.getElementById('currentScore').textContent = '0';
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Quiz DOM loaded');
+    function initQuizEvents() {
+      console.log('Quiz events binding...');
 
-      document.getElementById('btn10').addEventListener('click', function() { startQuiz(10); });
-      document.getElementById('btn20').addEventListener('click', function() { startQuiz(20); });
-      document.getElementById('btn30').addEventListener('click', function() { startQuiz(30); });
-      document.getElementById('btnRestart').addEventListener('click', showStartScreen);
-      document.getElementById('btnReplay').addEventListener('click', showStartScreen);
+      var btn10 = document.getElementById('btn10');
+      var btn20 = document.getElementById('btn20');
+      var btn30 = document.getElementById('btn30');
+      var btnRestart = document.getElementById('btnRestart');
+      var btnReplay = document.getElementById('btnReplay');
+
+      if (btn10) btn10.addEventListener('click', function() { startQuiz(10); });
+      if (btn20) btn20.addEventListener('click', function() { startQuiz(20); });
+      if (btn30) btn30.addEventListener('click', function() { startQuiz(30); });
+      if (btnRestart) btnRestart.addEventListener('click', showStartScreen);
+      if (btnReplay) btnReplay.addEventListener('click', showStartScreen);
 
       document.querySelectorAll('.quiz-option').forEach(function(btn) {
         btn.addEventListener('click', function() {
-          const index = parseInt(this.getAttribute('data-index'));
+          var index = parseInt(this.getAttribute('data-index'));
           selectOption(index);
         });
       });
 
       console.log('Quiz events bound');
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initQuizEvents);
+    } else {
+      initQuizEvents();
+    }
   </script>
 </body>
 </html>
