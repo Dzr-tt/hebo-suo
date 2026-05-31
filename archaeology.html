@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>线上模拟考古 - 河伯所</title>
+  <title>线上模拟考古 - 河泊所</title>
   <style>
     * {
       margin: 0;
@@ -221,7 +221,7 @@
     }
 
     .artifact-marker.detected::after {
-      content: '✦';
+      content: '�?;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -250,7 +250,7 @@
     }
 
     .artifact-marker.excavated::after {
-      content: '✦';
+      content: '�?;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -837,7 +837,7 @@
             <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="24" cy="28" r="4" fill="currentColor"/>
           </svg>
-          <span class="logo-text">河伯所</span>
+          <span class="logo-text">河泊所</span>
         </div>
         <div class="user-area">
           <div id="userInfo" class="user-info">
@@ -851,18 +851,17 @@
       <div class="game-header">
         <h1 class="game-title">线上模拟考古</h1>
         <div class="progress-info">
-          <span id="foundCount">0</span> / <span id="totalSpots">3</span> 件文物
-        </div>
+          <span id="foundCount">0</span> / <span id="totalSpots">3</span> 件文�?        </div>
       </div>
 
       <div class="game-tips">
         <div class="tip-item">
           <span class="tip-number">1</span>
-          <span>选择<span class="highlight">探测器</span>，点击土地扫描</span>
+          <span>选择<span class="highlight">探测�?/span>，点击土地扫�?/span>
         </div>
         <div class="tip-item">
           <span class="tip-number">2</span>
-          <span>发现文物后，选择<span class="highlight">铁锹</span>或<span class="highlight">锄头</span>挖掘</span>
+          <span>发现文物后，选择<span class="highlight">铁锹</span>�?span class="highlight">锄头</span>挖掘</span>
         </div>
         <div class="tip-item">
           <span class="tip-number">3</span>
@@ -873,7 +872,7 @@
       <div class="tool-bar">
         <button class="tool-item active" data-tool="detector" onclick="selectTool('detector')">
           <span class="tool-icon">🔍</span>
-          <span class="tool-name">探测器</span>
+          <span class="tool-name">探测�?/span>
         </button>
         <button class="tool-item" data-tool="shovel" onclick="selectTool('shovel')">
           <span class="tool-icon">⛏️</span>
@@ -884,7 +883,7 @@
           <span class="tool-name">锄头</span>
         </button>
         <button class="tool-item" data-tool="brush" onclick="selectTool('brush')">
-          <span class="tool-icon">🖌️</span>
+          <span class="tool-icon">🖌�?/span>
           <span class="tool-name">刷子</span>
         </button>
       </div>
@@ -898,12 +897,12 @@
 
       <div class="status-bar">
         <span class="status-icon">🔍</span>
-        <span class="status-text">选择探测器扫描土地</span>
+        <span class="status-text">选择探测器扫描土�?/span>
       </div>
 
       <div class="action-bar">
         <button class="action-btn" onclick="goHome()">🏠 返回首页</button>
-        <button class="action-btn" onclick="resetGame()">重新开始</button>
+        <button class="action-btn" onclick="resetGame()">重新开�?/button>
         <button class="action-btn" onclick="viewArtifactGallery()">图鉴</button>
         <button class="action-btn primary" onclick="viewCollection()">
           收藏 (<span id="collectionCount">0</span>)
@@ -948,7 +947,7 @@
         <button class="image-zoom-close" onclick="closeImageZoom()">×</button>
       </div>
       <div class="image-zoom-content">
-        <img id="zoomImage" src="" alt="放大的文物图片">
+        <img id="zoomImage" src="" alt="放大的文物图�?>
         <p id="zoomName"></p>
       </div>
     </div>
