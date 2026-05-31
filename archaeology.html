@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>线上模拟考古 - 河伯所</title>
+  <title>线上模拟考古 - 河泊所</title>
   <style>
     * {
       margin: 0;
@@ -221,7 +221,7 @@
     }
 
     .artifact-marker.detected::after {
-      content: '✦';
+      content: '藏';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -250,7 +250,7 @@
     }
 
     .artifact-marker.excavated::after {
-      content: '✦';
+      content: '获';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -837,7 +837,7 @@
             <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="24" cy="28" r="4" fill="currentColor"/>
           </svg>
-          <span class="logo-text">河伯所</span>
+          <span class="logo-text">河泊所</span>
         </div>
         <div class="user-area">
           <div id="userInfo" class="user-info">
@@ -851,8 +851,7 @@
       <div class="game-header">
         <h1 class="game-title">线上模拟考古</h1>
         <div class="progress-info">
-          <span id="foundCount">0</span> / <span id="totalSpots">3</span> 件文物
-        </div>
+          <span id="foundCount">0</span> / <span id="totalSpots">3</span> 件文物</div>
       </div>
 
       <div class="game-tips">
@@ -948,7 +947,7 @@
         <button class="image-zoom-close" onclick="closeImageZoom()">×</button>
       </div>
       <div class="image-zoom-content">
-        <img id="zoomImage" src="" alt="放大的文物图片">
+        <img id="zoomImage" src="" alt="放大的文物图片"
         <p id="zoomName"></p>
       </div>
     </div>
