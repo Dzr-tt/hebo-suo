@@ -2630,8 +2630,6 @@ body::before {
 
 .puzzle-tile {
   aspect-ratio: 1;
-  background-size: cover;
-  background-position: center;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -2639,21 +2637,20 @@ body::before {
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.puzzle-tile:hover:not(.empty) {
+.puzzle-tile:hover {
   border-color: var(--accent-gold);
   transform: scale(1.03);
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
-.puzzle-tile:active:not(.empty) {
+.puzzle-tile:active {
   transform: scale(0.97);
 }
 
-.puzzle-tile.empty {
-  background: rgba(30, 22, 12, 0.6);
-  border-style: dashed;
-  border-color: rgba(139, 105, 20, 0.3);
-  cursor: default;
+.puzzle-tile.selected {
+  border-color: #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5), inset 0 0 10px rgba(0, 255, 136, 0.2);
+  transform: scale(1.05);
 }
 
 .puzzle-stats {
