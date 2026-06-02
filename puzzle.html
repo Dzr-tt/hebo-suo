@@ -66,13 +66,31 @@
     </a>
   </div>
 
-  <div class="modal hidden" id="winModal">
-    <div class="modal-content">
-      <h2 class="modal-title">🎉 国宝重现！</h2>
-      <p class="modal-text" id="winMessage">你完成了文物修复！</p>
-      <div class="modal-buttons">
-        <button class="modal-btn cancel" onclick="closeWinModal()">继续挑战</button>
-        <button class="modal-btn confirm" onclick="goCertificate()">📜 查看任职文书</button>
+  <div class="completion-overlay hidden" id="winModal">
+    <div class="completion-card">
+      <div class="completion-badge">🧩</div>
+      <div class="completion-title">国宝重现</div>
+      <div class="completion-subtitle">残片归位，古韵重生，尘封的国宝终于重现昔日风采……</div>
+      <div class="completion-divider"></div>
+      <div class="completion-score-row">
+        <div class="completion-score-item">
+          <span class="completion-score-value" id="winTime">0:00</span>
+          <div class="completion-score-label">用时</div>
+        </div>
+        <div class="completion-score-item">
+          <span class="completion-score-value" id="winMoves">0</span>
+          <div class="completion-score-label">步数</div>
+        </div>
+      </div>
+      <div class="completion-medal">
+        <div class="completion-medal-icon">🏆</div>
+        <div class="completion-medal-title">巧手修复师</div>
+        <div class="completion-medal-desc">文物修复考核通过</div>
+      </div>
+      <div class="completion-buttons">
+        <button class="completion-btn primary" onclick="goCertificate()">📜 查看任职文书</button>
+        <button class="completion-btn secondary" onclick="closeWinModal()">继续挑战</button>
+        <a href="index.html" class="completion-btn secondary">🏛️ 返回郡府</a>
       </div>
     </div>
   </div>

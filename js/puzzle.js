@@ -146,11 +146,14 @@ function checkWin() {
 
 function showWinModal() {
   var modal = document.getElementById('winModal');
-  var message = document.getElementById('winMessage');
 
   var elapsed = Date.now() - puzzleState.startTime;
   var time = formatTime(elapsed);
-  message.textContent = '用时 ' + time + '，共 ' + puzzleState.moves + ' 步完成！';
+
+  var winTime = document.getElementById('winTime');
+  var winMoves = document.getElementById('winMoves');
+  if (winTime) winTime.textContent = time;
+  if (winMoves) winMoves.textContent = puzzleState.moves;
 
   if (typeof saveLevelResult === 'function') {
     var maxScore = puzzleState.size === 3 ? 100 : 200;

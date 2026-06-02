@@ -75,38 +75,38 @@
       </div>
     </div>
 
-    <!-- 结果界面 -->
-    <div class="quiz-container hidden" id="resultScreen">
-      <div class="quiz-result">
-        <h2 class="result-title">策问考核完毕！</h2>
-        <div class="result-score">
-          <div class="score-circle" style="border-color: var(--accent-gold); box-shadow: 0 0 30px rgba(255,215,0,0.3);">
-            <span id="finalScore">0</span>
-            <span class="score-label">分</span>
+    <!-- 结果弹窗 -->
+    <div class="completion-overlay hidden" id="resultOverlay">
+      <div class="completion-card">
+        <div class="completion-badge">📜</div>
+        <div class="completion-title">策问考核完毕</div>
+        <div class="completion-subtitle" id="resultSubtitle">太守大人放下竹简，微微颔首……</div>
+
+        <div class="completion-score-row">
+          <div class="completion-score-item">
+            <span class="completion-score-value" id="finalScore">0</span>
+            <div class="completion-score-label">答对题数</div>
+          </div>
+          <div class="completion-score-item">
+            <span class="completion-score-value" id="finalAccuracy">0%</span>
+            <div class="completion-score-label">正确率</div>
           </div>
         </div>
-        <div class="result-info">
-          <p class="result-level" id="resultLevel">🏅 初入仕途</p>
-          <p class="result-message" id="resultMessage">恭喜通过策问考核！</p>
+
+        <div class="completion-divider"></div>
+
+        <div class="completion-medal">
+          <div class="completion-medal-icon">🏅</div>
+          <div class="completion-medal-title" id="resultLevel">初入仕途</div>
+          <div class="completion-medal-desc" id="resultMessage">恭喜通过策问考核！</div>
         </div>
-        <div class="result-stats">
-          <span>答对 <span id="correctCount">0</span> 题</span>
-          <span>答错 <span id="wrongCount">0</span> 题</span>
-        </div>
-        <div id="medalBox" style="margin-top: 16px; padding: 12px; background: rgba(255,215,0,0.1); border-radius: 8px; border: 1px solid var(--accent-gold);">
-          <div style="font-size: 2rem;">🏅</div>
-          <div style="color: var(--accent-gold); font-weight: bold; margin-top: 4px;">获得勋章：初入仕途</div>
-          <div style="color: var(--secondary-yellow); font-size: 0.85rem;">益州郡府见习文吏</div>
+
+        <div class="completion-buttons">
+          <button class="completion-btn primary" id="btnNext">⛏️ 前往第二关：实地勘探</button>
+          <button class="completion-btn secondary" id="btnReplay">重新考核</button>
+          <a href="index.html" class="completion-btn secondary">🏛️ 返回郡府</a>
         </div>
       </div>
-      <button class="submit-btn" id="btnNext" style="background: linear-gradient(145deg, #8B6914, #5c4a32); border: 2px solid var(--accent-gold); color: #FFD700; font-family: 'Noto Serif SC', serif;">前往第二关：实地勘探 ➔</button>
-      <button class="action-btn" id="btnReplay" style="margin-top: 12px;">重新考核</button>
-      <a href="index.html" class="back-link" style="margin-top: 16px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        返回郡府
-      </a>
     </div>
   </div>
 
@@ -316,39 +316,32 @@
         clearInterval(quizState.timerInterval);
       }
 
-      document.getElementById('finalScore').textContent = quizState.score;
-      document.getElementById('correctCount').textContent = quizState.correctCount;
-      document.getElementById('wrongCount').textContent = quizState.wrongCount;
-
-      const percentage = (quizState.score / quizState.totalQuestions) * 100;
-      let level, message, medalTitle, medalDesc;
+      var percentage = Math.round((quizState.score / quizState.totalQuestions) * 100);
+      var level, message, subtitle;
 
       if (percentage >= 90) {
         level = '🏆 益州郡长史';
         message = '才华横溢，太守大人对你赞赏有加！';
-        medalTitle = '获得勋章：学贯古今';
-        medalDesc = '益州郡长史候选';
+        subtitle = '太守大人放下竹简，目光中满是欣赏……';
       } else if (percentage >= 70) {
         level = '📜 益州郡功曹';
         message = '学识渊博，可堪大任！';
-        medalTitle = '获得勋章：满腹经纶';
-        medalDesc = '益州郡功曹候选';
+        subtitle = '太守大人微微颔首，面露赞许之色……';
       } else if (percentage >= 50) {
         level = '🔍 益州郡书佐';
         message = '基本合格，还需多多历练。';
-        medalTitle = '获得勋章：初入仕途';
-        medalDesc = '益州郡书佐候补';
+        subtitle = '太守大人沉吟片刻，允你入府试职……';
       } else {
         level = '🌱 益州郡门吏';
         message = '勉强通过，日后要加倍努力！';
-        medalTitle = '获得勋章：初入仕途';
-        medalDesc = '益州郡门吏候补';
+        subtitle = '太守大人眉头微蹙，念你远道而来……';
       }
 
+      document.getElementById('finalScore').textContent = quizState.score + ' / ' + quizState.totalQuestions;
+      document.getElementById('finalAccuracy').textContent = percentage + '%';
       document.getElementById('resultLevel').textContent = level;
       document.getElementById('resultMessage').textContent = message;
-      document.querySelector('#medalBox div:nth-child(2)').textContent = medalTitle;
-      document.querySelector('#medalBox div:nth-child(3)').textContent = medalDesc;
+      document.getElementById('resultSubtitle').textContent = subtitle;
 
       // Save to career system
       if (typeof saveLevelResult === 'function') {
@@ -358,7 +351,7 @@
 
       document.getElementById('quizContainer').classList.add('hidden');
       document.getElementById('startScreen').classList.add('hidden');
-      document.getElementById('resultScreen').classList.remove('hidden');
+      document.getElementById('resultOverlay').classList.remove('hidden');
     }
 
     function showStartScreen() {
@@ -367,7 +360,7 @@
       }
 
       document.getElementById('quizContainer').classList.add('hidden');
-      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('resultOverlay').classList.add('hidden');
       document.getElementById('startScreen').classList.remove('hidden');
       document.getElementById('currentScore').textContent = '0';
     }

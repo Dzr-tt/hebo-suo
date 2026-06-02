@@ -956,8 +956,36 @@
     <div id="toolTip" class="tooltip"></div>
   </div>
 
+  <!-- 完成弹窗 -->
+  <div class="completion-overlay hidden" id="completeOverlay">
+    <div class="completion-card">
+      <div class="completion-badge">⛏️</div>
+      <div class="completion-title">实地勘探圆满完成</div>
+      <div class="completion-subtitle">风沙渐息，铜印在手，你已将所有前朝遗留的官印悉数寻回……</div>
+      <div class="completion-divider"></div>
+      <div class="completion-medal">
+        <div class="completion-medal-icon">🥇</div>
+        <div class="completion-medal-title">勘探先锋</div>
+        <div class="completion-medal-desc">古城遗址考察通过</div>
+      </div>
+      <div class="completion-buttons">
+        <button class="completion-btn primary" onclick="goLevel3()">🧩 前往第三关：文物修复</button>
+        <button class="completion-btn secondary" onclick="closeCompleteModal()">继续探索</button>
+        <a href="index.html" class="completion-btn secondary">🏛️ 返回郡府</a>
+      </div>
+    </div>
+  </div>
+
   <script src="js/career.js"></script>
   <script src="js/app.js"></script>
   <script src="js/archaeology.js"></script>
+  <script>
+    function goLevel3() {
+      window.location.href = 'puzzle.html';
+    }
+    function closeCompleteModal() {
+      document.getElementById('completeOverlay').classList.add('hidden');
+    }
+  </script>
 </body>
 </html>

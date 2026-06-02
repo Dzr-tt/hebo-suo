@@ -197,7 +197,7 @@
         </div>
 
         <div class="cert-qr" id="qrBox">
-          <canvas id="qrCanvas" width="120" height="120"></canvas>
+          <img id="qrImage" width="120" height="120" alt="二维码" style="display:block;border-radius:4px;">
           <div class="cert-qr-text">扫码查看考古战绩</div>
         </div>
       </div>
@@ -216,33 +216,13 @@
   <script src="js/career.js"></script>
   <script>
     function drawQR() {
-      var canvas = document.getElementById('qrCanvas');
-      if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, 120, 120);
-      ctx.fillStyle = '#1a0f0a';
-      // Draw a pseudo QR pattern
-      for (var y = 0; y < 12; y++) {
-        for (var x = 0; x < 12; x++) {
-          if (Math.random() > 0.5) {
-            ctx.fillRect(x * 10 + 2, y * 10 + 2, 8, 8);
-          }
-        }
-      }
-      // Draw position markers
-      ctx.fillStyle = '#1a0f0a';
-      ctx.fillRect(2, 2, 24, 24);
-      ctx.fillRect(88, 2, 24, 24);
-      ctx.fillRect(2, 88, 24, 24);
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(8, 8, 12, 12);
-      ctx.fillRect(94, 8, 12, 12);
-      ctx.fillRect(8, 94, 12, 12);
-      ctx.fillStyle = '#1a0f0a';
-      ctx.fillRect(11, 11, 6, 6);
-      ctx.fillRect(97, 11, 6, 6);
-      ctx.fillRect(11, 97, 6, 6);
+      var img = document.getElementById('qrImage');
+      if (!img) return;
+      var url = 'https://dzr-tt.github.io/hebo-suo/certificate.html';
+      try {
+        url = window.location.href;
+      } catch (e) {}
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(url);
     }
 
     function renderCertificate() {

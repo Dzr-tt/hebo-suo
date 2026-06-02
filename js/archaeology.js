@@ -310,9 +310,9 @@ function cleanArtifact(spot) {
         var elapsed = gameState.startTime ? (Date.now() - gameState.startTime) : 0;
         saveLevelResult(2, 100, 100, elapsed);
       }
-      var proceed = confirm('🎉 实地勘探完成！你已找到所有前朝遗留的官印。\n\n是否前往第三关：文物修复？');
-      if (proceed) {
-        window.location.href = 'puzzle.html';
+      var overlay = document.getElementById('completeOverlay');
+      if (overlay) {
+        overlay.classList.remove('hidden');
       }
     }, 500);
   }
