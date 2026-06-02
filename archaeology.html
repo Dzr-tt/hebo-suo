@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>线上模拟考古 - 河泊所</title>
+  <title>实地勘探 - 寻找前朝官印</title>
   <style>
     * {
       margin: 0;
@@ -837,7 +837,7 @@
             <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="24" cy="28" r="4" fill="currentColor"/>
           </svg>
-          <span class="logo-text">河泊所</span>
+          <span class="logo-text">益州郡府</span>
         </div>
         <div class="user-area">
           <div id="userInfo" class="user-info">
@@ -849,23 +849,24 @@
 
     <div class="game-container">
       <div class="game-header">
-        <h1 class="game-title">线上模拟考古</h1>
-        <div class="progress-info">
+        <h1 class="game-title">⛏️ 实地勘探</h1>
+        <p style="color: #C9A227; font-size: 0.9rem; margin-top: 4px;">恭喜通过笔试！现在请前往古城遗址进行实地考察，寻找前朝遗留的官印。</p>
+        <div class="progress-info" style="margin-top:8px">
           <span id="foundCount">0</span> / <span id="totalSpots">3</span> 件文物</div>
       </div>
 
       <div class="game-tips">
         <div class="tip-item">
           <span class="tip-number">1</span>
-          <span>选择<span class="highlight">探测器</span>，点击土地扫描</span>
+          <span>选择<span class="highlight">探测器</span>，扫描地层寻找异常</span>
         </div>
         <div class="tip-item">
           <span class="tip-number">2</span>
-          <span>发现文物后，选择<span class="highlight">铁锹</span>或<span class="highlight">锄头</span>挖掘</span>
+          <span>发现异常后，用<span class="highlight">铁锹</span>或<span class="highlight">锄头</span>挖掘</span>
         </div>
         <div class="tip-item">
           <span class="tip-number">3</span>
-          <span>挖掘完毕，选择<span class="highlight">刷子</span>清理文物</span>
+          <span>挖掘完毕，用<span class="highlight">刷子</span>清理出土文物</span>
         </div>
       </div>
 
@@ -955,6 +956,7 @@
     <div id="toolTip" class="tooltip"></div>
   </div>
 
+  <script src="js/career.js"></script>
   <script src="js/app.js"></script>
   <script src="js/archaeology.js"></script>
 </body>

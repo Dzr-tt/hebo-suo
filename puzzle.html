@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>文物拼图 - 河泊所·古滇探秘</title>
+  <title>文物修复 - 归位国宝</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
 </head>
@@ -18,7 +18,7 @@
             <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="24" cy="28" r="4" fill="currentColor"/>
           </svg>
-          <span class="logo-text">河泊所</span>
+          <span class="logo-text">益州郡府</span>
         </div>
         <div class="user-area">
           <button class="user-btn" id="userBtn" onclick="checkLogin()">未登录</button>
@@ -28,9 +28,9 @@
 
     <div class="game-container">
       <div class="game-header">
-        <h1 class="game-title-header">文物拼图</h1>
+        <h1 class="game-title-header">🧩 文物修复</h1>
         <p class="game-description" style="font-size: 0.9rem; color: var(--secondary-yellow); opacity: 0.8; margin-top: 8px;">
-          🎮 玩法：点击空白位置相邻的拼图块进行交换，将所有拼图恢复到正确位置即可完成
+          出土文物残破不堪，急需修复师归位！请运用你的巧手，重现国宝风采。
         </p>
         <div class="game-score" id="gameScore">用时: 0:00 | 步数: 0</div>
       </div>
@@ -68,16 +68,22 @@
 
   <div class="modal hidden" id="winModal">
     <div class="modal-content">
-      <h2 class="modal-title">🎉 恭喜完成!</h2>
-      <p class="modal-text" id="winMessage">你完成了拼图!</p>
+      <h2 class="modal-title">🎉 国宝重现！</h2>
+      <p class="modal-text" id="winMessage">你完成了文物修复！</p>
       <div class="modal-buttons">
         <button class="modal-btn cancel" onclick="closeWinModal()">继续挑战</button>
-        <button class="modal-btn confirm" onclick="resetPuzzle(); closeWinModal();">再来一局</button>
+        <button class="modal-btn confirm" onclick="goCertificate()">📜 查看任职文书</button>
       </div>
     </div>
   </div>
 
+  <script src="js/career.js"></script>
   <script src="js/app.js"></script>
   <script src="js/puzzle.js"></script>
+  <script>
+    function goCertificate() {
+      window.location.href = 'certificate.html';
+    }
+  </script>
 </body>
 </html>

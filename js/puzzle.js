@@ -188,8 +188,17 @@ function showWinModal() {
   const modal = document.getElementById('winModal');
   const message = document.getElementById('winMessage');
   
-  const time = formatTime(Date.now() - puzzleState.startTime);
+  const elapsed = Date.now() - puzzleState.startTime;
+  const time = formatTime(elapsed);
   message.textContent = `用时 ${time}，共 ${puzzleState.moves} 步完成！`;
+  
+  // Save to career system
+  if (typeof saveLevelResult === 'function') {
+    const maxScore = puzzleState.size === 3 ? 100 : 200;
+    const timeBonus = Math.max(0, maxScore - Math.floor(puzzleState.moves / 2));
+    const score = Math.max(Math.floor(maxScore * 0.5), timeBonus);
+    saveLevelResult(3, score, maxScore, elapsed);
+  }
   
   modal.classList.remove('hidden');
 }

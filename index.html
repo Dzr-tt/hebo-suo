@@ -1,67 +1,161 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>河泊所·古滇探秘 - 线上模拟考古</title>
+  <title>汉代职场晋升之路 - 益州郡新人报到</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
+  <style>
+    .career-intro {
+      text-align: center;
+      padding: 24px 16px;
+      background: rgba(61, 50, 40, 0.6);
+      border-radius: 16px;
+      border: 2px solid var(--primary-bronze);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .career-intro::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .career-badge {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+    .career-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.6rem;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+    .career-subtitle {
+      color: var(--secondary-yellow);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+    .career-story {
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      text-align: left;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .level-path {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .level-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(61, 50, 40, 0.5);
+      border: 2px solid var(--primary-bronze);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .level-card.locked {
+      opacity: 0.5;
+      border-color: rgba(139, 105, 20, 0.3);
+    }
+    .level-card.completed {
+      border-color: var(--accent-gold);
+      background: rgba(255, 215, 0, 0.05);
+    }
+    .level-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary-bronze);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .level-card.completed .level-num {
+      background: var(--accent-gold);
+      color: #1a0f0a;
+    }
+    .level-info {
+      flex: 1;
+      text-align: left;
+    }
+    .level-name {
+      font-size: 1.05rem;
+      color: var(--accent-gold);
+      font-weight: bold;
+    }
+    .level-desc {
+      font-size: 0.85rem;
+      color: var(--secondary-yellow);
+      margin-top: 4px;
+    }
+    .level-status {
+      font-size: 0.8rem;
+      color: var(--accent-gold);
+      text-align: right;
+      min-width: 60px;
+    }
+    .arrow-down {
+      text-align: center;
+      color: var(--primary-bronze);
+      font-size: 1.2rem;
+      margin: -4px 0;
+    }
+    .start-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.2rem;
+      font-family: 'Noto Serif SC', serif;
+      background: linear-gradient(145deg, #8B6914 0%, #5c4a32 100%);
+      border: 2px solid var(--accent-gold);
+      border-radius: 30px;
+      color: #FFD700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 16px;
+    }
+    .start-btn:hover {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    .result-preview {
+      background: rgba(61, 50, 40, 0.6);
+      border: 2px solid var(--accent-gold);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .result-preview h3 {
+      color: var(--accent-gold);
+      margin-bottom: 12px;
+    }
+    .result-scores {
+      display: flex;
+      justify-content: space-around;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+    .result-scores span {
+      color: var(--secondary-yellow);
+    }
+  </style>
 </head>
 <body>
-  <!-- 四角纹饰装饰 -->
-  <svg class="corner-decoration top-left" viewBox="0 0 120 120">
-    <!-- 云雷纹角落装�?-->
-    <path d="M0,0 L120,0 L120,20 Q100,30 80,20 Q60,10 40,20 Q20,30 0,20 Z" fill="url(#cornerGrad1)" opacity="0.6"/>
-    <path d="M0,0 Q30,30 0,60 L20,60 Q30,40 40,50 Q50,60 60,50 L60,40 Q40,30 30,40 Q20,50 30,60 L60,60 L60,20 Q40,10 20,20 Q10,30 0,20 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.4"/>
-    <path d="M0,40 Q15,35 30,40 Q45,45 60,40" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M0,60 Q20,55 40,60 Q60,65 80,60" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <!-- 蟠螭�?-->
-    <path d="M10,80 Q20,70 30,80 Q40,90 50,80 Q60,70 70,80 Q80,90 90,80 L90,100 Q70,95 50,100 Q30,105 10,100 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.3"/>
-    <circle cx="30" cy="90" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-    <circle cx="60" cy="90" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-    <defs>
-      <linearGradient id="cornerGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style="stop-color:#8B6914;stop-opacity:0.5"/>
-        <stop offset="100%" style="stop-color:#8B6914;stop-opacity:0"/>
-      </linearGradient>
-    </defs>
-  </svg>
-
-  <svg class="corner-decoration top-right" viewBox="0 0 120 120">
-    <path d="M0,0 L120,0 L120,20 Q100,30 80,20 Q60,10 40,20 Q20,30 0,20 Z" fill="url(#cornerGrad1)" opacity="0.6"/>
-    <path d="M0,0 Q30,30 0,60 L20,60 Q30,40 40,50 Q50,60 60,50 L60,40 Q40,30 30,40 Q20,50 30,60 L60,60 L60,20 Q40,10 20,20 Q10,30 0,20 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.4"/>
-    <path d="M0,40 Q15,35 30,40 Q45,45 60,40" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M0,60 Q20,55 40,60 Q60,65 80,60" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M10,80 Q20,70 30,80 Q40,90 50,80 Q60,70 70,80 Q80,90 90,80 L90,100 Q70,95 50,100 Q30,105 10,100 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.3"/>
-    <circle cx="30" cy="90" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-    <circle cx="60" cy="90" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-  </svg>
-
-  <svg class="corner-decoration bottom-left" viewBox="0 0 120 120">
-    <path d="M0,120 L120,120 L120,100 Q100,90 80,100 Q60,110 40,100 Q20,90 0,100 Z" fill="url(#cornerGrad1)" opacity="0.6"/>
-    <path d="M0,60 Q30,90 0,120 L20,120 Q30,100 40,110 Q50,120 60,110 L60,100 Q40,90 30,100 Q20,110 30,120 L60,120 L60,80 Q40,70 20,80 Q10,90 0,80 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.4"/>
-    <path d="M0,40 Q15,45 30,40 Q45,35 60,40" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M0,20 Q20,25 40,20 Q60,15 80,20" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M10,10 Q20,20 30,10 Q40,0 50,10 Q60,20 70,10 Q80,0 90,10 L90,30 Q70,25 50,30 Q30,35 10,30 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.3"/>
-    <circle cx="30" cy="20" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-    <circle cx="60" cy="20" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-  </svg>
-
-  <svg class="corner-decoration bottom-right" viewBox="0 0 120 120">
-    <path d="M0,120 L120,120 L120,100 Q100,90 80,100 Q60,110 40,100 Q20,90 0,100 Z" fill="url(#cornerGrad1)" opacity="0.6"/>
-    <path d="M0,60 Q30,90 0,120 L20,120 Q30,100 40,110 Q50,120 60,110 L60,100 Q40,90 30,100 Q20,110 30,120 L60,120 L60,80 Q40,70 20,80 Q10,90 0,80 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.4"/>
-    <path d="M0,40 Q15,45 30,40 Q45,35 60,40" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M0,20 Q20,25 40,20 Q60,15 80,20" fill="none" stroke="#8B6914" stroke-width="0.8" opacity="0.5"/>
-    <path d="M10,10 Q20,20 30,10 Q40,0 50,10 Q60,20 70,10 Q80,0 90,10 L90,30 Q70,25 50,30 Q30,35 10,30 Z" fill="none" stroke="#C9A227" stroke-width="1" opacity="0.3"/>
-    <circle cx="30" cy="20" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-    <circle cx="60" cy="20" r="5" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.4"/>
-  </svg>
-
-  <!-- 侧边装饰 -->
-  <div class="border-decoration left"></div>
-  <div class="border-decoration right"></div>
-
-  <div class="container page" id="app">
+  <div class="container page">
     <header class="header">
       <div class="header-content">
         <div class="logo">
@@ -71,117 +165,130 @@
             <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="24" cy="28" r="4" fill="currentColor"/>
           </svg>
-          <span class="logo-text">河泊所</span>
-        </div>
-        <div class="user-area">
-          <div id="userInfo" class="user-info">
-            <button class="user-btn" id="userBtn" onclick="handleUserAction()">登录</button>
-          </div>
+          <span class="logo-text">益州郡府</span>
         </div>
       </div>
     </header>
 
-    <section class="hero">
-      <svg class="sun-pattern" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="25" fill="none" stroke="#FFD700" stroke-width="2"/>
-        <circle cx="30" cy="30" r="15" fill="none" stroke="#FFD700" stroke-width="1.5"/>
-        <circle cx="30" cy="30" r="5" fill="#FFD700"/>
-        <g stroke="#FFD700" stroke-width="2">
-          <line x1="30" y1="2" x2="30" y2="8"/>
-          <line x1="30" y1="52" x2="30" y2="58"/>
-          <line x1="2" y1="30" x2="8" y2="30"/>
-          <line x1="52" y1="30" x2="58" y2="30"/>
-          <line x1="10" y1="10" x2="14" y2="14"/>
-          <line x1="46" y1="46" x2="50" y2="50"/>
-          <line x1="50" y1="10" x2="46" y2="14"/>
-          <line x1="14" y1="46" x2="10" y2="50"/>
-        </g>
-      </svg>
-      <div class="hero-content">
-        <h1 class="hero-title">古滇探秘</h1>
-        <p class="hero-subtitle">探索河泊所文化 · 感受千年古滇文明</p>
+    <div class="career-intro">
+      <div class="career-badge">📜</div>
+      <h1 class="career-title">汉代职场晋升之路</h1>
+      <p class="career-subtitle">建元六年，益州郡设郡治，广纳贤才</p>
+      <div class="career-story">
+        <p>🎭 <strong>角色设定：</strong>你是一名来自中原的年轻士子，听闻益州郡府正在招募贤才。为了在这西南边陲一展抱负，你决定前往应聘。</p>
+        <p style="margin-top:8px">🏛️ <strong>考核流程：</strong>太守大人设下三重考验——先过"策问"考校学识，再赴遗址实地勘探，最后修复出土文物。通过全部考核者，方可获得益州郡专属任职文书。</p>
       </div>
-    </section>
+    </div>
 
     <h2 class="section-title">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/>
       </svg>
-      游戏中心
+      晋升之路
     </h2>
 
-    <div class="game-grid">
-      <div class="game-card" onclick="navigateTo('archaeology.html')">
-        <svg class="game-icon" viewBox="0 0 48 48">
-          <path d="M24 4 C20 4 18 8 18 12 L18 16 L12 20 L12 24 L36 24 L36 20 L30 16 L30 12 C30 8 28 4 24 4 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-          <rect x="14" y="24" width="20" height="16" fill="none" stroke="currentColor" stroke-width="2"/>
-          <line x1="14" y1="28" x2="34" y2="28" stroke="currentColor" stroke-width="2"/>
-          <circle cx="20" cy="32" r="2" fill="currentColor"/>
-          <circle cx="28" cy="32" r="2" fill="currentColor"/>
-        </svg>
-        <h3 class="game-title">线上模拟考古</h3>
-        <p class="game-desc">挖掘沉睡的文物</p>
+    <div class="level-path" id="levelPath">
+      <div class="level-card" id="level1Card" onclick="goLevel(1)">
+        <div class="level-num">📝</div>
+        <div class="level-info">
+          <div class="level-name">第一关：入职试炼</div>
+          <div class="level-desc">策问考核 · 太守大人考校学识</div>
+        </div>
+        <div class="level-status" id="level1Status">可进入</div>
       </div>
-
-      <div class="game-card" onclick="navigateTo('puzzle.html')">
-        <svg class="game-icon" viewBox="0 0 48 48">
-          <rect x="4" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-          <rect x="26" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-          <rect x="4" y="26" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-          <rect x="26" y="26" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-          <circle cx="13" cy="13" r="4" fill="currentColor"/>
-          <path d="M35 9 L39 13 L35 17" fill="none" stroke="currentColor" stroke-width="2"/>
-          <rect x="31" y="31" width="8" height="8" fill="currentColor"/>
-        </svg>
-        <h3 class="game-title">文物拼图</h3>
-        <p class="game-desc">还原历史碎片</p>
+      <div class="arrow-down">▼</div>
+      <div class="level-card locked" id="level2Card" onclick="goLevel(2)">
+        <div class="level-num">⛏️</div>
+        <div class="level-info">
+          <div class="level-name">第二关：实地勘探</div>
+          <div class="level-desc">古城遗址 · 寻找前朝官印</div>
+        </div>
+        <div class="level-status" id="level2Status">未解锁</div>
       </div>
-
-      <div class="game-card" onclick="navigateTo('quiz.html')">
-        <svg class="game-icon" viewBox="0 0 48 48">
-          <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
-          <text x="24" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="currentColor">?</text>
-          <circle cx="10" cy="10" r="3" fill="currentColor"/>
-          <circle cx="38" cy="10" r="3" fill="currentColor"/>
-          <circle cx="10" cy="38" r="3" fill="currentColor"/>
-          <circle cx="38" cy="38" r="3" fill="currentColor"/>
-        </svg>
-        <h3 class="game-title">古滇知识问答</h3>
-        <p class="game-desc">测试你的文化知识</p>
+      <div class="arrow-down">▼</div>
+      <div class="level-card locked" id="level3Card" onclick="goLevel(3)">
+        <div class="level-num">🧩</div>
+        <div class="level-info">
+          <div class="level-name">第三关：文物修复</div>
+          <div class="level-desc">修复残器 · 重现国宝风采</div>
+        </div>
+        <div class="level-status" id="level3Status">未解锁</div>
       </div>
-
-
     </div>
 
-    <div class="cultural-pattern">
-      <svg class="pattern-item" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <circle cx="12" cy="12" r="2" fill="currentColor"/>
-      </svg>
-      <svg class="pattern-item" viewBox="0 0 24 24">
-        <path d="M12 2 L14 8 L12 14 L10 8 Z" fill="currentColor"/>
-        <path d="M12 22 L14 16 L12 10 L10 16 Z" fill="currentColor"/>
-        <path d="M2 12 L8 10 L14 12 L8 14 Z" fill="currentColor"/>
-        <path d="M22 12 L16 10 L10 12 L16 14 Z" fill="currentColor"/>
-      </svg>
-      <svg class="pattern-item" viewBox="0 0 24 24">
-        <path d="M4 8 C8 4 16 4 20 8 L20 16 C16 20 8 20 4 16 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M8 10 L16 14 M16 10 L8 14" stroke="currentColor" stroke-width="1"/>
-      </svg>
-      <svg class="pattern-item" viewBox="0 0 24 24">
-        <ellipse cx="12" cy="12" rx="8" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <ellipse cx="12" cy="12" rx="4" ry="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <circle cx="12" cy="12" r="2" fill="currentColor"/>
-      </svg>
-    </div>
+    <button class="start-btn" id="startBtn" onclick="startCareerFlow()">开始晋升之路</button>
 
-    <footer class="footer">
-      <p>© 2026 河泊所文化遗址 · 古滇探秘</p>
-      <p style="margin-top: 8px; font-size: 0.8rem; opacity: 0.7;">探索古滇文明 · 传承历史文化</p>
-    </footer>
+    <div class="result-preview hidden" id="resultPreview">
+      <h3>📋 当前考核进度</h3>
+      <div class="result-scores" id="resultScores"></div>
+      <button class="action-btn primary" onclick="goCertificate()">查看任职文书</button>
+      <button class="action-btn" onclick="resetAll(); location.reload();" style="margin-top:8px">重新考核</button>
+    </div>
   </div>
 
-  <script src="js/app.js"></script>
+  <script src="js/career.js"></script>
+  <script>
+    function startCareerFlow() {
+      startCareer();
+      window.location.href = 'quiz.html';
+    }
+
+    function goLevel(level) {
+      if (!canPlayLevel(level)) {
+        alert('请先完成前一关考核！');
+        return;
+      }
+      var map = { 1: 'quiz.html', 2: 'archaeology.html', 3: 'puzzle.html' };
+      window.location.href = map[level];
+    }
+
+    function goCertificate() {
+      window.location.href = 'certificate.html';
+    }
+
+    function resetAll() {
+      resetCareer();
+    }
+
+    function updateUI() {
+      var career = getCareer();
+      if (!career) return;
+
+      var allDone = career.level1 && career.level2 && career.level3;
+      var btn = document.getElementById('startBtn');
+
+      if (allDone) {
+        btn.textContent = '已通关，查看任职文书';
+        btn.onclick = goCertificate;
+        document.getElementById('resultPreview').classList.remove('hidden');
+        var rs = document.getElementById('resultScores');
+        rs.innerHTML =
+          '<span>策问：' + (career.level1 ? career.level1.score : 0) + '/' + (career.level1 ? career.level1.maxScore : 0) + '</span>' +
+          '<span>勘探：' + (career.level2 ? career.level2.score : 0) + '/' + (career.level2 ? career.level2.maxScore : 0) + '</span>' +
+          '<span>修复：' + (career.level3 ? career.level3.score : 0) + '/' + (career.level3 ? career.level3.maxScore : 0) + '</span>';
+      } else if (career.level1 || career.level2 || career.level3) {
+        btn.textContent = '继续考核';
+        var next = career.level1 ? (career.level2 ? (career.level3 ? 3 : 3) : 2) : 1;
+        btn.onclick = function() { goLevel(next); };
+      }
+
+      // Update cards
+      [1, 2, 3].forEach(function(l) {
+        var card = document.getElementById('level' + l + 'Card');
+        var status = document.getElementById('level' + l + 'Status');
+        var res = career['level' + l];
+        if (res) {
+          card.classList.remove('locked');
+          card.classList.add('completed');
+          status.textContent = res.score + '分';
+        } else if (canPlayLevel(l)) {
+          card.classList.remove('locked');
+          status.textContent = '可进入';
+        }
+      });
+    }
+
+    updateUI();
+  </script>
 </body>
 </html>

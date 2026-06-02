@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>古滇知识问答 - 河泊所·古滇探秘</title>
+  <title>入职试炼 - 益州郡策问考核</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
   <style>
@@ -23,7 +23,7 @@
             <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
             <circle cx="24" cy="28" r="4" fill="currentColor"/>
           </svg>
-          <span class="logo-text">河泊所</span>
+          <span class="logo-text">益州郡府</span>
         </div>
         <button class="user-btn" id="userBtn">登录</button>
       </div>
@@ -32,27 +32,28 @@
     <!-- 开始界面 -->
     <div class="quiz-container" id="startScreen">
       <div class="hero" style="text-align: center;">
-        <h2 style="font-family: 'Noto Serif SC', serif; font-size: 1.5rem; color: var(--accent-gold); margin-bottom: 16px;">选择题库数量</h2>
-        <p style="color: var(--secondary-yellow); margin-bottom: 24px;">测试你对古滇文化的了解程度</p>
+        <h2 style="font-family: 'Noto Serif SC', serif; font-size: 1.5rem; color: var(--accent-gold); margin-bottom: 16px;">📝 入职试炼（策问）</h2>
+        <p style="color: var(--secondary-yellow); margin-bottom: 8px;">想要进入益州郡府任职，先要通过"策问"考核！</p>
+        <p style="color: var(--secondary-yellow); opacity: 0.8; margin-bottom: 24px; font-size: 0.85rem;">太守大人正在考校你的学识，答对有赏，答错无罚，但时间有限！</p>
         <div style="display: flex; flex-direction: column; gap: 12px;">
-          <button class="action-btn primary" id="btn10">🌱 初探古滇 (10题)</button>
-          <button class="action-btn" id="btn20">📚 深入探索 (20题)</button>
-          <button class="action-btn" id="btn30">🏆 古滇大师 (30题)</button>
+          <button class="action-btn primary" id="btn10">📜 小吏初试 (10题)</button>
+          <button class="action-btn" id="btn20">📚 功曹选拔 (20题)</button>
+          <button class="action-btn" id="btn30">🏆 太守亲考 (30题)</button>
         </div>
       </div>
       <a href="index.html" class="back-link" style="margin-top: 24px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
-        返回首页
+        返回郡府
       </a>
     </div>
 
     <!-- 答题界面 -->
     <div class="quiz-container hidden" id="quizContainer">
       <div class="game-header">
-        <h1 class="game-title-header">古滇知识问答</h1>
-        <div class="game-score">得分: <span id="currentScore">0</span></div>
+        <h1 class="game-title-header">📝 策问考核</h1>
+        <div class="game-score">政绩: <span id="currentScore">0</span></div>
       </div>
 
       <div class="quiz-progress" id="quizProgress">1 / 10</div>
@@ -77,35 +78,47 @@
     <!-- 结果界面 -->
     <div class="quiz-container hidden" id="resultScreen">
       <div class="quiz-result">
-        <h2 class="result-title">答题完成!</h2>
+        <h2 class="result-title">策问考核完毕！</h2>
         <div class="result-score">
-          <div class="score-circle">
+          <div class="score-circle" style="border-color: var(--accent-gold); box-shadow: 0 0 30px rgba(255,215,0,0.3);">
             <span id="finalScore">0</span>
             <span class="score-label">分</span>
           </div>
         </div>
         <div class="result-info">
-          <p class="result-level" id="resultLevel">🏆 古滇大师</p>
-          <p class="result-message" id="resultMessage">恭喜完成答题!</p>
+          <p class="result-level" id="resultLevel">🏅 初入仕途</p>
+          <p class="result-message" id="resultMessage">恭喜通过策问考核！</p>
         </div>
         <div class="result-stats">
           <span>答对 <span id="correctCount">0</span> 题</span>
           <span>答错 <span id="wrongCount">0</span> 题</span>
         </div>
+        <div id="medalBox" style="margin-top: 16px; padding: 12px; background: rgba(255,215,0,0.1); border-radius: 8px; border: 1px solid var(--accent-gold);">
+          <div style="font-size: 2rem;">🏅</div>
+          <div style="color: var(--accent-gold); font-weight: bold; margin-top: 4px;">获得勋章：初入仕途</div>
+          <div style="color: var(--secondary-yellow); font-size: 0.85rem;">益州郡府见习文吏</div>
+        </div>
       </div>
-      <button class="submit-btn" id="btnReplay">再玩一次</button>
-      <a href="index.html" class="back-link" style="margin-top: 24px;">
+      <button class="submit-btn" id="btnNext" style="background: linear-gradient(145deg, #8B6914, #5c4a32); border: 2px solid var(--accent-gold); color: #FFD700; font-family: 'Noto Serif SC', serif;">前往第二关：实地勘探 ➔</button>
+      <button class="action-btn" id="btnReplay" style="margin-top: 12px;">重新考核</button>
+      <a href="index.html" class="back-link" style="margin-top: 16px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
-        返回首页
+        返回郡府
       </a>
     </div>
   </div>
 
+  <script src="js/career.js"></script>
   <script src="js/app.js"></script>
   <script>
     const QUIZ_QUESTIONS = [
+      { question: '在益州郡府当差，以下哪种特产最适合送给上司？', options: ['漆器', '铜牛虎扣饰', '奶茶', '以上都不行，汉代不兴这个'], correct: 3 },
+      { question: '太守大人问你："益州郡"最早设立于哪位皇帝时期？', options: ['汉武帝', '汉文帝', '汉景帝', '秦始皇'], correct: 0 },
+      { question: '作为新晋文吏，你每月俸禄大概用什么形式发放？', options: ['铜钱', '粮食', '布帛', '海贝'], correct: 1 },
+      { question: '太守考校：古滇国最著名的青铜器是什么？', options: ['青铜剑', '贮贝器', '铜鼓', '以上都是'], correct: 3 },
+      { question: '在益州郡，以下哪种行为最可能被太守表扬？', options: ['发掘到滇王之印', '懂得骑马射箭', '会写隶书公文', '以上都可能'], correct: 3 },
       { question: '河泊所文化遗址位于哪个省份?', options: ['四川省', '云南省', '广西壮族自治区', '贵州省'], correct: 1 },
       { question: '河泊所遗址发现于哪一年?', options: ['1980年', '1972年', '1958年', '1965年'], correct: 2 },
       { question: '河泊所遗址的主要文化层属于哪个时期?', options: ['青铜时代', '汉代', '新石器时代', '铁器时代'], correct: 0 },
@@ -208,6 +221,7 @@
       quizState.score = 0;
       quizState.correctCount = 0;
       quizState.wrongCount = 0;
+      quizState.startTime = Date.now();
 
       const shuffled = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
       quizState.questions = shuffled.slice(0, quizState.totalQuestions);
@@ -307,24 +321,40 @@
       document.getElementById('wrongCount').textContent = quizState.wrongCount;
 
       const percentage = (quizState.score / quizState.totalQuestions) * 100;
-      let level, message;
+      let level, message, medalTitle, medalDesc;
 
       if (percentage >= 90) {
-        level = '🏆 古滇大师';
-        message = '你对古滇文化有深入研究，堪称古滇大师！';
+        level = '🏆 益州郡长史';
+        message = '才华横溢，太守大人对你赞赏有加！';
+        medalTitle = '获得勋章：学贯古今';
+        medalDesc = '益州郡长史候选';
       } else if (percentage >= 70) {
-        level = '📜 古滇学者';
-        message = '你对古滇文化有深入了解，继续努力！';
+        level = '📜 益州郡功曹';
+        message = '学识渊博，可堪大任！';
+        medalTitle = '获得勋章：满腹经纶';
+        medalDesc = '益州郡功曹候选';
       } else if (percentage >= 50) {
-        level = '🔍 古滇探索者';
-        message = '你对古滇文化有一定了解，还有更多知识等待探索！';
+        level = '🔍 益州郡书佐';
+        message = '基本合格，还需多多历练。';
+        medalTitle = '获得勋章：初入仕途';
+        medalDesc = '益州郡书佐候补';
       } else {
-        level = '🌱 古滇学徒';
-        message = '开始你的古滇文化探索之旅吧！';
+        level = '🌱 益州郡门吏';
+        message = '勉强通过，日后要加倍努力！';
+        medalTitle = '获得勋章：初入仕途';
+        medalDesc = '益州郡门吏候补';
       }
 
       document.getElementById('resultLevel').textContent = level;
       document.getElementById('resultMessage').textContent = message;
+      document.querySelector('#medalBox div:nth-child(2)').textContent = medalTitle;
+      document.querySelector('#medalBox div:nth-child(3)').textContent = medalDesc;
+
+      // Save to career system
+      if (typeof saveLevelResult === 'function') {
+        var elapsed = quizState.startTime ? (Date.now() - quizState.startTime) : 0;
+        saveLevelResult(1, quizState.score, quizState.totalQuestions, elapsed);
+      }
 
       document.getElementById('quizContainer').classList.add('hidden');
       document.getElementById('startScreen').classList.add('hidden');
@@ -350,12 +380,14 @@
       var btn30 = document.getElementById('btn30');
       var btnRestart = document.getElementById('btnRestart');
       var btnReplay = document.getElementById('btnReplay');
+      var btnNext = document.getElementById('btnNext');
 
       if (btn10) btn10.addEventListener('click', function() { startQuiz(10); });
       if (btn20) btn20.addEventListener('click', function() { startQuiz(20); });
       if (btn30) btn30.addEventListener('click', function() { startQuiz(30); });
       if (btnRestart) btnRestart.addEventListener('click', showStartScreen);
       if (btnReplay) btnReplay.addEventListener('click', showStartScreen);
+      if (btnNext) btnNext.addEventListener('click', function() { window.location.href = 'archaeology.html'; });
 
       document.querySelectorAll('.quiz-option').forEach(function(btn) {
         btn.addEventListener('click', function() {

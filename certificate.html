@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>益州郡专属工作证 - 汉代职场晋升之路</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%238B6914'/%3E%3Cpath d='M50 15 L55 25 L50 35 L45 25 Z' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='55' r='25' fill='none' stroke='%23FFD700' stroke-width='3'/%3E%3C/svg%3E">
+  <style>
+    .cert-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .cert-card {
+      background: linear-gradient(145deg, rgba(61,50,40,0.9) 0%, rgba(26,15,10,0.95) 100%);
+      border: 3px solid var(--accent-gold);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255,215,0,0.2);
+    }
+    .cert-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,215,0,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cert-header {
+      border-bottom: 2px solid var(--primary-bronze);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .cert-badge {
+      font-size: 3.5rem;
+      margin-bottom: 8px;
+    }
+    .cert-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.4rem;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
+    .cert-subtitle {
+      color: var(--secondary-yellow);
+      font-size: 0.85rem;
+    }
+    .cert-rank {
+      margin: 20px 0;
+      padding: 16px;
+      background: rgba(255,215,0,0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(255,215,0,0.3);
+    }
+    .cert-rank-icon {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+    .cert-rank-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
+    .cert-rank-desc {
+      color: var(--secondary-yellow);
+      font-size: 0.9rem;
+    }
+    .cert-scores {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      gap: 8px;
+    }
+    .cert-score-item {
+      flex: 1;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 12px 8px;
+      border: 1px solid var(--primary-bronze);
+    }
+    .cert-score-icon {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+    .cert-score-label {
+      font-size: 0.75rem;
+      color: var(--secondary-yellow);
+      margin-bottom: 4px;
+    }
+    .cert-score-val {
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      font-weight: bold;
+    }
+    .cert-total {
+      margin: 16px 0;
+      padding: 12px;
+      border-top: 1px solid var(--primary-bronze);
+      border-bottom: 1px solid var(--primary-bronze);
+    }
+    .cert-total-label {
+      color: var(--secondary-yellow);
+      font-size: 0.85rem;
+    }
+    .cert-total-val {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.6rem;
+      color: var(--accent-gold);
+      margin-top: 4px;
+    }
+    .cert-qr {
+      margin-top: 20px;
+      padding: 12px;
+      background: #fff;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    .cert-qr-text {
+      color: #1a0f0a;
+      font-size: 0.75rem;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+    .cert-actions {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cert-notice {
+      color: var(--secondary-yellow);
+      font-size: 0.8rem;
+      margin-top: 8px;
+      opacity: 0.7;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="container page">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M24 6 L28 14 L24 22 L20 14 Z" fill="currentColor"/>
+            <circle cx="24" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="24" cy="28" r="4" fill="currentColor"/>
+          </svg>
+          <span class="logo-text">益州郡府</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="cert-container">
+      <div class="cert-card" id="certCard">
+        <div class="cert-header">
+          <div class="cert-badge">📜</div>
+          <div class="cert-title">益州郡专属工作证</div>
+          <div class="cert-subtitle">建元六年 · 官方认证</div>
+        </div>
+
+        <div class="cert-rank">
+          <div class="cert-rank-icon" id="rankIcon">🏆</div>
+          <div class="cert-rank-title" id="rankTitle">益州郡太守</div>
+          <div class="cert-rank-desc" id="rankDesc">才华横溢，堪当大任！</div>
+        </div>
+
+        <div class="cert-scores">
+          <div class="cert-score-item">
+            <div class="cert-score-icon">📝</div>
+            <div class="cert-score-label">策问</div>
+            <div class="cert-score-val" id="score1">0/0</div>
+          </div>
+          <div class="cert-score-item">
+            <div class="cert-score-icon">⛏️</div>
+            <div class="cert-score-label">勘探</div>
+            <div class="cert-score-val" id="score2">0/0</div>
+          </div>
+          <div class="cert-score-item">
+            <div class="cert-score-icon">🧩</div>
+            <div class="cert-score-label">修复</div>
+            <div class="cert-score-val" id="score3">0/0</div>
+          </div>
+        </div>
+
+        <div class="cert-total">
+          <div class="cert-total-label">综合考核成绩</div>
+          <div class="cert-total-val" id="totalScore">0 / 0</div>
+        </div>
+
+        <div class="cert-qr" id="qrBox">
+          <canvas id="qrCanvas" width="120" height="120"></canvas>
+          <div class="cert-qr-text">扫码查看考古战绩</div>
+        </div>
+      </div>
+
+      <div class="cert-actions">
+        <button class="action-btn primary" onclick="shareResult()">📤 分享我的战绩</button>
+        <button class="action-btn" onclick="window.print()">🖨️ 打印工作证</button>
+        <button class="action-btn" onclick="location.href='index.html'">🏛️ 返回郡府</button>
+        <button class="action-btn" onclick="resetCareer(); location.href='index.html';" style="border-color: rgba(255,255,255,0.2);">🔄 重新考核</button>
+      </div>
+
+      <p class="cert-notice" id="notCompleteMsg" style="display:none;">⚠️ 尚未完成全部考核，部分数据可能不完整</p>
+    </div>
+  </div>
+
+  <script src="js/career.js"></script>
+  <script>
+    function drawQR() {
+      var canvas = document.getElementById('qrCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, 120, 120);
+      ctx.fillStyle = '#1a0f0a';
+      // Draw a pseudo QR pattern
+      for (var y = 0; y < 12; y++) {
+        for (var x = 0; x < 12; x++) {
+          if (Math.random() > 0.5) {
+            ctx.fillRect(x * 10 + 2, y * 10 + 2, 8, 8);
+          }
+        }
+      }
+      // Draw position markers
+      ctx.fillStyle = '#1a0f0a';
+      ctx.fillRect(2, 2, 24, 24);
+      ctx.fillRect(88, 2, 24, 24);
+      ctx.fillRect(2, 88, 24, 24);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(8, 8, 12, 12);
+      ctx.fillRect(94, 8, 12, 12);
+      ctx.fillRect(8, 94, 12, 12);
+      ctx.fillStyle = '#1a0f0a';
+      ctx.fillRect(11, 11, 6, 6);
+      ctx.fillRect(97, 11, 6, 6);
+      ctx.fillRect(11, 97, 6, 6);
+    }
+
+    function renderCertificate() {
+      var career = getCareer();
+      if (!career) {
+        document.getElementById('notCompleteMsg').style.display = 'block';
+        drawQR();
+        return;
+      }
+
+      var r1 = career.level1, r2 = career.level2, r3 = career.level3;
+      var total = (r1 ? r1.score : 0) + (r2 ? r2.score : 0) + (r3 ? r3.score : 0);
+      var max = (r1 ? r1.maxScore : 0) + (r2 ? r2.maxScore : 0) + (r3 ? r3.maxScore : 0);
+
+      document.getElementById('score1').textContent = (r1 ? r1.score : 0) + '/' + (r1 ? r1.maxScore : 0);
+      document.getElementById('score2').textContent = (r2 ? r2.score : 0) + '/' + (r2 ? r2.maxScore : 0);
+      document.getElementById('score3').textContent = (r3 ? r3.score : 0) + '/' + (r3 ? r3.maxScore : 0);
+      document.getElementById('totalScore').textContent = total + ' / ' + max;
+
+      var rank = getRank();
+      document.getElementById('rankIcon').textContent = rank.badge;
+      document.getElementById('rankTitle').textContent = rank.title;
+      document.getElementById('rankDesc').textContent = rank.desc;
+
+      if (!r1 || !r2 || !r3) {
+        document.getElementById('notCompleteMsg').style.display = 'block';
+      }
+
+      drawQR();
+    }
+
+    function shareResult() {
+      var career = getCareer();
+      var rank = getRank();
+      var text = '我在【汉代职场晋升之路】中获得了「' + rank.title + '」的头衔！\n' +
+                 '策问：' + (career && career.level1 ? career.level1.score : 0) + '分\n' +
+                 '勘探：' + (career && career.level2 ? career.level2.score : 0) + '分\n' +
+                 '修复：' + (career && career.level3 ? career.level3.score : 0) + '分\n' +
+                 '快来挑战吧！';
+      if (navigator.share) {
+        navigator.share({ title: '益州郡专属工作证', text: text });
+      } else {
+        try {
+          navigator.clipboard.writeText(text);
+          alert('战绩已复制到剪贴板，快去分享给好友吧！');
+        } catch (e) {
+          alert(text);
+        }
+      }
+    }
+
+    renderCertificate();
+  </script>
+</body>
+</html>

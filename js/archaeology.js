@@ -78,6 +78,7 @@ function initArchaeologyGame() {
   gameState.selectedSpot = null;
   gameState.isInitialized = true;
   gameState.discoveredArtifactIds = [];
+  gameState.startTime = Date.now();
 
   const shuffled = [...ARTIFACTS].sort(() => Math.random() - 0.5);
   const selectedArtifacts = shuffled.slice(0, GAME_CONFIG.totalArtifacts);
@@ -301,6 +302,20 @@ function cleanArtifact(spot) {
   showArtifactReveal(spot.artifact);
   saveToCollection(spot.artifact);
   updateUI();
+
+  // Check completion
+  if (gameState.foundCount >= GAME_CONFIG.totalArtifacts) {
+    setTimeout(function() {
+      if (typeof saveLevelResult === 'function') {
+        var elapsed = gameState.startTime ? (Date.now() - gameState.startTime) : 0;
+        saveLevelResult(2, 100, 100, elapsed);
+      }
+      var proceed = confirm('🎉 实地勘探完成！你已找到所有前朝遗留的官印。\n\n是否前往第三关：文物修复？');
+      if (proceed) {
+        window.location.href = 'puzzle.html';
+      }
+    }, 500);
+  }
 }
 
 function showArtifactReveal(artifact) {
