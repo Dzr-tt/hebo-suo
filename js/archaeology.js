@@ -145,34 +145,33 @@ function initCanvas() {
 }
 
 function resizeCanvas() {
-  const canvas = digGame.canvas;
-  const container = document.getElementById('digScene');
-  if (!container) return;
+  var canvas = digGame.canvas;
+  var container = document.getElementById('digScene');
+  if (!canvas || !container) return;
 
-  const rect = container.getBoundingClientRect();
-  var w = Math.max(1, Math.round(rect.width));
-  var h = Math.max(1, Math.round(rect.height));
+  var rect = container.getBoundingClientRect();
+  var size = Math.max(1, Math.round(rect.width));
 
-  if (w <= 1 || h <= 1) {
+  if (size < 10) {
     var parent = container.parentElement;
     if (parent) {
-      var pRect = parent.getBoundingClientRect();
-      w = Math.max(300, Math.round(Math.min(pRect.width, 400)));
-      h = w;
+      size = Math.max(300, Math.round(Math.min(parent.getBoundingClientRect().width, 400)));
     } else {
-      w = 400; h = 400;
+      size = 400;
     }
   }
 
-  canvas.width = w;
-  canvas.height = h;
-  digGame.width = w;
-  digGame.height = h;
+  container.style.height = size + 'px';
+  canvas.width = size;
+  canvas.height = size;
+  digGame.width = size;
+  digGame.height = size;
 }
 
 function drawCurrentLayer() {
-  const ctx = digGame.ctx;
-  const layer = digGame.layers[digGame.currentLayer];
+  var ctx = digGame.ctx;
+  if (!ctx) return;
+  var layer = digGame.layers[digGame.currentLayer];
 
   ctx.globalCompositeOperation = 'source-over';
   ctx.fillStyle = layer.color;
@@ -192,28 +191,28 @@ function drawCurrentLayer() {
 }
 
 function addSoilTexture(ctx, w, h, baseColor) {
-  for (let i = 0; i < 400; i++) {
-    const x = Math.random() * w;
-    const y = Math.random() * h;
-    const size = Math.random() * 3 + 0.5;
-    ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.12})`;
+  for (var i = 0; i < 400; i++) {
+    var x = Math.random() * w;
+    var y = Math.random() * h;
+    var size = Math.random() * 3 + 0.5;
+    ctx.fillStyle = 'rgba(0,0,0,' + (Math.random() * 0.12) + ')';
     ctx.fillRect(x, y, size, size);
   }
-  for (let i = 0; i < 200; i++) {
-    const x = Math.random() * w;
-    const y = Math.random() * h;
-    const size = Math.random() * 2 + 0.3;
-    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.06})`;
+  for (var i = 0; i < 200; i++) {
+    var x = Math.random() * w;
+    var y = Math.random() * h;
+    var size = Math.random() * 2 + 0.3;
+    ctx.fillStyle = 'rgba(255,255,255,' + (Math.random() * 0.06) + ')';
     ctx.fillRect(x, y, size, size);
   }
 
-  for (let i = 0; i < 8; i++) {
-    const x = Math.random() * w;
-    const y = Math.random() * h;
-    const r = Math.random() * 2 + 1;
+  for (var i = 0; i < 8; i++) {
+    var x = Math.random() * w;
+    var y = Math.random() * h;
+    var r = Math.random() * 2 + 1;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(139,105,20,${Math.random() * 0.15})`;
+    ctx.fillStyle = 'rgba(139,105,20,' + (Math.random() * 0.15) + ')';
     ctx.fill();
   }
 }
@@ -479,14 +478,27 @@ function viewArtifactGallery() {
     var isDiscovered = gameState.discoveredArtifactIds.includes(artifact.id);
     var card = document.createElement('div');
     card.className = 'artifact-gallery-item ' + (isDiscovered ? 'discovered' : 'undiscovered');
-    card.innerHTML =
-      '<div class="artifact-gallery-icon" style="border-color:' + artifact.color + '">' +
-        (isDiscovered
-          ? '<img src="' + artifact.image + '" alt="' + artifact.name + '" onerror="this.style.display=\'none\'">'
-          : '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="none" stroke="' + artifact.color + '" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="20" fill="' + artifact.color + '">?</text></svg>'
-        ) +
-      '</div>' +
-      '<span class="artifact-gallery-name">' + artifact.name + '</span>';
+
+    var iconDiv = document.createElement('div');
+    iconDiv.className = 'artifact-gallery-icon';
+    iconDiv.style.borderColor = artifact.color;
+
+    if (isDiscovered) {
+      var img = document.createElement('img');
+      img.src = artifact.image;
+      img.alt = artifact.name;
+      img.onerror = function() { this.style.display = 'none'; };
+      iconDiv.appendChild(img);
+    } else {
+      iconDiv.innerHTML = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="none" stroke="' + artifact.color + '" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="20" fill="' + artifact.color + '">?</text></svg>';
+    }
+
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'artifact-gallery-name';
+    nameSpan.textContent = artifact.name;
+
+    card.appendChild(iconDiv);
+    card.appendChild(nameSpan);
     grid.appendChild(card);
   });
 
@@ -543,12 +555,32 @@ function viewCollection() {
     artifacts.forEach(function(artifact) {
       var card = document.createElement('div');
       card.className = 'collection-card';
-      card.innerHTML =
-        '<div class="artifact-icon" style="border-color:' + artifact.color + '">' +
-          '<img src="' + artifact.image + '" alt="' + artifact.name + '" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<svg viewBox=\\'0 0 100 100\\'><circle cx=\\'50\\' cy=\\'50\\' r=\\'35\\' fill=\\'none\\' stroke=' + artifact.color + ' stroke-width=\\'3\\'/><text x=\\'50\\' y=\\'55\\' text-anchor=\\'middle\\' font-size=\\'20\\' fill=' + artifact.color + '>滇</text></svg>\';">' +
-        '</div>' +
-        '<h4 class="artifact-name">' + artifact.name + '</h4>' +
-        '<p class="artifact-era">' + artifact.era + '</p>';
+
+      var iconDiv = document.createElement('div');
+      iconDiv.className = 'artifact-icon';
+      iconDiv.style.borderColor = artifact.color;
+
+      var img = document.createElement('img');
+      img.src = artifact.image;
+      img.alt = artifact.name;
+      img.onerror = function() {
+        this.style.display = 'none';
+        var svgHtml = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="none" stroke="' + artifact.color + '" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="20" fill="' + artifact.color + '">滇</text></svg>';
+        this.parentElement.innerHTML = svgHtml;
+      };
+      iconDiv.appendChild(img);
+
+      var nameEl = document.createElement('h4');
+      nameEl.className = 'artifact-name';
+      nameEl.textContent = artifact.name;
+
+      var eraEl = document.createElement('p');
+      eraEl.className = 'artifact-era';
+      eraEl.textContent = artifact.era;
+
+      card.appendChild(iconDiv);
+      card.appendChild(nameEl);
+      card.appendChild(eraEl);
       card.onclick = function() { openImageZoom(artifact); };
       grid.appendChild(card);
     });
