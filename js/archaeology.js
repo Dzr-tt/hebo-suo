@@ -110,7 +110,11 @@ function goHome() {
 }
 
 function initArchaeologyGame() {
-  gameState.targetArtifact = ARTIFACTS[Math.floor(Math.random() * ARTIFACTS.length)];
+  var undiscovered = ARTIFACTS.filter(function(a) {
+    return !gameState.discoveredArtifactIds.includes(a.id);
+  });
+  var pool = undiscovered.length > 0 ? undiscovered : ARTIFACTS;
+  gameState.targetArtifact = pool[Math.floor(Math.random() * pool.length)];
   gameState.startTime = Date.now();
   gameState.isCompleted = false;
 
