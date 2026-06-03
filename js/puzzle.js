@@ -15,14 +15,18 @@ let puzzleState = {
   currentImageIndex: 0,
   isCompleted: false,
   selectedPosition: null,
-  imageCache: {}
+  imageCache: {},
+  timerStarted: false
 };
 
 function initPuzzle() {
   puzzleState.isCompleted = false;
   puzzleState.moves = 0;
-  puzzleState.startTime = Date.now();
+  puzzleState.startTime = null;
   puzzleState.selectedPosition = null;
+  puzzleState.timerStarted = false;
+  stopTimer();
+  document.getElementById('timerDisplay').textContent = '0:00';
 
   const totalTiles = puzzleState.size * puzzleState.size;
   puzzleState.tiles = [];
@@ -37,7 +41,6 @@ function initPuzzle() {
 
   shuffleTiles();
   renderPuzzle();
-  startTimer();
   updateStats();
 }
 
@@ -94,6 +97,12 @@ function doRenderPuzzle(imagePath) {
     tileElement.addEventListener('click', handleTileClick);
     grid.appendChild(tileElement);
   });
+
+  if (!puzzleState.timerStarted && !puzzleState.isCompleted) {
+    puzzleState.timerStarted = true;
+    puzzleState.startTime = Date.now();
+    startTimer();
+  }
 }
 
 function renderPuzzle() {
