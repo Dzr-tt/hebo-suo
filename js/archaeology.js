@@ -109,7 +109,19 @@ function goHome() {
   window.location.href = 'index.html';
 }
 
+function loadDiscoveredFromStorage() {
+  var user = getUserInfo();
+  if (user && user.collectedArtifacts) {
+    user.collectedArtifacts.forEach(function(a) {
+      if (!gameState.discoveredArtifactIds.includes(a.id)) {
+        gameState.discoveredArtifactIds.push(a.id);
+      }
+    });
+  }
+}
+
 function initArchaeologyGame() {
+  loadDiscoveredFromStorage();
   var undiscovered = ARTIFACTS.filter(function(a) {
     return !gameState.discoveredArtifactIds.includes(a.id);
   });
@@ -539,6 +551,10 @@ function saveToCollection(artifact) {
       localStorage.setItem('heboUsers', JSON.stringify(users));
       localStorage.setItem('heboUser', JSON.stringify(users[userIndex]));
     }
+  }
+
+  if (!gameState.discoveredArtifactIds.includes(artifact.id)) {
+    gameState.discoveredArtifactIds.push(artifact.id);
   }
 }
 
