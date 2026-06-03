@@ -12,7 +12,7 @@ const ARTIFACTS = [
     name: '滇国相印封泥',
     era: '汉代',
     desc: '滇国相印封泥是古滇国行政体系的重要证据，展现了汉代益州郡的官僚制度，是研究古滇国政治制度的重要实物。',
-    image: '图片/"滇国相印" 封泥.png',
+    image: '图片/滇国相印封泥.png',
     color: '#CD7F32'
   },
   {
@@ -20,7 +20,7 @@ const ARTIFACTS = [
     name: '益州铭文瓦当',
     era: '汉代',
     desc: '益州铭文瓦当是汉代建筑构件，刻有"益州"二字，证明了益州郡的存在，展现了汉代在滇池地区的行政建设。',
-    image: '图片/"益州" 铭文瓦当.png',
+    image: '图片/益州铭文瓦当.png',
     color: '#8B6914'
   },
   {
@@ -221,9 +221,11 @@ function getDigPos(e) {
   const rect = digGame.canvas.getBoundingClientRect();
   const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
   const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+  const scaleX = digGame.canvas.width / rect.width;
+  const scaleY = digGame.canvas.height / rect.height;
   return {
-    x: clientX - rect.left,
-    y: clientY - rect.top
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY
   };
 }
 
@@ -301,18 +303,22 @@ function nextLayer() {
 }
 
 function showLayerInfo(layer) {
-  const panel = document.getElementById('layerInfo');
-  if (!panel) return;
+  const modal = document.getElementById('layerModal');
+  const title = document.getElementById('layerModalTitle');
+  const era = document.getElementById('layerModalEra');
+  const desc = document.getElementById('layerModalDesc');
+  if (!modal || !title || !era || !desc) return;
 
-  panel.innerHTML =
-    '<div class="layer-tag">' + layer.name + '</div>' +
-    '<div class="layer-era">' + layer.era + '</div>' +
-    '<div class="layer-desc">' + layer.desc + '</div>';
+  title.textContent = layer.name;
+  era.textContent = layer.era;
+  desc.textContent = layer.desc;
 
-  panel.classList.remove('hidden');
-  panel.style.animation = 'none';
-  panel.offsetHeight;
-  panel.style.animation = 'slideUp 0.5s ease';
+  modal.classList.remove('hidden');
+}
+
+function closeLayerModal() {
+  const modal = document.getElementById('layerModal');
+  if (modal) modal.classList.add('hidden');
 }
 
 function updateProgress() {
@@ -338,6 +344,7 @@ function showArtifactFound() {
   }
 
   saveToCollection(gameState.targetArtifact);
+  updateProgress();
 
   if (typeof saveLevelResult === 'function' && !gameState.isCompleted) {
     gameState.isCompleted = true;
@@ -631,6 +638,9 @@ function resetGame() {
 
   var panel = document.getElementById('layerInfo');
   if (panel) panel.classList.add('hidden');
+
+  var layerModal = document.getElementById('layerModal');
+  if (layerModal) layerModal.classList.add('hidden');
 
   initArchaeologyGame();
 }

@@ -835,6 +835,95 @@
       line-height: 1.6;
     }
 
+    /* === 土层简介弹窗 === */
+    .layer-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .layer-modal.hidden {
+      display: none;
+    }
+
+    .layer-modal-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(2px);
+    }
+
+    .layer-modal-content {
+      position: relative;
+      background: linear-gradient(135deg, rgba(61, 50, 40, 0.98), rgba(30, 22, 12, 0.98));
+      border: 2px solid #8B6914;
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      animation: scaleIn 0.3s ease;
+    }
+
+    .layer-modal-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .layer-modal-header h3 {
+      color: #FFD700;
+      font-size: 1.3rem;
+      margin: 0 0 4px 0;
+    }
+
+    .layer-modal-era {
+      color: #C9A227;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .layer-modal-body {
+      color: #D4C4A8;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .layer-modal-btn {
+      background: #8B6914;
+      border: none;
+      color: white;
+      padding: 10px 28px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .layer-modal-btn:hover {
+      background: #A68027;
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     @keyframes slideUp {
       from {
         opacity: 0;
@@ -1014,6 +1103,21 @@
       </div>
 
       <div class="layer-info hidden" id="layerInfo"></div>
+
+      <div id="layerModal" class="layer-modal hidden">
+        <div class="layer-modal-backdrop" onclick="closeLayerModal()"></div>
+        <div class="layer-modal-content">
+          <div class="layer-modal-icon">⛏️</div>
+          <div class="layer-modal-header">
+            <h3 id="layerModalTitle">土层名称</h3>
+            <span class="layer-modal-era" id="layerModalEra">时代</span>
+          </div>
+          <div class="layer-modal-body">
+            <p id="layerModalDesc">土层描述</p>
+          </div>
+          <button class="layer-modal-btn" onclick="closeLayerModal()">继续发掘</button>
+        </div>
+      </div>
 
       <div class="action-bar">
         <button class="action-btn" onclick="goHome()">🏠 返回首页</button>
