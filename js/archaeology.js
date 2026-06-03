@@ -136,9 +136,12 @@ function initCanvas() {
   if (!digGame.canvas) return;
 
   digGame.ctx = digGame.canvas.getContext('2d');
-  resizeCanvas();
-  drawCurrentLayer();
-  bindDigEvents();
+
+  requestAnimationFrame(function() {
+    resizeCanvas();
+    drawCurrentLayer();
+    bindDigEvents();
+  });
 }
 
 function resizeCanvas() {
@@ -147,10 +150,24 @@ function resizeCanvas() {
   if (!container) return;
 
   const rect = container.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-  digGame.width = rect.width;
-  digGame.height = rect.height;
+  var w = Math.max(1, Math.round(rect.width));
+  var h = Math.max(1, Math.round(rect.height));
+
+  if (w <= 1 || h <= 1) {
+    var parent = container.parentElement;
+    if (parent) {
+      var pRect = parent.getBoundingClientRect();
+      w = Math.max(300, Math.round(Math.min(pRect.width, 400)));
+      h = w;
+    } else {
+      w = 400; h = 400;
+    }
+  }
+
+  canvas.width = w;
+  canvas.height = h;
+  digGame.width = w;
+  digGame.height = h;
 }
 
 function drawCurrentLayer() {
@@ -372,6 +389,15 @@ function closeAllModals() {
 function bindDigEvents() {
   const canvas = digGame.canvas;
   if (!canvas) return;
+  if (digGame._eventsBound) return;
+  digGame._eventsBound = true;
+
+  function isInsideCanvas(e) {
+    var rect = canvas.getBoundingClientRect();
+    var cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    var cy = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    return cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom;
+  }
 
   canvas.addEventListener('mousedown', function(e) {
     e.preventDefault();
@@ -382,9 +408,7 @@ function bindDigEvents() {
 
   window.addEventListener('mousemove', function(e) {
     if (!digGame.isDrawing) return;
-    const rect = canvas.getBoundingClientRect();
-    if (e.clientX >= rect.left && e.clientX <= rect.right &&
-        e.clientY >= rect.top && e.clientY <= rect.bottom) {
+    if (isInsideCanvas(e)) {
       scratch(getDigPos(e));
     }
   });
@@ -404,20 +428,24 @@ function bindDigEvents() {
     scratch(digGame.lastPos);
   }, { passive: false });
 
-  canvas.addEventListener('touchmove', function(e) {
+  document.addEventListener('touchmove', function(e) {
+    if (!digGame.isDrawing) return;
     e.preventDefault();
-    if (digGame.isDrawing) {
+    if (isInsideCanvas(e)) {
       scratch(getDigPos(e));
     }
   }, { passive: false });
 
-  canvas.addEventListener('touchend', function(e) {
+  document.addEventListener('touchend', function(e) {
+    if (!digGame.isDrawing) return;
     e.preventDefault();
-    if (digGame.isDrawing) {
-      digGame.isDrawing = false;
-      digGame.lastPos = null;
-      checkProgress();
-    }
+    digGame.isDrawing = false;
+    digGame.lastPos = null;
+    checkProgress();
+  }, { passive: false });
+
+  canvas.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
   });
 }
 
