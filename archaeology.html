@@ -924,6 +924,154 @@
       to { opacity: 1; transform: scale(1); }
     }
 
+    /* 闯关完成弹窗 */
+    .completion-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 6, 4, 0.88);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 2000;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .completion-overlay.hidden {
+      display: none !important;
+    }
+
+    .completion-card {
+      background: linear-gradient(160deg, rgba(74, 55, 40, 0.98) 0%, rgba(30, 20, 12, 0.99) 100%);
+      border: 2px solid #FFD700;
+      border-radius: 20px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(255, 215, 0, 0.15), inset 0 0 30px rgba(255, 215, 0, 0.03);
+      animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .completion-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,215,0,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .completion-badge {
+      font-size: 3.5rem;
+      margin-bottom: 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .completion-title {
+      font-family: 'Microsoft YaHei', 'Noto Serif SC', serif;
+      font-size: 1.6rem;
+      color: #FFD700;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .completion-subtitle {
+      color: #D4A84B;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .completion-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #8B6914, transparent);
+      margin: 20px 0;
+    }
+
+    .completion-medal {
+      margin: 16px 0;
+      padding: 14px;
+      background: rgba(255, 215, 0, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 215, 0, 0.25);
+    }
+
+    .completion-medal-icon {
+      font-size: 2.2rem;
+      margin-bottom: 6px;
+    }
+
+    .completion-medal-title {
+      color: #FFD700;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .completion-medal-desc {
+      color: #D4A84B;
+      font-size: 0.85rem;
+    }
+
+    .completion-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .completion-btn {
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      font-family: 'Microsoft YaHei', 'Noto Serif SC', serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .completion-btn.primary {
+      background: linear-gradient(145deg, #8B6914, #5c4a32);
+      border: 2px solid #FFD700;
+      color: #FFD700;
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15);
+    }
+
+    .completion-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(255, 215, 0, 0.3);
+    }
+
+    .completion-btn.secondary {
+      background: rgba(139, 105, 20, 0.15);
+      border: 1px solid #8B6914;
+      color: #D4A84B;
+    }
+
+    .completion-btn.secondary:hover {
+      background: rgba(139, 105, 20, 0.3);
+      border-color: #FFD700;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
     @keyframes slideUp {
       from {
         opacity: 0;
