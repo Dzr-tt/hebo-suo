@@ -72,6 +72,29 @@
       color: var(--secondary-yellow);
       font-size: 0.9rem;
     }
+    .cert-personal-title {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255,215,0,0.3);
+    }
+    .cert-personal-label {
+      font-size: 0.75rem;
+      color: var(--primary-bronze);
+      margin-bottom: 4px;
+      letter-spacing: 2px;
+    }
+    .cert-personal-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.15rem;
+      color: var(--accent-gold);
+      font-weight: bold;
+    }
+    .cert-personal-desc {
+      font-size: 0.8rem;
+      color: var(--secondary-yellow);
+      margin-top: 4px;
+      opacity: 0.8;
+    }
     .cert-scores {
       display: flex;
       justify-content: space-around;
@@ -171,6 +194,11 @@
           <div class="cert-rank-icon" id="rankIcon">🏆</div>
           <div class="cert-rank-title" id="rankTitle">益州郡太守</div>
           <div class="cert-rank-desc" id="rankDesc">才华横溢，堪当大任！</div>
+          <div class="cert-personal-title" id="personalTitleBox" style="display:none;">
+            <div class="cert-personal-label">✦ 专属头衔 ✦</div>
+            <div class="cert-personal-name" id="personalTitleName">--</div>
+            <div class="cert-personal-desc" id="personalTitleDesc">--</div>
+          </div>
         </div>
 
         <div class="cert-scores">
@@ -246,6 +274,13 @@
       document.getElementById('rankIcon').textContent = rank.badge;
       document.getElementById('rankTitle').textContent = rank.title;
       document.getElementById('rankDesc').textContent = rank.desc;
+
+      var personal = getPersonalizedTitle();
+      if (personal) {
+        document.getElementById('personalTitleBox').style.display = 'block';
+        document.getElementById('personalTitleName').textContent = personal.full;
+        document.getElementById('personalTitleDesc').textContent = personal.levelName + '得分率 ' + personal.scorePct + '%' + (personal.modifier ? ' · ' + personal.modifier + '通关' : '');
+      }
 
       if (!r1 || !r2 || !r3) {
         document.getElementById('notCompleteMsg').style.display = 'block';

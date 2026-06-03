@@ -90,6 +90,64 @@ function getRank() {
   return { title: '益州郡门吏', badge: '🌾', desc: '初入职场，多多历练！' };
 }
 
+function getPersonalizedTitle() {
+  var career = getCareer();
+  if (!career) return null;
+
+  var bestLevel = -1;
+  var bestPct = -1;
+  var bestTime = 0;
+  var levelData = [
+    { level: 1, name: '策问', type: '知识', icon: '📝' },
+    { level: 2, name: '勘探', type: '考古', icon: '⛏️' },
+    { level: 3, name: '修复', type: '拼图', icon: '🧩' }
+  ];
+
+  for (var i = 0; i < levelData.length; i++) {
+    var r = career['level' + levelData[i].level];
+    if (r && r.maxScore > 0) {
+      var pct = r.score / r.maxScore;
+      if (pct > bestPct) {
+        bestPct = pct;
+        bestLevel = i;
+        bestTime = r.time || 0;
+      }
+    }
+  }
+
+  if (bestLevel === -1) return null;
+
+  var info = levelData[bestLevel];
+  var titles = {
+    1: ['求知学徒', '博学书佐', '策问高手', '古滇百科全书'],
+    2: ['实习考古员', '铲土能手', '勘探先锋', '金牌铲屎官'],
+    3: ['拼图学徒', '修复工匠', '拼图大师', '皇家修复师']
+  };
+
+  var idx = 0;
+  if (bestPct >= 0.9) idx = 3;
+  else if (bestPct >= 0.75) idx = 2;
+  else if (bestPct >= 0.6) idx = 1;
+
+  var timeSec = bestTime / 1000;
+  var modifier = '';
+  if (timeSec > 0 && timeSec < 30) modifier = '⚡闪电';
+  else if (timeSec > 0 && timeSec < 60) modifier = '迅捷';
+  else if (timeSec > 180) modifier = '从容';
+
+  var titleName = titles[info.level][idx];
+
+  return {
+    full: (modifier ? modifier : '') + titleName + '（' + info.type + '向）',
+    short: titleName,
+    type: info.type,
+    modifier: modifier,
+    scorePct: Math.round(bestPct * 100),
+    levelName: info.name,
+    badge: info.icon
+  };
+}
+
 function getCareerTitle(level) {
   const map = {
     1: { name: '入职试炼', sub: '策问考核', icon: '📝' },
