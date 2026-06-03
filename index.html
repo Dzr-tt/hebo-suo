@@ -152,9 +152,173 @@
     .result-scores span {
       color: var(--secondary-yellow);
     }
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .auth-overlay.hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
+  <!-- 登录注册覆盖层 -->
+  <div id="authOverlay" class="auth-overlay hidden">
+    <div class="bg-pattern"></div>
+    <div class="auth-container" style="margin:auto;position:relative;z-index:10;">
+      <div class="auth-card">
+        <div class="card-logo">
+          <svg viewBox="0 0 100 100" class="logo-main">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#8B6914" stroke-width="2"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#C9A227" stroke-width="1.5" opacity="0.6"/>
+            <path d="M50 18 L57 32 L50 46 L43 32 Z" fill="#FFD700"/>
+            <circle cx="50" cy="58" r="20" fill="none" stroke="#8B6914" stroke-width="1.5"/>
+            <circle cx="50" cy="58" r="6" fill="#8B6914"/>
+            <circle cx="25" cy="25" r="3" fill="#C9A227" opacity="0.6"/>
+            <circle cx="75" cy="25" r="3" fill="#C9A227" opacity="0.6"/>
+            <circle cx="25" cy="75" r="3" fill="#C9A227" opacity="0.6"/>
+            <circle cx="75" cy="75" r="3" fill="#C9A227" opacity="0.6"/>
+          </svg>
+          <h1 class="card-title">古滇探秘</h1>
+          <p class="card-subtitle">探索河泊所文化遗址</p>
+        </div>
+
+        <div class="tabs-wrapper">
+          <button class="tab active" id="tabLogin" onclick="showTab('login')">
+            <span class="tab-text">登录</span>
+            <span class="tab-indicator"></span>
+          </button>
+          <button class="tab" id="tabRegister" onclick="showTab('register')">
+            <span class="tab-text">注册</span>
+            <span class="tab-indicator"></span>
+          </button>
+        </div>
+
+        <form id="formLogin" class="form-panel active" onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <label class="input-label">
+              <svg class="label-icon" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              <span>用户名</span>
+            </label>
+            <input type="text" id="loginUser" class="form-input" placeholder="请输入用户名" required>
+          </div>
+          <div class="input-group">
+            <label class="input-label">
+              <svg class="label-icon" viewBox="0 0 24 24">
+                <path d="M18 8h-1V6a6 6 0 00-12 0v2H6c-1.1 0-2 .9-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a4 4 0 018 0v2z"/>
+              </svg>
+              <span>密码</span>
+            </label>
+            <div class="password-box">
+              <input type="password" id="loginPass" class="form-input" placeholder="请输入密码" required>
+              <button type="button" class="toggle-pass" onclick="togglePassword('loginPass')">
+                <svg class="eye" viewBox="0 0 24 24">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">
+            <span class="btn-text">登录</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z"/>
+            </svg>
+          </button>
+        </form>
+
+        <form id="formRegister" class="form-panel hidden" onsubmit="handleRegister(event)">
+          <div class="input-group">
+            <label class="input-label">
+              <svg class="label-icon" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              <span>用户名</span>
+            </label>
+            <input type="text" id="regUser" class="form-input" placeholder="请输入用户名(4-20字符)" required>
+          </div>
+          <div class="input-group">
+            <label class="input-label">
+              <svg class="label-icon" viewBox="0 0 24 24">
+                <path d="M18 8h-1V6a6 6 0 00-12 0v2H6c-1.1 0-2 .9-2 2v10a2 2 0 002 2h12a2 2 0 002-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a4 4 0 018 0v2z"/>
+              </svg>
+              <span>密码</span>
+            </label>
+            <div class="password-box">
+              <input type="password" id="regPass" class="form-input" placeholder="请输入密码" required>
+              <button type="button" class="toggle-pass" onclick="togglePassword('regPass')">
+                <svg class="eye" viewBox="0 0 24 24">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">
+              <svg class="label-icon" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <span>所在省份</span>
+            </label>
+            <select id="regProvince" class="form-select" required>
+              <option value="">请选择省份</option>
+              <option value="北京">北京市</option>
+              <option value="天津">天津市</option>
+              <option value="河北">河北省</option>
+              <option value="山西">山西省</option>
+              <option value="内蒙古">内蒙古自治区</option>
+              <option value="辽宁">辽宁省</option>
+              <option value="吉林">吉林省</option>
+              <option value="黑龙江">黑龙江省</option>
+              <option value="上海">上海市</option>
+              <option value="江苏">江苏省</option>
+              <option value="浙江">浙江省</option>
+              <option value="安徽">安徽省</option>
+              <option value="福建">福建省</option>
+              <option value="江西">江西省</option>
+              <option value="山东">山东省</option>
+              <option value="河南">河南省</option>
+              <option value="湖北">湖北省</option>
+              <option value="湖南">湖南省</option>
+              <option value="广东">广东省</option>
+              <option value="广西">广西壮族自治区</option>
+              <option value="海南">海南省</option>
+              <option value="重庆">重庆市</option>
+              <option value="四川">四川省</option>
+              <option value="贵州">贵州省</option>
+              <option value="云南">云南省</option>
+              <option value="西藏">西藏自治区</option>
+              <option value="陕西">陕西省</option>
+              <option value="甘肃">甘肃省</option>
+              <option value="青海">青海省</option>
+              <option value="宁夏">宁夏回族自治区</option>
+              <option value="新疆">新疆维吾尔自治区</option>
+              <option value="台湾">台湾省</option>
+              <option value="香港">香港特别行政区</option>
+              <option value="澳门">澳门特别行政区</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">
+            <span class="btn-text">注册</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="container page">
     <header class="header">
       <div class="header-content">
@@ -288,7 +452,122 @@
       });
     }
 
-    updateUI();
+    // 登录注册相关逻辑
+    var AUTH_STORAGE = {
+      USERS: 'heboUsers',
+      CURRENT_USER: 'heboUser'
+    };
+
+    function showTab(tab) {
+      var tabs = document.querySelectorAll('.tab');
+      var loginForm = document.getElementById('formLogin');
+      var registerForm = document.getElementById('formRegister');
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      if (tab === 'login') {
+        document.getElementById('tabLogin').classList.add('active');
+        loginForm.classList.add('active');
+        loginForm.classList.remove('hidden');
+        registerForm.classList.remove('active');
+        registerForm.classList.add('hidden');
+      } else {
+        document.getElementById('tabRegister').classList.add('active');
+        registerForm.classList.add('active');
+        registerForm.classList.remove('hidden');
+        loginForm.classList.remove('active');
+        loginForm.classList.add('hidden');
+      }
+    }
+
+    function getAuthUsers() {
+      var data = localStorage.getItem(AUTH_STORAGE.USERS);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveAuthUsers(users) {
+      localStorage.setItem(AUTH_STORAGE.USERS, JSON.stringify(users));
+    }
+
+    function togglePassword(fieldId) {
+      var field = document.getElementById(fieldId);
+      field.type = field.type === 'password' ? 'text' : 'password';
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      var username = document.getElementById('loginUser').value.trim();
+      var password = document.getElementById('loginPass').value;
+      if (!username || !password) {
+        showAuthToast('请填写用户名和密码', 'error');
+        return;
+      }
+      var users = getAuthUsers();
+      var user = users.find(function(u) { return u.username === username && u.password === password; });
+      if (user) {
+        localStorage.setItem(AUTH_STORAGE.CURRENT_USER, JSON.stringify(user));
+        showAuthToast('登录成功!', 'success');
+        document.getElementById('authOverlay').classList.add('hidden');
+        updateUI();
+      } else {
+        showAuthToast('用户名或密码错误', 'error');
+      }
+    }
+
+    function handleRegister(event) {
+      event.preventDefault();
+      var username = document.getElementById('regUser').value.trim();
+      var password = document.getElementById('regPass').value;
+      var province = document.getElementById('regProvince').value;
+      if (!username || !password || !province) {
+        showAuthToast('请填写所有字段', 'error');
+        return;
+      }
+      if (username.length < 4 || username.length > 20) {
+        showAuthToast('用户名需要4-20个字符', 'error');
+        return;
+      }
+      var users = getAuthUsers();
+      if (users.find(function(u) { return u.username === username; })) {
+        showAuthToast('用户名已存在', 'error');
+        return;
+      }
+      var newUser = {
+        id: Date.now(),
+        username: username,
+        password: password,
+        province: province,
+        createdAt: new Date().toISOString(),
+        score: { archaeology: 0, puzzle: 0, quiz: 0 },
+        collectedArtifacts: []
+      };
+      users.push(newUser);
+      saveAuthUsers(users);
+      localStorage.setItem(AUTH_STORAGE.CURRENT_USER, JSON.stringify(newUser));
+      showAuthToast('注册成功!', 'success');
+      document.getElementById('authOverlay').classList.add('hidden');
+      updateUI();
+    }
+
+    function showAuthToast(message, type) {
+      var existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+      var toast = document.createElement('div');
+      toast.className = 'toast toast-' + (type || 'info');
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 3000);
+    }
+
+    function checkAuth() {
+      var userData = localStorage.getItem(AUTH_STORAGE.CURRENT_USER);
+      if (!userData) {
+        document.getElementById('authOverlay').classList.remove('hidden');
+      } else {
+        document.getElementById('authOverlay').classList.add('hidden');
+        updateUI();
+      }
+    }
+
+    checkAuth();
   </script>
 </body>
 </html>
