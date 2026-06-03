@@ -506,6 +506,8 @@
         localStorage.setItem(AUTH_STORAGE.CURRENT_USER, JSON.stringify(user));
         showAuthToast('登录成功!', 'success');
         document.getElementById('authOverlay').classList.add('hidden');
+        var container = document.querySelector('.container.page');
+        if (container) container.classList.remove('hidden');
         updateUI();
       } else {
         showAuthToast('用户名或密码错误', 'error');
@@ -544,6 +546,8 @@
       localStorage.setItem(AUTH_STORAGE.CURRENT_USER, JSON.stringify(newUser));
       showAuthToast('注册成功!', 'success');
       document.getElementById('authOverlay').classList.add('hidden');
+      var container = document.querySelector('.container.page');
+      if (container) container.classList.remove('hidden');
       updateUI();
     }
 
@@ -559,10 +563,13 @@
 
     function checkAuth() {
       var userData = localStorage.getItem(AUTH_STORAGE.CURRENT_USER);
+      var container = document.querySelector('.container.page');
       if (!userData) {
         document.getElementById('authOverlay').classList.remove('hidden');
+        if (container) container.classList.add('hidden');
       } else {
         document.getElementById('authOverlay').classList.add('hidden');
+        if (container) container.classList.remove('hidden');
         updateUI();
       }
     }
