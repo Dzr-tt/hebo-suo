@@ -1,9 +1,3 @@
-const GAME_CONFIG = {
-  totalArtifacts: 3,
-  scanRadius: 15,
-  maxDistance: 100
-};
-
 const ARTIFACTS = [
   {
     id: 1,
@@ -18,7 +12,7 @@ const ARTIFACTS = [
     name: '滇国相印封泥',
     era: '汉代',
     desc: '滇国相印封泥是古滇国行政体系的重要证据，展现了汉代益州郡的官僚制度，是研究古滇国政治制度的重要实物。',
-    image: '图片/“滇国相印” 封泥.png',
+    image: '图片/"滇国相印" 封泥.png',
     color: '#CD7F32'
   },
   {
@@ -26,7 +20,7 @@ const ARTIFACTS = [
     name: '益州铭文瓦当',
     era: '汉代',
     desc: '益州铭文瓦当是汉代建筑构件，刻有"益州"二字，证明了益州郡的存在，展现了汉代在滇池地区的行政建设。',
-    image: '图片/“益州” 铭文瓦当.png',
+    image: '图片/"益州" 铭文瓦当.png',
     color: '#8B6914'
   },
   {
@@ -47,24 +41,67 @@ const ARTIFACTS = [
   }
 ];
 
+const SOIL_LAYERS = [
+  {
+    name: '表土层',
+    era: '现代耕土',
+    color: '#5D4037',
+    texture: '#4E342E',
+    desc: '现代耕土层，含有近现代陶瓷碎片和植物根系。这是考古发掘中首先遇到的层次，厚度约20-30厘米。'
+  },
+  {
+    name: '扰乱层',
+    era: '近现代扰动',
+    color: '#6D4C41',
+    texture: '#5D4037',
+    desc: '近现代扰动层，土壤混杂，可能含有明清时期的遗物。地层学上称为"扰乱层"，是后期人类活动扰动形成的。'
+  },
+  {
+    name: '汉代文化层',
+    era: '汉代 · 益州郡',
+    color: '#8D6E63',
+    texture: '#795548',
+    desc: '汉代文化堆积层，含有大量陶片、瓦当、铁器残片。这是益州郡最繁荣时期留下的文化遗存，见证了古滇国的辉煌。'
+  },
+  {
+    name: '青铜时代层',
+    era: '战国-西汉',
+    color: '#A1887F',
+    texture: '#8D6E63',
+    desc: '青铜时代文化层，含有青铜器残片、贝币、石器。古滇国先民在此生活了数百年，创造了灿烂的青铜文明。'
+  },
+  {
+    name: '生土层',
+    era: '史前沉积',
+    color: '#BCAAA4',
+    texture: '#A1887F',
+    desc: '原生土层，未经人类扰动的自然沉积。考古发掘到此为止，下方即是基岩，也是埋藏珍贵文物的最后一道屏障。'
+  }
+];
+
 let gameState = {
-  currentTool: 'detector',
-  digSpots: [],
-  foundCount: 0,
-  selectedSpot: null,
-  isInitialized: false,
-  discoveredArtifactIds: []
+  targetArtifact: null,
+  discoveredArtifactIds: [],
+  startTime: null,
+  isCompleted: false
+};
+
+let digGame = {
+  canvas: null,
+  ctx: null,
+  layers: SOIL_LAYERS,
+  currentLayer: 0,
+  isDrawing: false,
+  width: 0,
+  height: 0,
+  lastPos: null
 };
 
 function getUserInfo() {
   try {
     const user = localStorage.getItem('heboUser');
-    if (user) {
-      return JSON.parse(user);
-    }
-  } catch (e) {
-    console.error('获取用户信息失败:', e);
-  }
+    if (user) return JSON.parse(user);
+  } catch (e) {}
   return null;
 }
 
@@ -73,249 +110,229 @@ function goHome() {
 }
 
 function initArchaeologyGame() {
-  gameState.digSpots = [];
-  gameState.foundCount = 0;
-  gameState.selectedSpot = null;
-  gameState.isInitialized = true;
-  gameState.discoveredArtifactIds = [];
+  gameState.targetArtifact = ARTIFACTS[Math.floor(Math.random() * ARTIFACTS.length)];
   gameState.startTime = Date.now();
+  gameState.isCompleted = false;
 
-  const shuffled = [...ARTIFACTS].sort(() => Math.random() - 0.5);
-  const selectedArtifacts = shuffled.slice(0, GAME_CONFIG.totalArtifacts);
-
-  for (let i = 0; i < GAME_CONFIG.totalArtifacts; i++) {
-    gameState.digSpots.push({
-      id: i,
-      x: 10 + Math.random() * 80,
-      y: 15 + Math.random() * 70,
-      artifact: selectedArtifacts[i],
-      state: 'hidden'
-    });
+  const artifactImg = document.getElementById('targetArtifact');
+  if (artifactImg) {
+    artifactImg.src = gameState.targetArtifact.image;
+    artifactImg.alt = gameState.targetArtifact.name;
   }
 
-  updateUI();
-  bindEvents();
-  console.log('考古游戏初始化完成，文物位置:', gameState.digSpots);
+  const artifactName = document.getElementById('targetArtifactName');
+  if (artifactName) artifactName.textContent = gameState.targetArtifact.name;
+
+  digGame.currentLayer = 0;
+  digGame.isDrawing = false;
+
+  initCanvas();
+  showLayerInfo(SOIL_LAYERS[0]);
+  updateProgress();
 }
 
-function updateUI() {
-  document.getElementById('foundCount').textContent = gameState.foundCount;
-  updateCollectionCount();
-  updateToolStatus();
+function initCanvas() {
+  digGame.canvas = document.getElementById('digCanvas');
+  if (!digGame.canvas) return;
+
+  digGame.ctx = digGame.canvas.getContext('2d');
+  resizeCanvas();
+  drawCurrentLayer();
+  bindDigEvents();
 }
 
-function updateToolStatus() {
-  const statusText = document.querySelector('.status-text');
-  const statusIcon = document.querySelector('.status-icon');
+function resizeCanvas() {
+  const canvas = digGame.canvas;
+  const container = document.getElementById('digScene');
+  if (!container) return;
 
-  const toolInfo = {
-    detector: { icon: '🔍', text: '选择探测器扫描土地' },
-    shovel: { icon: '⛏️', text: '选择铁锹挖掘文物' },
-    pickaxe: { icon: '🔨', text: '选择锄头挖掘文物' },
-    brush: { icon: '🖌️', text: '选择刷子清理文物' }
+  const rect = container.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  digGame.width = rect.width;
+  digGame.height = rect.height;
+}
+
+function drawCurrentLayer() {
+  const ctx = digGame.ctx;
+  const layer = digGame.layers[digGame.currentLayer];
+
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = layer.color;
+  ctx.fillRect(0, 0, digGame.width, digGame.height);
+
+  addSoilTexture(ctx, digGame.width, digGame.height, layer.texture);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  ctx.font = 'bold 22px "Microsoft YaHei", "Noto Serif SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(layer.name, digGame.width / 2, digGame.height / 2 - 10);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  ctx.font = '13px "Microsoft YaHei", sans-serif';
+  ctx.fillText('第 ' + (digGame.currentLayer + 1) + ' / ' + digGame.layers.length + ' 层', digGame.width / 2, digGame.height / 2 + 20);
+}
+
+function addSoilTexture(ctx, w, h, baseColor) {
+  for (let i = 0; i < 400; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const size = Math.random() * 3 + 0.5;
+    ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.12})`;
+    ctx.fillRect(x, y, size, size);
+  }
+  for (let i = 0; i < 200; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const size = Math.random() * 2 + 0.3;
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.06})`;
+    ctx.fillRect(x, y, size, size);
+  }
+
+  for (let i = 0; i < 8; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const r = Math.random() * 2 + 1;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(139,105,20,${Math.random() * 0.15})`;
+    ctx.fill();
+  }
+}
+
+function getDigPos(e) {
+  const rect = digGame.canvas.getBoundingClientRect();
+  const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+  const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
   };
-
-  const info = toolInfo[gameState.currentTool];
-  if (statusIcon) statusIcon.textContent = info.icon;
-  if (statusText) statusText.textContent = info.text;
 }
 
-function selectTool(tool) {
-  gameState.currentTool = tool;
+function scratch(pos) {
+  const ctx = digGame.ctx;
 
-  document.querySelectorAll('.tool-item').forEach(item => {
-    item.classList.toggle('active', item.dataset.tool === tool);
-  });
+  ctx.globalCompositeOperation = 'destination-out';
 
-  updateToolStatus();
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, 32, 0, Math.PI * 2);
+  ctx.fill();
 
-  const digGround = document.getElementById('digGround');
-  if (digGround) {
-    digGround.style.cursor = tool === 'detector' ? 'crosshair' : 'pointer';
+  ctx.beginPath();
+  ctx.arc(pos.x + (Math.random() - 0.5) * 8, pos.y + (Math.random() - 0.5) * 8, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (digGame.lastPos) {
+    const dx = pos.x - digGame.lastPos.x;
+    const dy = pos.y - digGame.lastPos.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const steps = Math.max(1, Math.floor(dist / 8));
+    for (let i = 1; i < steps; i++) {
+      const t = i / steps;
+      const ix = digGame.lastPos.x + dx * t;
+      const iy = digGame.lastPos.y + dy * t;
+      ctx.beginPath();
+      ctx.arc(ix, iy, 24, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  digGame.lastPos = { x: pos.x, y: pos.y };
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+function checkProgress() {
+  if (digGame.currentLayer >= digGame.layers.length) return;
+
+  digGame.lastPos = null;
+
+  const w = digGame.width;
+  const h = digGame.height;
+  const imageData = digGame.ctx.getImageData(0, 0, w, h);
+  const data = imageData.data;
+  let transparentPixels = 0;
+
+  const sampleStep = 4;
+  for (let y = 0; y < h; y += sampleStep) {
+    for (let x = 0; x < w; x += sampleStep) {
+      const idx = (y * w + x) * 4 + 3;
+      if (data[idx] < 100) transparentPixels++;
+    }
+  }
+
+  const totalSamples = (w / sampleStep) * (h / sampleStep);
+  const percent = transparentPixels / totalSamples;
+
+  if (percent > 0.42) {
+    nextLayer();
   }
 }
 
-function bindEvents() {
-  const digGround = document.getElementById('digGround');
-  if (digGround) {
-    digGround.addEventListener('click', handleGroundClick);
-    console.log('事件绑定成功');
+function nextLayer() {
+  digGame.currentLayer++;
+
+  if (digGame.currentLayer >= digGame.layers.length) {
+    digGame.ctx.clearRect(0, 0, digGame.width, digGame.height);
+    showArtifactReveal(gameState.targetArtifact);
+    showArtifactFound();
   } else {
-    console.error('digGround 元素不存在');
+    drawCurrentLayer();
+    showLayerInfo(digGame.layers[digGame.currentLayer]);
+    updateProgress();
   }
 }
 
-function handleGroundClick(event) {
-  console.log('点击土地，工具:', gameState.currentTool);
+function showLayerInfo(layer) {
+  const panel = document.getElementById('layerInfo');
+  if (!panel) return;
 
-  if (gameState.currentTool === 'detector') {
-    performScan(event);
-  } else if (gameState.currentTool === 'brush') {
-    handleBrushClick(event);
-  }
+  panel.innerHTML =
+    '<div class="layer-tag">' + layer.name + '</div>' +
+    '<div class="layer-era">' + layer.era + '</div>' +
+    '<div class="layer-desc">' + layer.desc + '</div>';
+
+  panel.classList.remove('hidden');
+  panel.style.animation = 'none';
+  panel.offsetHeight;
+  panel.style.animation = 'slideUp 0.5s ease';
 }
 
-function handleBrushClick(event) {
-  const digGround = document.getElementById('digGround');
-  if (!digGround) return;
+function updateProgress() {
+  const bar = document.getElementById('progressBar');
+  const text = document.getElementById('progressText');
+  if (!bar || !text) return;
 
-  const rect = digGround.getBoundingClientRect();
-  const clickX = ((event.clientX - rect.left) / rect.width) * 100;
-  const clickY = ((event.clientY - rect.top) / rect.height) * 100;
-
-  const excavatedSpot = gameState.digSpots.find(spot => 
-    spot.state === 'excavated' &&
-    Math.sqrt(Math.pow(clickX - spot.x, 2) + Math.pow(clickY - spot.y, 2)) <= 15
-  );
-
-  if (excavatedSpot) {
-    cleanArtifact(excavatedSpot);
-  } else {
-    showToolTip('请点击已挖掘的文物位置进行清理', event.clientX, event.clientY);
-  }
+  const percent = Math.round((digGame.currentLayer / digGame.layers.length) * 100);
+  bar.style.width = percent + '%';
+  text.textContent = '发掘进度：' + percent + '%';
 }
 
-function performScan(event) {
-  const digGround = document.getElementById('digGround');
-  if (!digGround) return;
-
-  const rect = digGround.getBoundingClientRect();
-  const clickX = ((event.clientX - rect.left) / rect.width) * 100;
-  const clickY = ((event.clientY - rect.top) / rect.height) * 100;
-
-  showScanEffect(event);
-
-  let foundSpot = null;
-  let closestSpot = null;
-  let minDistance = GAME_CONFIG.maxDistance;
-
-  gameState.digSpots.forEach(spot => {
-    if (spot.state === 'hidden') {
-      const distance = Math.sqrt(Math.pow(clickX - spot.x, 2) + Math.pow(clickY - spot.y, 2));
-
-      if (distance <= GAME_CONFIG.scanRadius) {
-        foundSpot = spot;
-      }
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestSpot = spot;
-      }
-    }
-  });
-
-  if (foundSpot) {
-    setTimeout(() => revealArtifactSpot(foundSpot), 500);
-  } else if (closestSpot) {
-    showDistanceHint(minDistance, closestSpot, clickX, clickY, event.clientX, event.clientY);
-  } else {
-    showToolTip('所有文物已发现！', event.clientX, event.clientY);
-  }
-}
-
-function revealArtifactSpot(spot, event) {
-  spot.state = 'detected';
-
-  const marker = document.getElementById(`spot-${spot.id}`);
-  if (marker) {
-    marker.style.left = `${spot.x}%`;
-    marker.style.top = `${spot.y}%`;
-    marker.classList.remove('hidden');
-    marker.classList.add('detected');
-
-    marker.onclick = (e) => handleMarkerClick(spot, e);
+function showArtifactFound() {
+  const panel = document.getElementById('layerInfo');
+  if (panel) {
+    panel.innerHTML =
+      '<div class="layer-tag" style="color:#FFD700;font-size:1.1rem;">🏆 重大发现</div>' +
+      '<div class="layer-desc">你在生土层下方发现了 <strong>' + gameState.targetArtifact.name + '</strong>！<br>这是汉代益州郡的重要文物！</div>';
   }
 
-  if (event) {
-    showToolTip('发现文物信号！切换到挖掘工具', event.clientX, event.clientY);
-  }
-}
-
-function handleMarkerClick(spot, event) {
-  if (gameState.currentTool === 'detector') {
-    if (spot.state === 'hidden') {
-      revealArtifactSpot(spot, event);
-    }
-  } else if (gameState.currentTool === 'shovel' || gameState.currentTool === 'pickaxe') {
-    if (spot.state === 'detected') {
-      startExcavation(spot, event);
-    }
-  } else if (gameState.currentTool === 'brush') {
-    if (spot.state === 'excavated') {
-      cleanArtifact(spot);
-    }
-  }
-}
-
-function startExcavation(spot, event) {
-  spot.state = 'excavating';
-
-  const marker = document.getElementById(`spot-${spot.id}`);
-  if (marker) {
-    marker.classList.remove('detected');
-    marker.classList.add('excavating');
+  if (!gameState.discoveredArtifactIds.includes(gameState.targetArtifact.id)) {
+    gameState.discoveredArtifactIds.push(gameState.targetArtifact.id);
   }
 
-  const digGround = document.getElementById('digGround');
-  if (digGround) {
-    const hole = document.createElement('div');
-    hole.className = 'excavation-hole';
-    hole.id = `hole-${spot.id}`;
-    hole.style.left = `${spot.x}%`;
-    hole.style.top = `${spot.y}%`;
-    digGround.appendChild(hole);
+  saveToCollection(gameState.targetArtifact);
+
+  if (typeof saveLevelResult === 'function' && !gameState.isCompleted) {
+    gameState.isCompleted = true;
+    var elapsed = gameState.startTime ? (Date.now() - gameState.startTime) : 0;
+    saveLevelResult(2, 100, 100, elapsed);
   }
 
-  setTimeout(() => {
-    spot.state = 'excavated';
-    const markerEl = document.getElementById(`spot-${spot.id}`);
-    if (markerEl) {
-      markerEl.classList.remove('excavating');
-      markerEl.classList.add('excavated');
-    }
-    if (event) {
-      showToolTip('挖掘完成！切换到刷子清理', event.clientX, event.clientY);
-    }
-  }, 1500);
-}
-
-function cleanArtifact(spot) {
-  spot.state = 'revealed';
-  gameState.foundCount++;
-
-  if (!gameState.discoveredArtifactIds.includes(spot.artifact.id)) {
-    gameState.discoveredArtifactIds.push(spot.artifact.id);
-  }
-
-  const marker = document.getElementById(`spot-${spot.id}`);
-  if (marker) {
-    marker.classList.remove('excavated');
-    marker.classList.add('revealed');
-  }
-
-  const hole = document.getElementById(`hole-${spot.id}`);
-  if (hole) {
-    hole.classList.add('cleaned');
-    setTimeout(() => hole.remove(), 500);
-  }
-
-  showArtifactReveal(spot.artifact);
-  saveToCollection(spot.artifact);
-  updateUI();
-
-  // Check completion
-  if (gameState.foundCount >= GAME_CONFIG.totalArtifacts) {
-    setTimeout(function() {
-      if (typeof saveLevelResult === 'function') {
-        var elapsed = gameState.startTime ? (Date.now() - gameState.startTime) : 0;
-        saveLevelResult(2, 100, 100, elapsed);
-      }
-      var overlay = document.getElementById('completeOverlay');
-      if (overlay) {
-        overlay.classList.remove('hidden');
-      }
-    }, 500);
-  }
+  setTimeout(function() {
+    var overlay = document.getElementById('completeOverlay');
+    if (overlay) overlay.classList.remove('hidden');
+  }, 2000);
 }
 
 function showArtifactReveal(artifact) {
@@ -326,13 +343,14 @@ function showArtifactReveal(artifact) {
 
   document.getElementById('revealName').textContent = artifact.name;
   document.getElementById('revealEra').textContent = artifact.era;
-  
+
   const revealImage = document.getElementById('revealImage');
   revealImage.src = artifact.image;
   revealImage.alt = artifact.name;
+  revealImage.style.display = 'block';
   revealImage.onerror = function() {
     this.style.display = 'none';
-    this.parentElement.innerHTML = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="${artifact.color}" stroke-width="4"/><text x="50" y="55" text-anchor="middle" font-size="24" fill="${artifact.color}">滇</text></svg>`;
+    this.parentElement.innerHTML = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="' + artifact.color + '" stroke-width="4"/><text x="50" y="55" text-anchor="middle" font-size="24" fill="' + artifact.color + '">滇</text></svg>';
   };
 
   overlay.classList.remove('hidden');
@@ -351,75 +369,73 @@ function closeAllModals() {
   document.getElementById('collectionView').classList.add('hidden');
 }
 
-function showDistanceHint(distance, spot, clickX, clickY, clientX, clientY) {
-  let direction = '';
-  const dx = spot.x - clickX;
-  const dy = spot.y - clickY;
+function bindDigEvents() {
+  const canvas = digGame.canvas;
+  if (!canvas) return;
 
-  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+  canvas.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    digGame.isDrawing = true;
+    digGame.lastPos = getDigPos(e);
+    scratch(digGame.lastPos);
+  });
 
-  if (angle >= -22.5 && angle < 22.5) {
-    direction = '右';
-  } else if (angle >= 22.5 && angle < 67.5) {
-    direction = '右下';
-  } else if (angle >= 67.5 && angle < 112.5) {
-    direction = '下';
-  } else if (angle >= 112.5 && angle < 157.5) {
-    direction = '左下';
-  } else if (angle >= 157.5 || angle < -157.5) {
-    direction = '左';
-  } else if (angle >= -157.5 && angle < -112.5) {
-    direction = '左上';
-  } else if (angle >= -112.5 && angle < -67.5) {
-    direction = '上';
-  } else {
-    direction = '右上';
-  }
+  window.addEventListener('mousemove', function(e) {
+    if (!digGame.isDrawing) return;
+    const rect = canvas.getBoundingClientRect();
+    if (e.clientX >= rect.left && e.clientX <= rect.right &&
+        e.clientY >= rect.top && e.clientY <= rect.bottom) {
+      scratch(getDigPos(e));
+    }
+  });
 
-  let hint = '';
-  if (distance <= 25) {
-    hint = `探测器反应强烈！文物在${direction}方，很近了！`;
-  } else if (distance <= 45) {
-    hint = `探测器有感应！文物在${direction}方`;
-  } else {
-    hint = `探测器微弱响应，文物在${direction}方，继续搜索`;
-  }
+  window.addEventListener('mouseup', function() {
+    if (digGame.isDrawing) {
+      digGame.isDrawing = false;
+      digGame.lastPos = null;
+      checkProgress();
+    }
+  });
 
-  showToolTip(hint, clientX, clientY);
-}
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    digGame.isDrawing = true;
+    digGame.lastPos = getDigPos(e);
+    scratch(digGame.lastPos);
+  }, { passive: false });
 
-function showScanEffect(event) {
-  const digGround = document.getElementById('digGround');
-  const effect = document.getElementById('scanEffect');
+  canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (digGame.isDrawing) {
+      scratch(getDigPos(e));
+    }
+  }, { passive: false });
 
-  if (!digGround || !effect) return;
-
-  const rect = digGround.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-
-  effect.innerHTML = `
-    <div class="scan-ring" style="left: ${x}px; top: ${y}px;"></div>
-    <div class="scan-ring" style="left: ${x}px; top: ${y}px; animation-delay: 0.2s;"></div>
-    <div class="scan-ring" style="left: ${x}px; top: ${y}px; animation-delay: 0.4s;"></div>
-  `;
+  canvas.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    if (digGame.isDrawing) {
+      digGame.isDrawing = false;
+      digGame.lastPos = null;
+      checkProgress();
+    }
+  });
 }
 
 function showToolTip(text, x, y) {
   const tip = document.getElementById('toolTip');
   if (!tip) return;
-
   tip.textContent = text;
   if (x !== undefined && y !== undefined) {
-    tip.style.left = `${x + 15}px`;
-    tip.style.top = `${y + 15}px`;
+    tip.style.left = (x + 15) + 'px';
+    tip.style.top = (y + 15) + 'px';
+    tip.style.transform = 'none';
   } else {
     tip.style.left = '50%';
     tip.style.top = '50%';
     tip.style.transform = 'translate(-50%, -50%)';
   }
   tip.classList.add('show');
-  setTimeout(() => tip.classList.remove('show'), 2500);
+  setTimeout(function() { tip.classList.remove('show'); }, 2500);
 }
 
 function viewArtifactGallery() {
@@ -431,22 +447,18 @@ function viewArtifactGallery() {
 
   grid.innerHTML = '';
 
-  ARTIFACTS.forEach(artifact => {
-    const isDiscovered = gameState.discoveredArtifactIds.includes(artifact.id);
-    const card = document.createElement('div');
-    card.className = `artifact-gallery-item ${isDiscovered ? 'discovered' : 'undiscovered'}`;
-    card.innerHTML = `
-      <div class="artifact-gallery-icon" style="border-color: ${artifact.color}">
-        ${isDiscovered
-          ? `<img src="${artifact.image}" alt="${artifact.name}" onerror="this.style.display='none'">`
-          : `<svg viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="35" fill="none" stroke="${artifact.color}" stroke-width="3"/>
-              <text x="50" y="55" text-anchor="middle" font-size="20" fill="${artifact.color}">?</text>
-            </svg>`
-        }
-      </div>
-      <span class="artifact-gallery-name">${artifact.name}</span>
-    `;
+  ARTIFACTS.forEach(function(artifact) {
+    var isDiscovered = gameState.discoveredArtifactIds.includes(artifact.id);
+    var card = document.createElement('div');
+    card.className = 'artifact-gallery-item ' + (isDiscovered ? 'discovered' : 'undiscovered');
+    card.innerHTML =
+      '<div class="artifact-gallery-icon" style="border-color:' + artifact.color + '">' +
+        (isDiscovered
+          ? '<img src="' + artifact.image + '" alt="' + artifact.name + '" onerror="this.style.display=\'none\'">'
+          : '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="none" stroke="' + artifact.color + '" stroke-width="3"/><text x="50" y="55" text-anchor="middle" font-size="20" fill="' + artifact.color + '">?</text></svg>'
+        ) +
+      '</div>' +
+      '<span class="artifact-gallery-name">' + artifact.name + '</span>';
     grid.appendChild(card);
   });
 
@@ -464,14 +476,13 @@ function saveToCollection(artifact) {
   if (!user) return;
 
   const users = JSON.parse(localStorage.getItem('heboUsers') || '[]');
-  const userIndex = users.findIndex(u => u.username === user.username);
+  const userIndex = users.findIndex(function(u) { return u.username === user.username; });
 
   if (userIndex !== -1) {
     if (!users[userIndex].collectedArtifacts) {
       users[userIndex].collectedArtifacts = [];
     }
-
-    const exists = users[userIndex].collectedArtifacts.find(a => a.id === artifact.id);
+    var exists = users[userIndex].collectedArtifacts.find(function(a) { return a.id === artifact.id; });
     if (!exists) {
       users[userIndex].collectedArtifacts.push(artifact);
       localStorage.setItem('heboUsers', JSON.stringify(users));
@@ -483,7 +494,8 @@ function saveToCollection(artifact) {
 function updateCollectionCount() {
   const user = getUserInfo();
   const count = user && user.collectedArtifacts ? user.collectedArtifacts.length : 0;
-  document.getElementById('collectionCount').textContent = count;
+  var el = document.getElementById('collectionCount');
+  if (el) el.textContent = count;
 }
 
 function viewCollection() {
@@ -498,22 +510,18 @@ function viewCollection() {
   const artifacts = user && user.collectedArtifacts ? user.collectedArtifacts : [];
 
   if (artifacts.length === 0) {
-    grid.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">还没有收藏任何文物</p>';
+    grid.innerHTML = '<p style="text-align:center;color:#999;grid-column:1/-1;">还没有收藏任何文物</p>';
   } else {
-    artifacts.forEach(artifact => {
-      const card = document.createElement('div');
+    artifacts.forEach(function(artifact) {
+      var card = document.createElement('div');
       card.className = 'collection-card';
-      card.innerHTML = `
-        <div class="artifact-icon" style="border-color: ${artifact.color}">
-          <img src="${artifact.image}" alt="${artifact.name}"
-            onerror="this.style.display='none'; this.parentElement.innerHTML='<svg viewBox=&quot;0 0 100 100&quot;><circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;35&quot; fill=&quot;none&quot; stroke=&quot;${artifact.color}&quot; stroke-width=&quot;3&quot;/><text x=&quot;50&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; font-size=&quot;20&quot; fill=&quot;${artifact.color}&quot;>滇</text></svg>';">
-        </div>
-        <h4 class="artifact-name">${artifact.name}</h4>
-        <p class="artifact-era">${artifact.era}</p>
-      `;
-      card.onclick = function() {
-        openImageZoom(artifact);
-      };
+      card.innerHTML =
+        '<div class="artifact-icon" style="border-color:' + artifact.color + '">' +
+          '<img src="' + artifact.image + '" alt="' + artifact.name + '" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<svg viewBox=\\'0 0 100 100\\'><circle cx=\\'50\\' cy=\\'50\\' r=\\'35\\' fill=\\'none\\' stroke=' + artifact.color + ' stroke-width=\\'3\\'/><text x=\\'50\\' y=\\'55\\' text-anchor=\\'middle\\' font-size=\\'20\\' fill=' + artifact.color + '>滇</text></svg>\';">' +
+        '</div>' +
+        '<h4 class="artifact-name">' + artifact.name + '</h4>' +
+        '<p class="artifact-era">' + artifact.era + '</p>';
+      card.onclick = function() { openImageZoom(artifact); };
       grid.appendChild(card);
     });
   }
@@ -525,20 +533,21 @@ function viewCollection() {
 function openImageZoom(artifact) {
   const overlay = document.getElementById('overlay');
   const zoomModal = document.getElementById('imageZoomModal');
-  
+
   if (!overlay || !zoomModal) return;
-  
+
   document.getElementById('zoomTitle').textContent = artifact.name;
   document.getElementById('zoomName').textContent = artifact.name;
-  
+
   const zoomImage = document.getElementById('zoomImage');
   zoomImage.src = artifact.image;
   zoomImage.alt = artifact.name;
+  zoomImage.style.display = 'block';
   zoomImage.onerror = function() {
     this.style.display = 'none';
-    this.parentElement.innerHTML = `<svg viewBox="0 0 100 100" style="width: 200px; height: 200px;"><circle cx="50" cy="50" r="40" fill="none" stroke="${artifact.color}" stroke-width="4"/><text x="50" y="55" text-anchor="middle" font-size="32" fill="${artifact.color}">滇</text></svg><p style="color: #C9A227; margin-top: 12px;">${artifact.name}</p>`;
+    this.parentElement.innerHTML = '<svg viewBox="0 0 100 100" style="width:200px;height:200px;"><circle cx="50" cy="50" r="40" fill="none" stroke="' + artifact.color + '" stroke-width="4"/><text x="50" y="55" text-anchor="middle" font-size="32" fill="' + artifact.color + '">滇</text></svg><p style="color:#C9A227;margin-top:12px;">' + artifact.name + '</p>';
   };
-  
+
   document.getElementById('collectionView').classList.add('hidden');
   zoomModal.classList.remove('hidden');
 }
@@ -554,42 +563,25 @@ function closeOverlay() {
 }
 
 function resetGame() {
-  document.querySelectorAll('.artifact-marker').forEach(marker => {
-    marker.remove();
-  });
-
-  document.querySelectorAll('.excavation-hole').forEach(hole => {
-    hole.remove();
-  });
-
-  const markersContainer = document.getElementById('artifactMarkers');
-  if (markersContainer) {
-    for (let i = 0; i < GAME_CONFIG.totalArtifacts; i++) {
-      const marker = document.createElement('div');
-      marker.className = 'artifact-marker hidden';
-      marker.id = `spot-${i}`;
-      markersContainer.appendChild(marker);
-    }
-  }
-
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('artifactReveal').classList.add('hidden');
   document.getElementById('artifactGallery').classList.add('hidden');
   document.getElementById('collectionView').classList.add('hidden');
+  document.getElementById('completeOverlay').classList.add('hidden');
+
+  var panel = document.getElementById('layerInfo');
+  if (panel) panel.classList.add('hidden');
 
   initArchaeologyGame();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const markersContainer = document.getElementById('artifactMarkers');
-  if (markersContainer) {
-    for (let i = 0; i < GAME_CONFIG.totalArtifacts; i++) {
-      const marker = document.createElement('div');
-      marker.className = 'artifact-marker hidden';
-      marker.id = `spot-${i}`;
-      markersContainer.appendChild(marker);
-    }
+window.addEventListener('resize', function() {
+  if (digGame.canvas && digGame.currentLayer < digGame.layers.length) {
+    resizeCanvas();
+    drawCurrentLayer();
   }
+});
 
+document.addEventListener('DOMContentLoaded', function() {
   initArchaeologyGame();
 });
