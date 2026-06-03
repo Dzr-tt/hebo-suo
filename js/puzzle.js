@@ -1,9 +1,9 @@
 const PUZZLE_IMAGES = [
-  { id: 1, name: '滇王之印', path: '图片/滇王之印.png' },
-  { id: 2, name: '滇国相印封泥', path: '图片/滇国相印封泥.png' },
-  { id: 3, name: '益州铭文瓦当', path: '图片/益州铭文瓦当.png' },
-  { id: 4, name: '官印封泥群', path: '图片/官印封泥群（益州郡体系）.png' },
-  { id: 5, name: '汉代简牍', path: '图片/汉代简牍.png' }
+  { id: 1, name: '滇王之印', path: '图片/jpg/滇王之印.jpg' },
+  { id: 2, name: '滇国相印封泥', path: '图片/jpg/滇国相印封泥.jpg' },
+  { id: 3, name: '益州铭文瓦当', path: '图片/jpg/益州铭文瓦当.jpg' },
+  { id: 4, name: '官印封泥群', path: '图片/jpg/官印封泥群（益州郡体系）.jpg' },
+  { id: 5, name: '汉代简牍', path: '图片/jpg/汉代简牍.jpg' }
 ];
 
 let puzzleState = {
