@@ -227,10 +227,11 @@
       quizState.questions = shuffled.slice(0, quizState.totalQuestions);
 
       document.getElementById('quizContainer').classList.remove('hidden');
-      document.getElementById('startScreen').classList.add('hidden');
-      document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.add('hidden');
+  var resultOverlay = document.getElementById('resultOverlay');
+  if (resultOverlay) resultOverlay.classList.add('hidden');
 
-      showQuestion();
+  showQuestion();
     }
 
     function showQuestion() {
