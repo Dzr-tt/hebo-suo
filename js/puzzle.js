@@ -1,7 +1,7 @@
 const PUZZLE_IMAGES = [
   { id: 1, name: '滇王之印', path: '图片/滇王之印.png' },
-  { id: 2, name: '滇国相印封泥', path: '图片/"滇国相印" 封泥.png' },
-  { id: 3, name: '益州铭文瓦当', path: '图片/"益州" 铭文瓦当.png' },
+  { id: 2, name: '滇国相印封泥', path: '图片/滇国相印封泥.png' },
+  { id: 3, name: '益州铭文瓦当', path: '图片/益州铭文瓦当.png' },
   { id: 4, name: '官印封泥群', path: '图片/官印封泥群（益州郡体系）.png' },
   { id: 5, name: '汉代简牍', path: '图片/汉代简牍.png' }
 ];
@@ -14,7 +14,8 @@ let puzzleState = {
   timer: null,
   currentImageIndex: 0,
   isCompleted: false,
-  selectedPosition: null
+  selectedPosition: null,
+  imageCache: {}
 };
 
 function initPuzzle() {
@@ -64,17 +65,13 @@ function swapTiles(pos1, pos2) {
   }
 }
 
-function renderPuzzle() {
-  const grid = document.getElementById('puzzleGrid');
+function doRenderPuzzle(imagePath) {
+  var grid = document.getElementById('puzzleGrid');
   if (!grid) return;
 
-  grid.className = 'puzzle-grid size-' + puzzleState.size;
   grid.innerHTML = '';
 
-  const image = PUZZLE_IMAGES[puzzleState.currentImageIndex];
-
-  // 按 currentPosition 排序后渲染
-  const sortedTiles = puzzleState.tiles.slice().sort(function(a, b) {
+  var sortedTiles = puzzleState.tiles.slice().sort(function(a, b) {
     return a.currentPosition - b.currentPosition;
   });
 
@@ -89,26 +86,40 @@ function renderPuzzle() {
     var row = Math.floor(tile.correctPosition / puzzleState.size);
     var col = tile.correctPosition % puzzleState.size;
 
-    // 使用 img 标签裁剪，避免 background 边界重复
-    tileElement.style.overflow = 'hidden';
-    tileElement.style.position = 'relative';
+    tileElement.style.backgroundImage = "url('" + imagePath + "')";
+    tileElement.style.backgroundSize = (puzzleState.size * 100) + "% " + (puzzleState.size * 100) + "%";
+    tileElement.style.backgroundRepeat = "no-repeat";
+    tileElement.style.backgroundPosition = ((col / (puzzleState.size - 1)) * 100) + "% " + ((row / (puzzleState.size - 1)) * 100) + "%";
 
-    var img = document.createElement('img');
-    img.src = image.path;
-    img.alt = '';
-    img.style.position = 'absolute';
-    img.style.width = (puzzleState.size * 100) + '%';
-    img.style.height = (puzzleState.size * 100) + '%';
-    img.style.left = (-col * 100) + '%';
-    img.style.top = (-row * 100) + '%';
-    img.style.objectFit = 'fill';
-    img.style.pointerEvents = 'none';
-    img.draggable = false;
-
-    tileElement.appendChild(img);
     tileElement.addEventListener('click', handleTileClick);
     grid.appendChild(tileElement);
   });
+}
+
+function renderPuzzle() {
+  var grid = document.getElementById('puzzleGrid');
+  if (!grid) return;
+
+  grid.className = 'puzzle-grid size-' + puzzleState.size;
+
+  var image = PUZZLE_IMAGES[puzzleState.currentImageIndex];
+
+  if (puzzleState.imageCache[image.path]) {
+    doRenderPuzzle(image.path);
+    return;
+  }
+
+  grid.innerHTML = '<div style="color:var(--accent-gold);text-align:center;padding:40px;font-size:1.1rem;">📷 加载图片中...</div>';
+
+  var imgLoader = new Image();
+  imgLoader.onload = function() {
+    puzzleState.imageCache[image.path] = true;
+    doRenderPuzzle(image.path);
+  };
+  imgLoader.onerror = function() {
+    grid.innerHTML = '<div style="color:var(--accent-gold);text-align:center;padding:40px;font-size:1.1rem;">❌ 图片加载失败: ' + image.name + '</div>';
+  };
+  imgLoader.src = image.path;
 }
 
 function handleTileClick(e) {
