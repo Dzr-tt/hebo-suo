@@ -365,7 +365,19 @@ function showArtifactFound() {
   if (typeof saveLevelResult === 'function' && !gameState.isCompleted) {
     gameState.isCompleted = true;
     var elapsed = gameState.startTime ? (Date.now() - gameState.startTime) : 0;
-    saveLevelResult(2, 100, 100, elapsed);
+    var elapsedSec = elapsed / 1000;
+
+    var score;
+    if (elapsedSec < 30) score = 100;
+    else if (elapsedSec < 60) score = 95;
+    else if (elapsedSec < 90) score = 90;
+    else if (elapsedSec < 120) score = 85;
+    else if (elapsedSec < 150) score = 80;
+    else if (elapsedSec < 180) score = 75;
+    else if (elapsedSec < 240) score = 70;
+    else score = 60;
+
+    saveLevelResult(2, score, 100, elapsed);
   }
 
   setTimeout(function() {
